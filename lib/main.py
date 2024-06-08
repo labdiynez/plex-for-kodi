@@ -10,6 +10,9 @@ import atexit
 import threading
 import six
 import sys
+#import cProfile, pstats, io
+#from pstats import SortKey
+
 sys.modules['_asyncio'] = None
 
 from . import plex
@@ -85,6 +88,11 @@ def main():
 
 def _main():
     global quitKodi
+
+    # uncomment to profile code #1
+    #pr = cProfile.Profile()
+    #pr.enable()
+
     util.DEBUG_LOG('[ STARTED: {0} -------------------------------------------------------------------- ]', util.ADDON.getAddonInfo('version'))
     util.DEBUG_LOG('USER-AGENT: {0}', plex.defaultUserAgent())
     background.setSplash()
@@ -185,9 +193,16 @@ def _main():
         background.setSplash(False)
         background.killMonitor()
 
+        # uncomment to profile code #2
+        #pr.disable()
+        #sortby = SortKey.CUMULATIVE
+        #s = io.StringIO()
+        #ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+        #ps.print_stats()
+        #util.DEBUG_LOG(s.getvalue())
+
         util.DEBUG_LOG('FINISHED')
         util.shutdown()
-
         gc.collect(2)
 
         if util.KODI_VERSION_MAJOR == 18 and quitKodi:
