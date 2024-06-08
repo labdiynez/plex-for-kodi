@@ -94,7 +94,7 @@ def _main():
     #pr.enable()
 
     util.DEBUG_LOG('[ STARTED: {0} -------------------------------------------------------------------- ]', util.ADDON.getAddonInfo('version'))
-    util.DEBUG_LOG('USER-AGENT: {0}', plex.defaultUserAgent())
+    util.DEBUG_LOG('USER-AGENT: {0}', lambda: plex.defaultUserAgent())
     background.setSplash()
 
     try:

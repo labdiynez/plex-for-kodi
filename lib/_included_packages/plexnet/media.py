@@ -321,5 +321,5 @@ class RelatedMixin(object):
         try:
             return plexobjects.listItems(self.server, path, offset=offset, limit=limit, params={"count": _max})
         except exceptions.BadRequest:
-            util.DEBUG_LOG("Invalid related items response returned for %s" % self)
+            util.DEBUG_LOG("Invalid related items response returned for {}", self)
             return None

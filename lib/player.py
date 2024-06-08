@@ -892,7 +892,7 @@ class BGMPlayerHandler(BasePlayerHandler):
         self.oldVolume = util.rpc.Application.GetProperties(properties=["volume"])["volume"]
 
     def onPlayBackStarted(self):
-        util.DEBUG_LOG("BGM: playing theme for %s" % self.currentlyPlaying)
+        util.DEBUG_LOG("BGM: playing theme for {}", self.currentlyPlaying)
 
     def _setVolume(self, vlm):
         xbmc.executebuiltin("SetVolume({})".format(vlm))

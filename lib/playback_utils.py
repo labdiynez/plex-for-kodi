@@ -70,8 +70,8 @@ class PlaybackManager(object):
     def __call__(self, obj, key=None, value=None, kv_dict=None):
         # shouldn't happen
         if not self._currentServerUUID or not self._currentUserID:
-            util.DEBUG_LOG("APP.PlaybackManager, something's wrong: ServerUUID: %s, UserID: %s" % (
-                self._currentServerUUID, self._currentUserID))
+            util.DEBUG_LOG("APP.PlaybackManager, something's wrong: ServerUUID: {}, UserID: {}",
+                           self._currentServerUUID, self._currentUserID)
             return
 
         csid = self._currentServerUUID

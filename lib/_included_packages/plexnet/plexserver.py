@@ -446,7 +446,7 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
             except IndexError:
                 continue
 
-            util.DEBUG_LOG("Connection score: {0}, {1}", conn.address, conn.getScore(True))
+            util.DEBUG_LOG("Connection score: {0}, {1}", conn.address, lambda: conn.getScore(True))
 
             if not best or conn.getScore() > best.getScore():
                 best = conn

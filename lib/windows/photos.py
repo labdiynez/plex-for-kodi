@@ -267,7 +267,7 @@ class PhotoWindow(kodigui.BaseWindow):
             # bad temporary fix for videos in photo playqueues
             if photo.type != "photo":
                 self.next()
-                util.DEBUG_LOG("SKIPPING PHOTO: %s" % photo)
+                util.DEBUG_LOG("SKIPPING PHOTO: {}", photo)
                 return
 
             self.updatePqueueListSelection(photo)

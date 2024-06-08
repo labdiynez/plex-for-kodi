@@ -172,7 +172,8 @@ class PlexInterface(plexapp.AppInterface):
                 self._globals['audioChannels'] = \
                     util.CHANNELMAPPING[util.rpc.Settings.GetSettingValue(setting='audiooutput.channels').get('value')]
             except:
-                util.DEBUG_LOG("Limiting audio channel definition to 2.0 due to error: %s" % traceback.format_exc())
+                util.DEBUG_LOG("Limiting audio channel definition to 2.0 due to error: {}",
+                               lambda: traceback.format_exc())
                 self._globals['audioChannels'] = "2.0"
 
         return self._globals.get(glbl, default)

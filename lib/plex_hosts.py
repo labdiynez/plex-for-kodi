@@ -84,7 +84,7 @@ class PlexHostsManager(object):
             if hosts:
                 self._hosts = dict(hosts)
                 self._orig_hosts = dict(hosts)
-                util.DEBUG_LOG("Found {} hosts in advancedsettings.xml", len(self._hosts))
+                util.DEBUG_LOG("Found {} hosts in advancedsettings.xml", lambda: len(self._hosts))
 
     def write(self, hosts=None):
         self._hosts = hosts or self._hosts

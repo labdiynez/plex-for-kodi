@@ -52,7 +52,8 @@ class AudioUsage(object):
         return "You can skip {0} songs an hour per mix.".format(self.skipsPerHour)
 
     def log(self, prefix):
-        util.DEBUG_LOG("AudioUsage {0}: total skips={1}, allowed skips={2}", prefix, len(self.skips), self.skipsPerHour)
+        util.DEBUG_LOG("AudioUsage {0}: total skips={1}, allowed skips={2}", prefix, lambda: len(self.skips),
+                       self.skipsPerHour)
 
 
 class UsageFactory(object):
@@ -375,7 +376,7 @@ class PlayQueue(signalsmixin.SignalsMixin):
         util.DEBUG_LOG('playQueue: Received response')
         self.responded = True
         if response.parseResponse():
-            util.DEBUG_LOG('playQueue: {0} items', len(response.items))
+            util.DEBUG_LOG('playQueue: {0} items', lambda: len(response.items))
             self.container = response.container
             # Handle an empty PQ if we have specified an pqEmptyCallable
             if self.options and self.options.pqEmptyCallable:

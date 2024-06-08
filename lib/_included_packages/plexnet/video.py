@@ -134,8 +134,7 @@ class Video(media.MediaItem, AudioCodecMixin):
                                 if not possible_alt:
                                     possible_alt = alt_stream
                         if possible_alt:
-                            util.DEBUG_LOG("Selecting stream %s instead of %s" %
-                                           (possible_alt, stream))
+                            util.DEBUG_LOG("Selecting stream {} instead of {}", possible_alt, stream)
                             stream.setSelected(False)
                             possible_alt.setSelected(True)
                             self.current_subtitle_is_embedded = possible_alt.embedded

@@ -1042,7 +1042,8 @@ class SeekDialog(kodigui.BaseDialog):
         util.DEBUG_LOG('chapter skipping from {0} with forward {1}', lastSelectedOffset, forward)
         if forward:
             nextChapters = [c for c in self.chapters if c.startTime() > lastSelectedOffset]
-            util.DEBUG_LOG('Found {0} chapters among {1}', len(nextChapters), len(self.chapters))
+            util.DEBUG_LOG('Found {0} chapters among {1}', lambda: len(nextChapters),
+                           lambda: len(self.chapters))
             if len(nextChapters) == 0:
                 return False
             chapter = nextChapters[0]
@@ -1051,7 +1052,8 @@ class SeekDialog(kodigui.BaseDialog):
             if startTimeLimit < 0:
                 startTimeLimit = 0
             lastChapters = [c for c in self.chapters if c.startTime() <= startTimeLimit]
-            util.DEBUG_LOG('Found {0} chapters among {1}', len(lastChapters), len(self.chapters))
+            util.DEBUG_LOG('Found {0} chapters among {1}', lambda: len(lastChapters),
+                           lambda: len(self.chapters))
             if len(lastChapters) == 0:
                 return False
             chapter = lastChapters[-1]
@@ -1060,7 +1062,7 @@ class SeekDialog(kodigui.BaseDialog):
             util.DEBUG_LOG('Skipping to chapter: {}', chapter.tag)
             self.forceNextTimeAsChapter = chapter.tag
 
-        util.DEBUG_LOG('New start time is {0}', chapter.startTime())
+        util.DEBUG_LOG('New start time is {0}', lambda: chapter.startTime())
         self.skipByOffset(chapter.startTime() - lastSelectedOffset, without_osd=without_osd)
         return True
 
@@ -1251,7 +1253,7 @@ class SeekDialog(kodigui.BaseDialog):
                 else:
                     oss_hash = util.getOpenSubtitlesHash(meta.size, meta.streamUrls[0])
                     if oss_hash:
-                        util.DEBUG_LOG("OpenSubtitles hash: %s" % oss_hash)
+                        util.DEBUG_LOG("OpenSubtitles hash: {}", oss_hash)
                         util.setGlobalProperty("current_oshash", oss_hash, base='videoinfo.{0}')
             else:
                 util.setGlobalProperty("current_oshash", '', base='videoinfo.{0}')
@@ -1263,7 +1265,6 @@ class SeekDialog(kodigui.BaseDialog):
             item = xbmcgui.ListItem()
             item.setPath(self.player.getPlayingFile())
             if t:
-                util.DEBUG_LOG("GOGOBO: %s" % t.getSeason())
                 year = t.getYear()
                 if year:
                     item.setInfo("video", {"year": 0})

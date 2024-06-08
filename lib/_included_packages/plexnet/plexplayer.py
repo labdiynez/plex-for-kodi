@@ -796,7 +796,8 @@ class PlexPhotoPlayer(object):
             obj.url = server.buildUrl(path, True)
             obj.enableBlur = server.supportsPhotoTranscoding
 
-            util.DEBUG_LOG("Constructed photo item for playback: {0}", util.cleanObjTokens(dict(obj)))
+            util.DEBUG_LOG("Constructed photo item for playback: {0}",
+                           lambda: util.cleanObjTokens(dict(obj)))
 
             self.metadata = obj
 

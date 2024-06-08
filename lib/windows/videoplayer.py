@@ -439,7 +439,8 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
             return
         else:
             millis = (self.passoutProtection - time.time()) * 1000
-            util.DEBUG_LOG('Post play auto-play: Passout protection in {0}', util.durationToShortText(millis))
+            util.DEBUG_LOG('Post play auto-play: Passout protection in {0}',
+                           lambda: util.durationToShortText(millis))
 
         self.timeout = time.time() + abs(util.addonSettings.postplayTimeout)
         util.DEBUG_LOG('Starting post-play timer until: %i' % self.timeout)
