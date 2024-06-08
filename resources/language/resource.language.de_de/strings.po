@@ -2481,3 +2481,11 @@ msgstr "Hub anzeigen: {}"
 msgctxt "#33042"
 msgid "Episode Date Added"
 msgstr "Episode zuletzt hinz."
+
+msgctxt "#33043"
+msgid "Hubs round-robin"
+msgstr "Hubs-Rundlauf"
+
+msgctxt "#33044"
+msgid "Allow round-robining in hubs"
+msgstr "Rundlauf für Hubs erlauben"

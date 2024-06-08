@@ -1342,7 +1342,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             self.updateBackgroundFrom(mli.dataSource)
 
         if not mli or not mli.getProperty('is.end') or mli.getProperty('is.updating') == '1':
-            if mli:
+            # round robining
+            if mli and util.getSetting("hubs_round_robin", False):
                 mlipos = control.getManagedItemPosition(mli)
 
                 # in order to not round-robin when the next chunk is loading, implement our own cheap round-robining

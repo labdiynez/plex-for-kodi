@@ -290,6 +290,11 @@ class Settings(object):
                     T(32999, "")
                 ),
                 BoolSetting(
+                    'hubs_round_robin', T(33043, ''), False
+                ).description(
+                    T(33044, "")
+                ),
+                BoolSetting(
                     'hubs_bifurcation_lines', T(32961, 'Show hub bifurcation lines'), False
                 ).description(
                     T(32962, "Visually separate hubs horizontally using a thin line.")
