@@ -840,7 +840,7 @@ def getShortDateFormat():
 shortDF = getShortDateFormat()
 
 DEF_THEME = "modern-colored"
-THEME_VERSION = 3
+THEME_VERSION = 4
 
 
 def applyTheme(theme=None):

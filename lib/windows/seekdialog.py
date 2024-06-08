@@ -635,7 +635,13 @@ class SeekDialog(kodigui.BaseDialog):
                             self.setProperty('show.chapters', '1')
 
                     elif action == xbmcgui.ACTION_MOVE_DOWN:
-                        if self.previousFocusID == self.BIG_SEEK_LIST_ID and (
+                        # pressing down with the OSD open and chapters available
+                        if (self.showChapters and
+                                (self.previousFocusID not in (controlID, self.MAIN_BUTTON_ID, self.BIG_SEEK_LIST_ID))):
+                            self.setProperty('show.chapters', '1')
+                            self.setFocusId(self.BIG_SEEK_LIST_ID)
+
+                        elif self.previousFocusID == self.BIG_SEEK_LIST_ID and (
                                 self.getProperty('show.markerSkip') or self.getProperty('show.markerSkip_OSDOnly')):
                             self.setFocusId(self.SKIP_MARKER_BUTTON_ID)
                             self.setProperty('show.chapters', '')
