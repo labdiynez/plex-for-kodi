@@ -1599,9 +1599,10 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         if self.isPlaying():
             util.DEBUG_LOG('Player: Stopping and waiting...')
             self.stop()
-            while not util.MONITOR.waitForAbort(0.1) and self.isPlaying():
-                pass
-            util.MONITOR.waitForAbort(0.2)
+            if not util.MONITOR.abortRequested():
+                while not util.MONITOR.waitForAbort(0.05) and self.isPlaying():
+                    if util.MONITOR.abortRequested():
+                        break
             util.DEBUG_LOG('Player: Stopping and waiting...Done')
 
     def monitor(self):
