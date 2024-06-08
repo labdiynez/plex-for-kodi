@@ -138,8 +138,12 @@ class ExtendHubTask(backgroundthread.Task):
             return
 
         try:
+            size = self.size
+            if self.reselect_pos == -1:
+                # we need the full hub if we want to round-robin
+                size = 999
             start = self.hub.offset.asInt() + self.hub.size.asInt()
-            items = self.hub.extend(start=start, size=self.size)
+            items = self.hub.extend(start=start, size=size)
             if self.isCanceled():
                 if self.canceledCallback:
                     self.canceledCallback(self.hub)
@@ -1324,6 +1328,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         control = self.hubControls[controlID - 400]
         mli = control.getSelectedItem()
         is_valid_mli = mli and mli.getProperty('is.end') != '1'
+        is_last_item = is_valid_mli and control.isLastItem(mli)
 
         if action in (xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_PREVIOUS_MENU):
             pos = control.getSelectedPos()
@@ -1337,6 +1342,32 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             self.updateBackgroundFrom(mli.dataSource)
 
         if not mli or not mli.getProperty('is.end') or mli.getProperty('is.updating') == '1':
+            if mli:
+                mlipos = control.getManagedItemPosition(mli)
+
+                # in order to not round-robin when the next chunk is loading, implement our own cheap round-robining
+                # by storing the last selected item of the current control. if we've seen it twice, we need to wrap
+                # around
+                if not mli.getProperty('is.end') and is_last_item and action == xbmcgui.ACTION_MOVE_RIGHT:
+                    if (controlID, mlipos) == self._lastSelectedItem:
+                        control.selectItem(0)
+                        self._lastSelectedItem = (controlID, 0)
+                        return
+                elif (action == xbmcgui.ACTION_MOVE_LEFT and mlipos == 0
+                      and (controlID, mlipos) == self._lastSelectedItem):
+                    if not control.dataSource.more.asInt():
+                        last_item_index = len(control) - 1
+                        control.selectItem(last_item_index)
+                        self._lastSelectedItem = (controlID, last_item_index)
+                    else:
+                        task = ExtendHubTask().setup(control.dataSource, self.extendHubCallback,
+                                                     canceledCallback=lambda hub: mli.setBoolProperty('is.updating',
+                                                                                                      False),
+                                                     reselect_pos=-1)
+                        self.tasks.append(task)
+                        backgroundthread.BGThreader.addTask(task)
+                    return
+                self._lastSelectedItem = (controlID, mlipos)
             return
 
         mli.setBoolProperty('is.updating', True)
@@ -1868,8 +1899,14 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         else:
             control.replaceItems(items)
 
-        if reselect_pos is not None and reselect_pos > 0:
+        if reselect_pos is not None and (reselect_pos > 0 or reselect_pos == -1):
             pos = reselect_pos
+            if reselect_pos == -1:
+                last_pos = control.size() - 1
+                control.selectItem(last_pos)
+                self._lastSelectedItem = (index + 400, last_pos)
+                return
+
             if pos < control.size() - (more and 1 or 0):
                 control.selectItem(pos)
             else:
