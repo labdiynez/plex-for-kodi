@@ -2489,3 +2489,11 @@ msgstr "Hubs-Rundlauf"
 msgctxt "#33044"
 msgid "Allow round-robining in hubs"
 msgstr "Rundlauf für Hubs erlauben"
+
+msgctxt "#33045"
+msgid "Behave like official Plex clients"
+msgstr "Verhalten wie Plex Clients"
+
+msgctxt "#33046"
+msgid "Show OSD when pressing up/down without OSD instead of showing chapters."
+msgstr "Das OSD anzeigen wenn hoch/runter gedrückt wird, anstatt Kapitel zu wechseln."

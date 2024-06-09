@@ -184,6 +184,7 @@ class SeekDialog(kodigui.BaseDialog):
         self._ignoreInput = False
         self._ignoreTick = False
         self._abortBufferWait = False
+        self.clientLikePlex = util.getSetting('player_official', True)
 
         self._videoBelowOneHour = False
         self.timeFmtKodi = util.timeFormatKN
@@ -669,7 +670,11 @@ class SeekDialog(kodigui.BaseDialog):
 
                         else:
                             self.skipBack(without_osd=True)
-                    if action in (xbmcgui.ACTION_MOVE_UP, xbmcgui.ACTION_MOVE_DOWN):
+                    elif action in (xbmcgui.ACTION_MOVE_UP, xbmcgui.ACTION_MOVE_DOWN):
+                        if self.clientLikePlex:
+                            self.showOSD()
+                            return
+
                         # we're seeking from the timeline, with the OSD closed; act as we're skipping
                         if not self._seeking:
                             self.selectedOffset = self.trueOffset()

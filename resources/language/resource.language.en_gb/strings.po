@@ -1981,3 +1981,11 @@ msgstr ""
 msgctxt "#33044"
 msgid "Allow round-robining in hubs"
 msgstr ""
+
+msgctxt "#33045"
+msgid "Behave like official Plex clients"
+msgstr ""
+
+msgctxt "#33046"
+msgid "When pressing up/down while the OSD isn't shown, show OSD instead of skipping chapters."
+msgstr ""
