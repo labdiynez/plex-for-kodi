@@ -2250,8 +2250,8 @@ msgstr "Path-Mapping aktivieren"
 
 #: 
 msgctxt "#33001"
-msgid "Honor path_mapping.json in the addon_data/script.plexmod folder when DirectPlaying media. This can be used to stream using other techniques such as SMB/NFS/etc. instead of the default HTTP handler. path_mapping.example.json is included in the addon's main directory."
-msgstr "Bei DirectPlay von Videos, nutze path_mapping.json im addon_data/script.plexmod-Ordner. Dies kann verwendet werden, um andere Dateizugriff-Technologien zu benutzen, wie z. B. SMB/NFS/usw., anstatt des HTTP-Handlers. path_mapping.example.json liegt im Hauptverzeichnis vom Addon."
+msgid "Long-press (or context menu) on a library item or: Honor path_mapping.json in the addon_data/script.plexmod folder when DirectPlaying media. This can be used to stream using other techniques such as SMB/NFS/etc. instead of the default HTTP handler. path_mapping.example.json is included in the addon's main directory."
+msgstr "Lange-gedrückt-halten (oder Context-Menü) einer Bibliothek, oder: Nutze path_mapping.json im addon_data/script.plexmod-Ordner. Dies kann verwendet werden, um andere Dateizugriff-Technologien zu benutzen, wie z. B. SMB/NFS/usw., anstatt des HTTP-Handlers. path_mapping.example.json liegt im Hauptverzeichnis vom Addon."
 
 #: 
 msgctxt "#33002"
