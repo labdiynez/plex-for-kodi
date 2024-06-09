@@ -2495,5 +2495,5 @@ msgid "Behave like official Plex clients"
 msgstr "Verhalten wie Plex Clients"
 
 msgctxt "#33046"
-msgid "Show OSD when pressing up/down without OSD instead of showing chapters."
-msgstr "Das OSD anzeigen wenn hoch/runter gedrückt wird, anstatt Kapitel zu wechseln."
+msgid "When pressing up/down while the OSD isn't shown, show OSD instead of skipping chapters."
+msgstr "Das OSD anzeigen wenn ohne OSD hoch/runter gedrückt wird, anstatt Kapitel zu wechseln."
