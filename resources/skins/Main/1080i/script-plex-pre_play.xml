@@ -479,6 +479,8 @@
                     <font>font12</font>
                     <align>left</align>
                     <textcolor>FFFFFFFF</textcolor>
+                    <scrolltime>200</scrolltime>
+                    <autoscroll delay="2000" time="2000" repeat="10000">!Control.HasFocus(13)</autoscroll>
                     <label>$INFO[Window.Property(summary)]</label>
                 </control>
                 <control type="image" id="250">
