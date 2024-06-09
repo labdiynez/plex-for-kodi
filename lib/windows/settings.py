@@ -433,6 +433,8 @@ class Settings(object):
                         ('never', T(32033, 'Never'))
                     )
                 ).description(T(32939, 'Only applies to video player UI')),
+                BoolSetting('player_updown_official', T(32935, 'Show shuffle button'), False).description(
+                    T(32939, 'Only applies to video player UI')),
             )
         ),
         'player_user': (
