@@ -141,7 +141,7 @@ class ExtendHubTask(backgroundthread.Task):
             size = self.size
             if self.reselect_pos == -1:
                 # we need the full hub if we want to round-robin
-                size = 999
+                size = util.addonSettings.hubsRrMax
             start = self.hub.offset.asInt() + self.hub.size.asInt()
             items = self.hub.extend(start=start, size=size)
             if self.isCanceled():
@@ -1912,6 +1912,9 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             pos = reselect_pos
             if reselect_pos == -1:
                 last_pos = control.size() - 1
+                if hub.more:
+                    last_pos -= 1
+
                 control.selectItem(last_pos)
                 self._lastSelectedItem = (index + 400, last_pos)
                 if self.updateBackgroundFrom(control[last_pos].dataSource):

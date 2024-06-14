@@ -292,7 +292,7 @@ class Settings(object):
                 BoolSetting(
                     'hubs_round_robin', T(33043, ''), False
                 ).description(
-                    T(33044, "")
+                    T(33044, "").format(util.addonSettings.hubsRrMax)
                 ),
                 BoolSetting(
                     'hubs_bifurcation_lines', T(32961, 'Show hub bifurcation lines'), False

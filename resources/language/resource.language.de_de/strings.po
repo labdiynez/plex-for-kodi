@@ -2487,8 +2487,8 @@ msgid "Hubs round-robin"
 msgstr "Hubs-Rundlauf"
 
 msgctxt "#33044"
-msgid "Allow round-robining in hubs. Attention: Loads the full hub. Depending on the hub size, this can lead to crashes. Use with caution."
-msgstr "Rundlauf für Hubs erlauben. Achtung: Lädt den gesamten Hub. Je nach Hubgröße kann dies zu Abstürzen führen. Mit Vorsicht genießen."
+msgid "Allow round-robining in hubs. Attention: Loads a lot of items. Depending on the hub size, this can lead to crashes. Current limit: {}; can be adjusted in addon settings."
+msgstr "Rundlauf für Hubs erlauben. Achtung: Lädt sehr viele Items. Je nach Hubgröße kann dies zu Abstürzen führen. Aktuelles Limit: {}; kann in den Addon-Einstellungen angepasst werden."
 
 msgctxt "#33045"
 msgid "Behave like official Plex clients"
@@ -2497,3 +2497,11 @@ msgstr "Verhalten wie Plex Clients"
 msgctxt "#33046"
 msgid "When pressing up/down while the OSD isn't shown, show OSD instead of skipping chapters."
 msgstr "Das OSD anzeigen wenn ohne OSD hoch/runter gedrückt wird, anstatt Kapitel zu wechseln."
+
+msgctxt "#33047"
+msgid "Hubs round-robin item limit"
+msgstr "Hubs-Rundlauf Item Limit"
+
+msgctxt "#33048"
+msgid "When hubs round-robin is enabled, only round-robin until this item limit. If the hub size exceeds this limit, the remaining items will be lazy loaded as usual. Tested minimum safe value on NVIDIA SHIELD 2019 is 1000. Default: 250"
+msgstr "Wenn Hubs-Rundlauf aktiviert ist, nur bis zu diesem Limit rundlaufen. Sollte der hub dieses Limit überschreiten, werden die übrigen Items nachgeladen. Minimal als sicher getesteter Wert auf der NVIDIA SHIELD 2019 ist 1000. Standard: 250"
