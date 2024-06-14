@@ -1353,6 +1353,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                     if (controlID, mlipos) == self._lastSelectedItem:
                         control.selectItem(0)
                         self._lastSelectedItem = (controlID, 0)
+                        self.updateBackgroundFrom(control[0].dataSource)
                         return
                 elif (action == xbmcgui.ACTION_MOVE_LEFT and mlipos == 0
                       and (controlID, mlipos) == self._lastSelectedItem):
@@ -1360,6 +1361,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                         last_item_index = len(control) - 1
                         control.selectItem(last_item_index)
                         self._lastSelectedItem = (controlID, last_item_index)
+                        self.updateBackgroundFrom(control[last_item_index].dataSource)
                     else:
                         task = ExtendHubTask().setup(control.dataSource, self.extendHubCallback,
                                                      canceledCallback=lambda hub: mli.setBoolProperty('is.updating',
@@ -1843,11 +1845,13 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         self.setProperty('hub.4{0:02d}'.format(index), hub.title or kwargs.get('title'))
         self.setProperty('hub.text2lines.4{0:02d}'.format(index), text2lines and '1' or '')
 
+        use_reselect_pos = reselect_pos is not None and (reselect_pos > 0 or reselect_pos == -1)
+
         items = []
 
         check_spoilers = False
         for obj in hubitems or hub.items:
-            if not self.backgroundSet:
+            if not self.backgroundSet and not use_reselect_pos:
                 if self.updateBackgroundFrom(obj):
                     self.backgroundSet = True
 
@@ -1900,16 +1904,20 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         else:
             control.replaceItems(items)
 
-        if reselect_pos is not None and (reselect_pos > 0 or reselect_pos == -1):
+        if use_reselect_pos:
             pos = reselect_pos
             if reselect_pos == -1:
                 last_pos = control.size() - 1
                 control.selectItem(last_pos)
                 self._lastSelectedItem = (index + 400, last_pos)
+                if self.updateBackgroundFrom(control[last_pos].dataSource):
+                    self.backgroundSet = True
                 return
 
             if pos < control.size() - (more and 1 or 0):
                 control.selectItem(pos)
+                if self.updateBackgroundFrom(control[pos].dataSource):
+                    self.backgroundSet = True
             else:
                 if more:
                     # re-extend the hub to its original size so we can reselect the position
@@ -1917,12 +1925,14 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                     # fixme: someone check for an off-by-one please
                     size = max(math.ceil((pos + 2 - control.size()) / HUB_PAGE_SIZE), 1) * HUB_PAGE_SIZE
                     task = ExtendHubTask().setup(control.dataSource, self.extendHubCallback,
-                                                 canceledCallback=lambda hub: mli.setBoolProperty('is.updating', False),
+                                                 canceledCallback=lambda h: mli.setBoolProperty('is.updating', False),
                                                  size=size, reselect_pos=pos)
                     self.tasks.append(task)
                     backgroundthread.BGThreader.addTask(task)
                 else:
                     control.selectItem(control.size() - 1)
+                    if self.updateBackgroundFrom(control[control.size() - 1].dataSource):
+                        self.backgroundSet = True
 
     def updateListItem(self, mli):
         if not mli or not mli.dataSource:  # May have become invalid
