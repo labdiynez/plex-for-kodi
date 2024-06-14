@@ -2487,8 +2487,8 @@ msgid "Hubs round-robin"
 msgstr "Hubs-Rundlauf"
 
 msgctxt "#33044"
-msgid "Allow round-robining in hubs"
-msgstr "Rundlauf für Hubs erlauben"
+msgid "Allow round-robining in hubs. Attention: Loads the full hub. Depending on the hub size, this can lead to crashes. Use with caution."
+msgstr "Rundlauf für Hubs erlauben. Achtung: Lädt den gesamten Hub. Je nach Hubgröße kann dies zu Abstürzen führen. Mit Vorsicht genießen."
 
 msgctxt "#33045"
 msgid "Behave like official Plex clients"

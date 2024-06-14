@@ -1979,7 +1979,7 @@ msgid "Hubs round-robin"
 msgstr ""
 
 msgctxt "#33044"
-msgid "Allow round-robining in hubs"
+msgid "Allow round-robining in hubs. Attention: Loads the full hub. Depending on the hub size, this can lead to crashes. Use with caution."
 msgstr ""
 
 msgctxt "#33045"
