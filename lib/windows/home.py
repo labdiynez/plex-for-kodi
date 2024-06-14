@@ -1983,7 +1983,6 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             self.onNewServer()
 
     def onSelectedServerChange(self, **kwargs):
-        util.DEBUG_LOG("YEELLO")
         if self.serverRefresh():
             self.setFocusId(self.SECTION_LIST_ID)
             self.changingServer = False
