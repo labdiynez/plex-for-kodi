@@ -409,6 +409,8 @@ class Settings(object):
                 ).description(
                     T(32984, 'stub')
                 ),
+                BoolSetting('player_official', T(33045, 'Behave like official Plex clients'), True).description(
+                    T(33046, '')),
                 BoolSetting('no_spoilers', T(33004, ''), False).description(
                     T(33005, '')),
                 BoolSetting('subtitle_downloads', T(32932, 'Show subtitle quick-actions button'), False).description(
@@ -433,8 +435,6 @@ class Settings(object):
                         ('never', T(32033, 'Never'))
                     )
                 ).description(T(32939, 'Only applies to video player UI')),
-                BoolSetting('player_official', T(33045, 'Behave like official Plex clients'), True).description(
-                    T(33046, '')),
             )
         ),
         'player_user': (
