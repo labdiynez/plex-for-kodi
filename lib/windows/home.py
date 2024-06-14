@@ -820,6 +820,9 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
                     if controlID == self.SECTION_LIST_ID and self.sectionList.control.getSelectedPosition() > 0:
                         self.sectionList.setSelectedItemByPos(0)
+                        # set lastSection here already, otherwise tick() might interfere
+                        # fixme: Might still happen in a race condition, check later
+                        self.lastSection = home_section
                         self.showHubs(home_section)
                         return
 
@@ -1630,9 +1633,10 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             if not update:
                 if section.key in self.sectionHubs:
                     self.sectionHubs[section.key] = None
-            self.tasks.append(SectionHubsTask().setup(section, self.sectionHubsCallback, self.wantedSections,
-                                                      reselect_pos_dict=_rp, ignore_hubs=self.ignoredHubs))
-            backgroundthread.BGThreader.addTask(self.tasks[-1])
+            task = SectionHubsTask().setup(section, self.sectionHubsCallback, self.wantedSections,
+                                           reselect_pos_dict=_rp, ignore_hubs=self.ignoredHubs)
+            self.tasks.append(task)
+            backgroundthread.BGThreader.addTask(task)
             return
 
         util.DEBUG_LOG('Showing hubs - Section: {0} - Update: {1}', section.key, update)
