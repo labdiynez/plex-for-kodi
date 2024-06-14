@@ -555,7 +555,9 @@ class BaseHub(plexobjects.PlexObject):
         self.set('offset', 0)
         self.set('size', len(self.items))
         totalSize = self.items[0].container.totalSize.asInt()
-        if totalSize:  # Hubs from a list of hubs don't have this, so it it's not here this is intital and we can leave as is
+        if totalSize:
+            # Hubs from a list of hubs don't have this, so if it's not here this is intital,
+            # and we can leave as is
             self.set(
                 'more',
                 (self.items[0].container.offset.asInt() + self.items[0].container.size.asInt() < totalSize) and '1' or ''
@@ -574,8 +576,12 @@ class Hub(BaseHub):
 
     def init(self, data):
         self.items = []
+        self._totalSize = None
 
         container = plexobjects.PlexContainer(data, self.key, self.server, self.key or '')
+
+        if container.totalSize:
+            self._totalSize = container.totalSize.asInt()
 
         if self.type == 'genre':
             self.items = [media.Genre(elem, initpath='/hubs', server=self.server, container=container) for elem in data]
@@ -610,6 +616,25 @@ class Hub(BaseHub):
         except:
             raise NoDataException
         self.init(data)
+
+    @property
+    def totalSize(self):
+        """
+        If we don't have seen the totalSize of the hub before, to a query on the hub's path with a limit of 0 items,
+        and cache the value for future access.
+        """
+        if self._totalSize is None:
+            try:
+                data = self.server.query(self.key, limit=0)
+            except Exception as e:
+                return
+            ts = data.attrib.get('totalSize', None)
+            self._totalSize = int(ts) if ts is not None else None
+        return self._totalSize
+
+    @totalSize.setter
+    def totalSize(self, value):
+        self._totalSize = value.asInt()
 
     def extend(self, start=None, size=None, **kwargs):
         path = self.key
