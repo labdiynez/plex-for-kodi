@@ -962,6 +962,7 @@ class BGMPlayerTask(backgroundthread.Task):
             util.MONITOR.waitForAbort(0.1)
             ct += 1
 
+        self.player.trigger('bgm.started')
         self.player.play(self.source, windowed=True)
 
 
