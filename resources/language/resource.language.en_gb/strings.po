@@ -1997,3 +1997,11 @@ msgstr ""
 msgctxt "#33048"
 msgid "When hubs round-robin is enabled, only round-robin until this item limit. If the hub size exceeds this limit, the remaining items will be lazy loaded as usual. Tested minimum safe value on NVIDIA SHIELD 2019 is 1000. Default: 250"
 msgstr ""
+
+msgctxt "#33049"
+msgid "Max retries"
+msgstr ""
+
+msgctxt "#33050"
+msgid "The maximum number of retries each connection should attempt. The default (1) helps with hibernation/wakeup issues. Set higher for bad connections, setting this to 0 was the old default before 0.7.9"
+msgstr ""

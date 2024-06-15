@@ -32,6 +32,8 @@ WIN_EISCONN = 10056
 WIN_ENOTCONN = 10057
 WIN_EHOSTUNREACH = 10065
 
+MAX_RETRIES = 1
+
 
 def ABORT_FLAG_FUNCTION():
     return False
@@ -336,8 +338,8 @@ class AsyncHTTPAdapter(HTTPAdapter):
 class Session(requests.Session):
     def __init__(self, *args, **kwargs):
         requests.Session.__init__(self, *args, **kwargs)
-        self.mount('https://', AsyncHTTPAdapter(max_retries=1))
-        self.mount('http://', AsyncHTTPAdapter(max_retries=1))
+        self.mount('https://', AsyncHTTPAdapter(max_retries=MAX_RETRIES))
+        self.mount('http://', AsyncHTTPAdapter(max_retries=MAX_RETRIES))
 
     def cancel(self):
         for v in self.adapters.values():

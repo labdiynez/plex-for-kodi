@@ -302,6 +302,7 @@ asyncadapter.DEFAULT_TIMEOUT = pnhttp.DEFAULT_TIMEOUT
 plexapp.util.ACCEPT_LANGUAGE = util.ACCEPT_LANGUAGE_CODE
 plexapp.setUserAgent(defaultUserAgent())
 plexnet_util.BASE_HEADERS = plexnet_util.getPlexHeaders()
+asyncadapter.MAX_RETRIES = int(util.addonSettings.maxRetries)
 
 
 class CallbackEvent(plexapp.util.CompatEvent):

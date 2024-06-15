@@ -2505,3 +2505,11 @@ msgstr "Hubs-Rundlauf Item Limit"
 msgctxt "#33048"
 msgid "When hubs round-robin is enabled, only round-robin until this item limit. If the hub size exceeds this limit, the remaining items will be lazy loaded as usual. Tested minimum safe value on NVIDIA SHIELD 2019 is 1000. Default: 250"
 msgstr "Wenn Hubs-Rundlauf aktiviert ist, nur bis zu diesem Limit rundlaufen. Sollte der hub dieses Limit überschreiten, werden die übrigen Items nachgeladen. Minimal als sicher getesteter Wert auf der NVIDIA SHIELD 2019 ist 1000. Standard: 250"
+
+msgctxt "#33049"
+msgid "Max retries"
+msgstr "Maximale Neuanfragen"
+
+msgctxt "#33050"
+msgid "The maximum number of retries each connection should attempt. The default (1) helps with hibernation/wakeup issues. Set higher for bad connections, setting this to 0 was the old default before 0.7.9"
+msgstr "Die maximale Anzahl an Versuchen, die eine Verbindung unternehmen soll. Der Standard (1) hilft bei Ruhezustand/Aufwachen Probleme. Höher stellen bei schlechter Verbindung, 0 war der alte Standard vor 0.7.9"
