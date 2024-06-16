@@ -224,7 +224,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         self.parentList = kwargs.get('parentList')
         self.cameFrom = kwargs.get('came_from')
         self.tasks = backgroundthread.Tasks()
-        self.bgm_handled = False
+        self.BGMhandled = False
 
     def reset(self, episode, season=None, show=None):
         self.episode = episode
@@ -248,7 +248,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         self.lastFocusID = None
         self.lastNonOptionsFocusID = None
         self.openedWithAutoPlay = False
-        self.bgm_handled = False
+        self.BGMhandled = False
 
     def doClose(self):
         self.closing = True
@@ -299,13 +299,15 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             if volume > 0:
                 player.PLAYER.playBackgroundMusic(self.show_.theme.asURL(True), volume,
                                                   self.show_.ratingKey)
+            else:
+                self.BGMhandled = True
         else:
-            self.bgm_handled = True
+            self.BGMhandled = True
         self.openedWithAutoPlay = False
 
     @busy.dialog()
     def onReInit(self):
-        self.bgm_handled = True
+        self.BGMhandled = True
         if not self.tasks:
             self.tasks = backgroundthread.Tasks()
 
@@ -575,7 +577,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         VIDEO_PROGRESS[data[0]] = data[1]
 
     def onBGMStarted(self, **kwargs):
-        self.bgm_handled = True
+        self.BGMhandled = True
 
     def checkOptionsAction(self, action):
         if action == xbmcgui.ACTION_MOVE_UP:
@@ -850,7 +852,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         )
 
     def episodeListClicked(self, force_episode=None, from_auto_play=False):
-        if (not self.currentItemLoaded or not self.bgm_handled) and not from_auto_play:
+        if (not self.currentItemLoaded or not self.BGMhandled) and not from_auto_play:
             return
 
         if not force_episode:
