@@ -6,6 +6,7 @@ import traceback
 import requests
 import socket
 import urllib3
+import datetime
 from . import threadutils
 import six.moves.urllib.request, six.moves.urllib.parse, six.moves.urllib.error
 import mimetypes
@@ -24,6 +25,9 @@ status_codes = requests.status_codes._codes
 DEFAULT_TIMEOUT = asyncadapter.AsyncTimeout(util.TIMEOUT).setConnectTimeout(util.TIMEOUT)
 
 RESOLVED_PD_HOSTS = {}
+
+CURRENT_PLEX_CRT_DATE = datetime.date(year=2025, month=9, day=15)
+TODAY = datetime.date.today()
 
 _getaddrinfo = socket.getaddrinfo
 
@@ -81,7 +85,7 @@ class HttpRequest(object):
                  "thread", "__dict__")
     _cancel = False
 
-    def __init__(self, url, method=None, forceCertificate=False):
+    def __init__(self, url, method=None):
         self.server = None
         self.path = None
         self.hasParams = '?' in url
@@ -93,13 +97,18 @@ class HttpRequest(object):
         self.url = url
         self.thread = None
 
-        # Use our specific plex.direct CA cert if applicable to improve performance
-        # if forceCertificate or url[:5] == "https":  # TODO: ---------------------------------------------------------------------------------IMPLEMENT
-        #     certsPath = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'certs')
-        #     if "plex.direct" in url:
-        #         self.session.cert = os.path.join(certsPath, 'plex-bundle.crt')
-        #     else:
-        #         self.session.cert = os.path.join(certsPath, 'ca-bundle.crt')
+        # Use a specific CA cert bundle if applicable
+        if util.USE_CERT_BUNDLE != "system" and url[:5] == "https":
+            if util.USE_CERT_BUNDLE == "custom":
+                # noinspection PyTypeChecker
+                self.session.cert = os.path.join(util.translatePath(util.ADDON.getAddonInfo("profile")),
+                                                 "custom_bundle.crt")
+
+            if util.USE_CERT_BUNDLE == "plex" and "plex.direct" in url and TODAY <= CURRENT_PLEX_CRT_DATE:
+                self.session.cert = os.path.join(
+                    os.path.dirname(os.path.realpath(__file__)), 'certs', 'plex.direct.bundle.crt')
+            #else:
+            #    self.session.cert = os.path.join(certsPath, 'ca-bundle.crt')
 
     def removeAsPending(self):
         from . import plexapp

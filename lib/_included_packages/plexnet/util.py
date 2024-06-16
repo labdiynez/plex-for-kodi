@@ -27,6 +27,8 @@ BASE_HEADERS = ''
 # to maintain py2 compatibility, duplicate ADDON from lib.util to avoid circular import
 ADDON = xbmcaddon.Addon()
 
+translatePath = None
+
 
 def resetBaseHeaders():
     return {
@@ -63,6 +65,8 @@ X_PLEX_PLATFORM_VERSION = platform.uname()[2]  # Operating system version, eg 4.
 X_PLEX_PRODUCT = PROJECT                       # Plex application name, eg Laika, Plex Media Server, Media Link
 X_PLEX_VERSION = VERSION                       # Plex application version number
 USER_AGENT = '{0}/{1}'.format(PROJECT, VERSION)
+
+USE_CERT_BUNDLE = False
 
 INTERFACE = None
 TIMER = None
