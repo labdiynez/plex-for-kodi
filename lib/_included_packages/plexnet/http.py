@@ -104,7 +104,7 @@ class HttpRequest(object):
                 self.session.cert = os.path.join(util.translatePath(util.ADDON.getAddonInfo("profile")),
                                                  "custom_bundle.crt")
 
-            if util.USE_CERT_BUNDLE == "plex" and "plex.direct" in url and TODAY <= CURRENT_PLEX_CRT_DATE:
+            elif util.USE_CERT_BUNDLE == "plex.direct" and "plex.direct" in url and TODAY <= CURRENT_PLEX_CRT_DATE:
                 self.session.cert = os.path.join(
                     os.path.dirname(os.path.realpath(__file__)), 'certs', 'plex.direct.bundle.crt')
             #else:
