@@ -207,6 +207,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.skipPostPlay = False
         self.prePlayWitnessed = False
         self.queuingNext = False
+        self.useAlternateSeek = util.deviceModel in ["UGOOS AM6B"]
         self.reset()
 
     def reset(self):
@@ -414,8 +415,16 @@ class SeekPlayerHandler(BasePlayerHandler):
                 return False
             self.updateNowPlaying(state=self.player.STATE_PAUSED)  # To for update after seek
 
-            util.DEBUG_LOG("SeekAbsolute: Seeking to {0}", self.seekOnStart)
-            self.player.seekTime(self.seekOnStart / 1000.0)
+            # Some devices seem to have an issue with the self.palyer.seekTime function where after the seek the video will be playing
+            # but the audio won't for a few seconds(I've seen up to 15 seconds).  Using this alternate way to seek avoids that issue.
+            if(self.useAlternateSeek):
+                currentTime = self.player.getTime()
+                relativeSeekSeconds = seekSeconds - currentTime
+                util.DEBUG_LOG("SeekAbsolute: Seeking to offset: {0}, current time: {1}, relative seek: {2}".format(seekSeconds, currentTime, relativeSeekSeconds))
+                xbmc.executebuiltin('Seek({})'.format(relativeSeekSeconds))
+            else:
+                util.DEBUG_LOG("SeekAbsolute: Seeking to {0}", self.seekOnStart)
+                self.player.seekTime(seekSeconds)
         return True
 
     def onAVChange(self):
