@@ -654,7 +654,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
             util.ERROR()
 
 
-def play(video=None, play_queue=None, resume=False, bgm=False):
+def play(video=None, play_queue=None, resume=False, bgm=False, **kwargs):
     try:
         w = VideoPlayerWindow.open(video=video, play_queue=play_queue, resume=resume, bgm=bgm)
     except util.NoDataException:
