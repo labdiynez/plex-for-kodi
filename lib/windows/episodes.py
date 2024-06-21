@@ -22,7 +22,7 @@ from . import playersettings
 from . import search
 from . import videoplayer
 from . import windowutils
-from .mixins import SeasonsMixin, RatingsMixin, SpoilersMixin
+from .mixins import SeasonsMixin, RatingsMixin, SpoilersMixin, PlaybackBtnMixin
 
 VIDEO_RELOAD_KW = dict(includeExtras=1, includeExtrasCount=10, includeChapters=1)
 
@@ -175,7 +175,7 @@ VIDEO_PROGRESS = {}
 
 
 class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, RatingsMixin, SpoilersMixin,
-                     playbacksettings.PlaybackSettingsMixin):
+                     PlaybackBtnMixin, playbacksettings.PlaybackSettingsMixin):
     xmlFile = 'script-plex-episodes.xml'
     path = util.ADDON.getAddonInfo('path')
     theme = 'Main'
@@ -219,12 +219,12 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         kodigui.ControlledWindow.__init__(self, *args, **kwargs)
         windowutils.UtilMixin.__init__(self)
         SpoilersMixin.__init__(self, *args, **kwargs)
+        PlaybackBtnMixin.__init__(self, *args, **kwargs)
         self.episode = None
         self.reset(kwargs.get('episode'), kwargs.get('season'), kwargs.get('show'))
         self.parentList = kwargs.get('parentList')
         self.cameFrom = kwargs.get('came_from')
         self.tasks = backgroundthread.Tasks()
-        self.BGMhandled = False
 
     def reset(self, episode, season=None, show=None):
         self.episode = episode
@@ -248,7 +248,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         self.lastFocusID = None
         self.lastNonOptionsFocusID = None
         self.openedWithAutoPlay = False
-        self.BGMhandled = False
+        self.useBGM = False
+        PlaybackBtnMixin.reset(self)
 
     def doClose(self):
         self.closing = True
@@ -261,7 +262,6 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         try:
             player.PLAYER.off('new.video', self.onNewVideo)
             player.PLAYER.off('video.progress', self.onVideoProgress)
-            player.PLAYER.off('bgm.started', self.onBGMStarted)
         except KeyError:
             pass
 
@@ -299,15 +299,14 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             if volume > 0:
                 player.PLAYER.playBackgroundMusic(self.show_.theme.asURL(True), volume,
                                                   self.show_.ratingKey)
-            else:
-                self.BGMhandled = True
-        else:
-            self.BGMhandled = True
+                self.useBGM = True
+
         self.openedWithAutoPlay = False
 
     @busy.dialog()
     def onReInit(self):
-        self.BGMhandled = True
+        self.playBtnClicked = False
+        self.useBGM = False
         if not self.tasks:
             self.tasks = backgroundthread.Tasks()
 
@@ -385,7 +384,6 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
     def _setup_hooks(self):
         player.PLAYER.on('new.video', self.onNewVideo)
         player.PLAYER.on('video.progress', self.onVideoProgress)
-        player.PLAYER.on('bgm.started', self.onBGMStarted)
 
     def _setup(self):
         (self.season or self.show_).reload(checkFiles=1, **VIDEO_RELOAD_KW)
@@ -577,7 +575,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         VIDEO_PROGRESS[data[0]] = data[1]
 
     def onBGMStarted(self, **kwargs):
-        self.BGMhandled = True
+        self.playBtnClicked = True
 
     def checkOptionsAction(self, action):
         if action == xbmcgui.ACTION_MOVE_UP:
@@ -852,7 +850,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         )
 
     def episodeListClicked(self, force_episode=None, from_auto_play=False):
-        if (not self.currentItemLoaded or not self.BGMhandled) and not from_auto_play:
+        if (not self.currentItemLoaded or self.playBtnClicked) and not from_auto_play:
             return
 
         if not force_episode:
@@ -867,6 +865,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         if not episode.available():
             util.messageDialog(T(32312, 'unavailable'), T(32332, 'This item is currently unavailable.'))
             return
+
+        self.playBtnClicked = True
 
         resume = False
         if episode.viewOffset.asInt():
@@ -897,10 +897,10 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
                     ep._show = self.show_
 
                 pl.setCurrent(episode)
-                self.processCommand(videoplayer.play(play_queue=pl, resume=resume))
+                self.processCommand(videoplayer.play(play_queue=pl, resume=resume, bgm=self.useBGM))
                 return True
 
-            self.processCommand(videoplayer.play(video=episode, resume=resume))
+            self.processCommand(videoplayer.play(video=episode, resume=resume, bgm=self.useBGM))
             return True
         except util.NoDataException:
             util.ERROR("No data - disconnected?", notify=True, time_ms=5000)

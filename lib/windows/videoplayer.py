@@ -123,6 +123,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
         self.lastFocusID = None
         self.lastNonOptionsFocusID = None
         self.playBackStarted = False
+        self.handleBGM = kwargs.get('bgm')
 
     def doClose(self):
         util.DEBUG_LOG('VideoPlayerWindow: Closing')
@@ -338,6 +339,19 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
                     self.doClose()
                     return
                 util.MONITOR.waitForAbort(0.5)
+
+        # wait for BGM to end if it's playing or queued
+        if self.handleBGM:
+            while not player.PLAYER.bgmPlaying and player.PLAYER.bgmStarting:
+                util.DEBUG_LOG("Waiting for BGM to start as it has been queued")
+                util.MONITOR.waitForAbort(0.1)
+
+            if player.PLAYER.bgmPlaying:
+                util.DEBUG_LOG("Stopping BGM before starting playback")
+                player.PLAYER.stopAndWait()
+
+            while player.PLAYER.bgmPlaying:
+                util.MONITOR.waitForAbort(0.1)
 
         self.setBackground()
         if self.playQueue:
@@ -640,9 +654,9 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
             util.ERROR()
 
 
-def play(video=None, play_queue=None, resume=False):
+def play(video=None, play_queue=None, resume=False, bgm=False):
     try:
-        w = VideoPlayerWindow.open(video=video, play_queue=play_queue, resume=resume)
+        w = VideoPlayerWindow.open(video=video, play_queue=play_queue, resume=resume, bgm=bgm)
     except util.NoDataException:
         raise
     finally:

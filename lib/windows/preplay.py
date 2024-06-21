@@ -18,7 +18,7 @@ from . import playersettings
 from . import search
 from . import videoplayer
 from . import windowutils
-from .mixins import RatingsMixin
+from .mixins import RatingsMixin, PlaybackBtnMixin
 
 VIDEO_RELOAD_KW = dict(includeExtras=1, includeExtrasCount=10, includeChapters=1, includeReviews=1)
 
@@ -28,7 +28,7 @@ class RelatedPaginator(pagination.BaseRelatedPaginator):
         return self.parentWindow.video.getRelated(offset=offset, limit=amount)
 
 
-class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixin):
+class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixin, PlaybackBtnMixin):
     xmlFile = 'script-plex-pre_play.xml'
     path = util.ADDON.getAddonInfo('path')
     theme = 'Main'
@@ -64,6 +64,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
 
     def __init__(self, *args, **kwargs):
         kodigui.ControlledWindow.__init__(self, *args, **kwargs)
+        PlaybackBtnMixin.__init__(self)
         self.video = kwargs.get('video')
         self.parentList = kwargs.get('parent_list')
         self.videos = None
@@ -95,6 +96,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
 
     @busy.dialog()
     def onReInit(self):
+        PlaybackBtnMixin.onReInit(self)
         self.initialized = False
         if util.getSetting("slow_connection", False):
             self.progressImageControl.setWidth(1)
@@ -449,9 +451,14 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
         return x, y
 
     def playVideo(self, from_auto_play=False):
+        if self.playBtnClicked:
+            return
+
         if not self.video.available():
             util.messageDialog(T(32312, 'Unavailable'), T(32313, 'This item is currently unavailable.'))
             return
+
+        self.playBtnClicked = True
 
         resume = False
         if self.video.viewOffset.asInt():

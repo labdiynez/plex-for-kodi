@@ -220,3 +220,14 @@ class SpoilersMixin(object):
         return (hide_spoilers if hide_spoilers is not None else
                 self.hideSpoilers(ep, fully_watched=fully_watched, watched=watched)) \
             and {"blur": util.addonSettings.episodeNoSpoilerBlur} or {}
+
+
+class PlaybackBtnMixin(object):
+    def __init__(self, *args, **kwargs):
+        self.playBtnClicked = False
+
+    def reset(self, *args, **kwargs):
+        self.playBtnClicked = False
+
+    def onReInit(self):
+        self.playBtnClicked = False

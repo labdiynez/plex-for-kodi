@@ -23,7 +23,7 @@ from . import search
 from . import tracks
 from . import videoplayer
 from . import windowutils
-from .mixins import SeasonsMixin, DeleteMediaMixin, RatingsMixin
+from .mixins import SeasonsMixin, DeleteMediaMixin, RatingsMixin, PlaybackBtnMixin
 
 
 class RelatedPaginator(pagination.BaseRelatedPaginator):
@@ -32,7 +32,7 @@ class RelatedPaginator(pagination.BaseRelatedPaginator):
 
 
 class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, DeleteMediaMixin, RatingsMixin,
-                 playbacksettings.PlaybackSettingsMixin):
+                 PlaybackBtnMixin, playbacksettings.PlaybackSettingsMixin):
     xmlFile = 'script-plex-seasons.xml'
     path = util.ADDON.getAddonInfo('path')
     theme = 'Main'
@@ -67,6 +67,7 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
         kodigui.ControlledWindow.__init__(self, *args, **kwargs)
         SeasonsMixin.__init__(*args, **kwargs)
         DeleteMediaMixin.__init__(*args, **kwargs)
+        PlaybackBtnMixin.__init__(self, *args, **kwargs)
         self.mediaItem = kwargs.get('media_item')
         self.parentList = kwargs.get('parent_list')
         self.cameFrom = kwargs.get('came_from')
@@ -398,6 +399,9 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
         util.garbageCollect()
 
     def playButtonClicked(self, shuffle=False):
+        if self.playBtnClicked:
+            return
+
         items = self.mediaItem.all()
         pl = playlist.LocalPlaylist(items, self.mediaItem.getServer())
         resume = False
@@ -406,6 +410,7 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
             if resume is None:
                 return
 
+        self.playBtnClicked = True
         pl.shuffle(shuffle, first=True)
         videoplayer.play(play_queue=pl, resume=resume)
 

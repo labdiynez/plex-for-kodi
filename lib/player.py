@@ -892,6 +892,7 @@ class BGMPlayerHandler(BasePlayerHandler):
         self.oldVolume = util.rpc.Application.GetProperties(properties=["volume"])["volume"]
 
     def onPlayBackStarted(self):
+        self.player.bgmStarting = False
         self.player.trigger('bgm.started')
         util.DEBUG_LOG("BGM: playing theme for {}", self.currentlyPlaying)
 
@@ -985,6 +986,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         self._nextItem = None
         self.started = False
         self.bgmPlaying = False
+        self.bgmStarting = False
         self.lastPlayWasBGM = False
         self.BGMTask = None
         self.pauseAfterPlaybackStarted = False
@@ -1097,6 +1099,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
             self.BGMTask.cancel()
 
         self.started = False
+        self.bgmStarting = True
         self.handler = BGMPlayerHandler(self, rating_key)
 
         # store current volume if it's different from the BGM volume

@@ -27,6 +27,8 @@ from . import preplay
 from . import search
 from . import subitems
 from . import windowutils
+from . import mixins
+from .mixins import PlaybackBtnMixin
 
 KEYS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -299,7 +301,7 @@ class LibrarySettings(object):
         self._saveSettings()
 
 
-class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
+class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.UtilMixin):
     bgXML = 'script-plex-blank.xml'
     path = util.ADDON.getAddonInfo('path')
     theme = 'Main'
@@ -311,6 +313,7 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
     CHUNK_OVERCOMMIT = 6
 
     def __init__(self, *args, **kwargs):
+        PlaybackBtnMixin.__init__(self)
         kodigui.MultiWindow.__init__(self, *args, **kwargs)
         windowutils.UtilMixin.__init__(self)
         self.section = kwargs.get('section')
@@ -341,6 +344,7 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
         self.lock = threading.Lock()
 
     def reset(self):
+        PlaybackBtnMixin.reset(self)
         util.setGlobalProperty('sort', '')
         self.filterUnwatched = self.librarySettings.getSetting('filter.unwatched', False)
         self.sort = self.librarySettings.getSetting('sort', 'titleSort')
@@ -546,6 +550,10 @@ class LibraryWindow(kodigui.MultiWindow, windowutils.UtilMixin):
         util.setGlobalProperty('key', li.dataSource)
 
     def playButtonClicked(self, shuffle=False):
+        if self.playBtnClicked:
+            return
+
+        self.playBtnClicked = True
         filter_ = self.getFilterOpts()
         sort = self.getSortOpts()
         args = {}
