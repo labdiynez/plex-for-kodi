@@ -12,6 +12,7 @@ import time
 import datetime
 import contextlib
 import types
+import subprocess
 
 import unicodedata
 
@@ -953,6 +954,27 @@ def getPlatform():
     ]:
         if xbmc.getCondVisibility(key):
             return key.rsplit('.', 1)[-1]
+
+
+# There are lots of different devices and different ways to get the device model.  This way is known
+# to work with the Ugoos am6b+ device but probably doesn't work for others.
+def getDeviceModel():
+    try:
+        deviceModel = "Unknown"
+        if(getPlatform() == "RaspberryPi"):
+            stdout = subprocess.check_output('cat /proc/cpuinfo', shell=True).decode()
+            hardwareRegex = re.compile(r'Hardware\s*:\s*(.*)')
+            match = hardwareRegex.search(stdout)
+            deviceModel = "Unknown"
+            if match:
+                deviceModel = match.group(1)
+
+        return deviceModel
+    except:
+        return "Unknown"
+
+
+deviceModel = getDeviceModel()
 
 
 def getRunningAddons():
