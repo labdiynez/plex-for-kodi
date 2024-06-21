@@ -781,7 +781,8 @@ class SeekDialog(kodigui.BaseDialog):
                                     self._osdHideAnimationTimeout = None
 
                             if action != xbmcgui.ACTION_STOP and self.osdVisible():
-                                self.hideOSD()
+                                if not self.playlistDialogVisible:
+                                    self.hideOSD()
                             else:
                                 self.sendTimeline(state=self.player.STATE_STOPPED)
                                 self.stop()
@@ -2226,6 +2227,7 @@ class SeekDialog(kodigui.BaseDialog):
         self.playlistDialog.doModal()
         self.resetTimeout()
         self.playlistDialogVisible = False
+        self.setFocusId(self.PLAYLIST_BUTTON_ID)
 
     def osdVisible(self):
         return xbmc.getCondVisibility('Control.IsVisible(801)')
