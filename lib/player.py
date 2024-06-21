@@ -892,6 +892,7 @@ class BGMPlayerHandler(BasePlayerHandler):
         self.oldVolume = util.rpc.Application.GetProperties(properties=["volume"])["volume"]
 
     def onPlayBackStarted(self):
+        self.player.trigger('bgm.started')
         util.DEBUG_LOG("BGM: playing theme for {}", self.currentlyPlaying)
 
     def _setVolume(self, vlm):
@@ -962,7 +963,6 @@ class BGMPlayerTask(backgroundthread.Task):
             util.MONITOR.waitForAbort(0.1)
             ct += 1
 
-        self.player.trigger('bgm.started')
         self.player.play(self.source, windowed=True)
 
 
