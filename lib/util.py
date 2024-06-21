@@ -956,12 +956,15 @@ def getPlatform():
             return key.rsplit('.', 1)[-1]
 
 
+platform = getPlatform()
+
+
 # There are lots of different devices and different ways to get the device model.  This way is known
 # to work with the Ugoos am6b+ device but probably doesn't work for others.
 def getDeviceModel():
     try:
         deviceModel = "Unknown"
-        if(getPlatform() == "RaspberryPi"):
+        if platform == "RaspberryPi":
             stdout = subprocess.check_output('cat /proc/cpuinfo', shell=True).decode()
             hardwareRegex = re.compile(r'Hardware\s*:\s*(.*)')
             match = hardwareRegex.search(stdout)
