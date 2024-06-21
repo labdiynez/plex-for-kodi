@@ -821,7 +821,7 @@ def getTimeFormat():
 
     # Kodi Omega on Android seems to have borked the regional format returned separately
     # (not happening on Windows at least). Format returned can be "%H:mm:ss", which is incompatible with strftime; fix.
-    adjustedFmt = adjustedFmt.replace("mm", "%M").replace("ss", "%S").replace("xx", "%p")
+    adjustedFmt = adjustedFmt.replace("mm", "%M").replace("ss", "%S").replace("xx", "%p").replace("M", "%M")
     adjustedFmtKN = adjustedFmt.replace("%M", "mm").replace("%H", "hh").replace("%I", "h").replace("%S", "ss").\
         replace("%p", "xx").replace(nonPadIF, "h").replace(nonPadHF, "h")
 
