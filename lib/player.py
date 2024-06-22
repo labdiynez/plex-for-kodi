@@ -415,12 +415,14 @@ class SeekPlayerHandler(BasePlayerHandler):
                 return False
             self.updateNowPlaying(state=self.player.STATE_PAUSED)  # To for update after seek
 
-            # Some devices seem to have an issue with the self.palyer.seekTime function where after the seek the video will be playing
-            # but the audio won't for a few seconds(I've seen up to 15 seconds).  Using this alternate way to seek avoids that issue.
-            if(self.useAlternateSeek):
+            # Some devices seem to have an issue with the self.player.seekTime function where after the seek the video
+            # will be playing, but the audio won't for a few seconds(I've seen up to 15 seconds).  Using this alternate
+            # way to seek avoids that issue.
+            if self.useAlternateSeek:
                 currentTime = self.player.getTime()
                 relativeSeekSeconds = seekSeconds - currentTime
-                util.DEBUG_LOG("SeekAbsolute: Seeking to offset: {0}, current time: {1}, relative seek: {2}".format(seekSeconds, currentTime, relativeSeekSeconds))
+                util.DEBUG_LOG("SeekAbsolute: Seeking to offset: {0}, current time: {1}, relative seek: {2}".format(
+                    seekSeconds, currentTime, relativeSeekSeconds))
                 xbmc.executebuiltin('Seek({})'.format(relativeSeekSeconds))
             else:
                 util.DEBUG_LOG("SeekAbsolute: Seeking to {0}", self.seekOnStart)
