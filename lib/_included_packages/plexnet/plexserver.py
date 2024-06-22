@@ -155,6 +155,8 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
         data = self.query(q, params=params)
         container = plexobjects.PlexContainer(data, initpath=q, server=self, address=q)
 
+        self.currentHubs = {} if self.currentHubs is None else self.currentHubs
+
         newCW = util.INTERFACE.getPreference('hubs_use_new_continue_watching', False) and not search_query \
             and not section
 
@@ -168,8 +170,6 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
             ccontainer = plexobjects.PlexContainer(cdata, initpath=cq, server=self, address=cq)
             self.currentHubs[cdata[0].attrib.get('hubIdentifier')] = cdata[0].attrib.get('title')
             hubs.append(plexlibrary.Hub(cdata[0], server=self, container=ccontainer))
-
-        self.currentHubs = {} if self.currentHubs is None else self.currentHubs
 
         for elem in data:
             hubIdent = elem.attrib.get('hubIdentifier')
