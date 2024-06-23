@@ -400,10 +400,11 @@ class SeekDialog(kodigui.BaseDialog):
         self.bigSeekGroupControl = self.getControl(self.BIG_SEEK_GROUP_ID)
         self.initialized = True
 
-        showQuickSubs = util.getSetting('subtitle_downloads', False)
-        showRepeat = util.getSetting('video_show_repeat', False)
-        showFfwdRwd = util.getSetting('video_show_ffwdrwd', False)
-        showShuffle = util.getSetting('video_show_shuffle', False)
+        button_settings = util.getSetting('player_show_buttons', ['subtitle_downloads'])
+        showQuickSubs = 'subtitle_downloads' in button_settings
+        showRepeat = 'video_show_repeat' in button_settings
+        showFfwdRwd = 'video_show_ffwdrwd' in button_settings
+        showShuffle = 'video_show_shuffle' in button_settings
         self.setBoolProperty('nav.quick_subtitles', showQuickSubs)
         self.setBoolProperty('nav.repeat', showRepeat)
         self.setBoolProperty('nav.ffwdrwd', showFfwdRwd)

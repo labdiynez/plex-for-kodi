@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+import json
 import sys
 
 import plexnet
@@ -28,7 +29,7 @@ class Setting(object):
         return util.getSetting(self.ID, self.default)
 
     def set(self, val):
-        old = self.get()
+        old = Setting.get(self)
         setRet = util.setSetting(self.ID, val)
         if old != val:
             util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]', self.ID, old, val)
@@ -147,6 +148,69 @@ class OptionsSetting(BasicSetting):
                 return i
 
         return 0
+
+
+DEFAULT = "__DEFAULT__"
+
+
+class MultiOptionsSetting(OptionsSetting):
+    type = 'MULTI'
+    valueLabelDelim = ', '
+    noneOption = None
+
+    def __init__(self, ID, label, default, options, none_option=None):
+        super(MultiOptionsSetting, self).__init__(ID, label, [], options)
+        self.default = default
+        self.noneOption = none_option
+        util.JSON_SETTINGS.append(self.ID)
+
+    def get(self, with_default=True):
+        val = util.getSetting(self.ID, DEFAULT)
+        if val and val != DEFAULT:
+            try:
+                return json.loads(val)
+            except json.decoder.JSONDecodeError:
+                # fallback for legacy settings that weren't json
+                for o in self.options:
+                    if o[0] == val:
+                        return [val]
+        elif val == DEFAULT:
+            # backport old separated options
+            ret = []
+            for o in self.options:
+                lval = util.getSetting(o[0], DEFAULT)
+                # we only support backporting booleans right now
+                if lval != DEFAULT and lval == "true":
+                    ret.append(o[0])
+            if ret:
+                self.set(ret)
+                return ret
+        return with_default and self.default or []
+
+    def set(self, val):
+        super(MultiOptionsSetting, self).set(json.dumps(val))
+
+    def translate(self, val, return_str=False, delim=", "):
+        if isinstance(val, (list, tuple, set)):
+            data = [super(MultiOptionsSetting, self).translate(v) for v in val]
+            if return_str:
+                return delim.join(data)
+            return data
+        return super(MultiOptionsSetting, self).translate(val)
+
+    def valueLabel(self, values=None):
+        vals = values or self.get()
+        if vals:
+            return self.translate(vals, return_str=True, delim=self.valueLabelDelim)
+        return T(33056, "None")
+
+    def optionIndex(self):
+        val = self.get()
+        ret = []
+        for i, o in enumerate(self.options):
+            if o[0] in val:
+                ret.append(i)
+        return ret
 
 
 class BufferSetting(OptionsSetting):
@@ -413,14 +477,15 @@ class Settings(object):
                     T(33046, '')),
                 BoolSetting('no_spoilers', T(33004, ''), False).description(
                     T(33005, '')),
-                BoolSetting('subtitle_downloads', T(32932, 'Show subtitle quick-actions button'), False).description(
-                    T(32939, 'Only applies to video player UI')),
-                BoolSetting('video_show_ffwdrwd', T(32933, 'Show FFWD/RWD buttons'), False).description(
-                    T(32939, 'Only applies to video player UI')),
-                BoolSetting('video_show_repeat', T(32934, 'Show repeat button'), False).description(
-                    T(32939, 'Only applies to video player UI')),
-                BoolSetting('video_show_shuffle', T(32935, 'Show shuffle button'), False).description(
-                    T(32939, 'Only applies to video player UI')),
+                MultiOptionsSetting(
+                    'player_show_buttons', T(33057, 'Show buttons'), ['subtitle_downloads'],
+                    (
+                        ('subtitle_downloads', T(32932, 'Show subtitle quick-actions button')),
+                        ('video_show_ffwdrwd', T(32933, 'Show FFWD/RWD buttons')),
+                        ('video_show_repeat', T(32934, 'Show repeat button')),
+                        ('video_show_shuffle', T(32935, 'Show shuffle button')),
+                    )
+                ).description(T(32939, 'Only applies to video player UI')),
                 OptionsSetting(
                     'video_show_playlist', T(32936, 'Show playlist button'), 'eponly',
                     (
@@ -711,7 +776,8 @@ class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):
 
         items = []
         for setting in settings:
-            item = kodigui.ManagedListItem(setting.label, setting.type != 'BOOL' and setting.valueLabel() or '', data_source=setting)
+            item = kodigui.ManagedListItem(setting.label, setting.type != 'BOOL' and setting.valueLabel() or '',
+                                           data_source=setting)
             item.setProperty('description', setting.desc)
             if setting.type == 'BOOL':
                 item.setProperty('checkbox', '1')
@@ -734,7 +800,7 @@ class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):
 
         setting = mli.dataSource
 
-        if setting.type in ('LIST', 'OPTIONS'):
+        if setting.type in ('LIST', 'OPTIONS', 'MULTI'):
             self.fillList(setting)
         elif setting.type == 'BOOL' and not from_right:
             self.toggleBool(mli, setting)
@@ -762,21 +828,42 @@ class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):
         elif setting.type == 'OPTIONS':
             setting.set(optionItem.dataSource)
             mli.setLabel2(setting.valueLabel())
+        elif setting.type == 'MULTI':
+            values = setting.get()
+            if optionItem.dataSource in values:
+                values.remove(optionItem.dataSource)
+                optionItem.setProperty('checkbox.checked', '')
+            else:
+                values.append(optionItem.dataSource)
+                optionItem.setProperty('checkbox.checked', '1')
+            setting.set(values)
+            mli.setLabel2(setting.valueLabel(values=values))
 
-        self.setFocusId(self.SETTINGS_LIST_ID)
+        if setting.type != 'MULTI':
+            self.setFocusId(self.SETTINGS_LIST_ID)
 
     def fillList(self, setting):
+        mli = self.settingsList.getSelectedItem()
+        if not mli:
+            return
+
         items = []
         if setting.type == 'LIST':
             for label in setting.optionLabels():
                 items.append(kodigui.ManagedListItem(label))
-        elif setting.type == 'OPTIONS':
+        elif setting.type in ('OPTIONS', 'MULTI'):
             for ID, label in setting.options:
                 items.append(kodigui.ManagedListItem(label, data_source=ID))
 
         self.optionsList.reset()
         self.optionsList.addItems(items)
-        self.optionsList.selectItem(setting.optionIndex())
+        idx = setting.optionIndex()
+        if isinstance(idx, int):
+            idx = [idx]
+        for _idx in idx:
+            self.optionsList.selectItem(_idx)
+            if setting.type == 'MULTI':
+                self.optionsList[_idx].setProperty('checkbox.checked', '1')
         self.setFocusId(self.OPTIONS_LIST_ID)
 
     def toggleBool(self, mli, setting):

@@ -119,7 +119,8 @@ except:
 def getSetting(key, default=None):
     with SETTINGS_LOCK:
         setting = ADDON.getSetting(key)
-        return _processSetting(setting, default)
+        is_json = key in JSON_SETTINGS
+        return _processSetting(setting, default, is_json=is_json)
 
 
 def getUserSetting(key, default=None):
@@ -132,7 +133,10 @@ def getUserSetting(key, default=None):
         return _processSetting(setting, default)
 
 
-def _processSetting(setting, default):
+JSON_SETTINGS = []
+
+
+def _processSetting(setting, default, is_json=False):
     if not setting:
         return default
     if isinstance(default, bool):
@@ -141,7 +145,7 @@ def _processSetting(setting, default):
         return float(setting)
     elif isinstance(default, int):
         return int(float(setting or 0))
-    elif isinstance(default, list):
+    elif isinstance(default, list) and not is_json:
         if setting:
             return json.loads(binascii.unhexlify(setting))
         else:

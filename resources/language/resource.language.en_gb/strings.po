@@ -1535,19 +1535,19 @@ msgid "Audio/Subtitles"
 msgstr ""
 
 msgctxt "#32932"
-msgid "Show subtitle quick-actions button"
+msgid "Subtitle quick-actions"
 msgstr ""
 
 msgctxt "#32933"
-msgid "Show FFWD/RWD buttons"
+msgid "FFWD/RWD"
 msgstr ""
 
 msgctxt "#32934"
-msgid "Show repeat button"
+msgid "Repeat"
 msgstr ""
 
 msgctxt "#32935"
-msgid "Show shuffle button"
+msgid "Shuffle"
 msgstr ""
 
 msgctxt "#32936"
@@ -2024,4 +2024,12 @@ msgstr ""
 
 msgctxt "#33055"
 msgid "Custom"
+msgstr ""
+
+msgctxt "#33056"
+msgid "None"
+msgstr ""
+
+msgctxt "#33057"
+msgid "Show buttons"
 msgstr ""

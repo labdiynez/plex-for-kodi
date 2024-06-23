@@ -1907,23 +1907,23 @@ msgstr "Audio/Untertitel"
 
 #: 
 msgctxt "#32932"
-msgid "Show subtitle quick-actions button"
-msgstr "Zeige Untertitel-Schnellaktionen-Knopf"
+msgid "Subtitle quick-actions"
+msgstr "Untertitel-Schnellaktionen"
 
 #: 
 msgctxt "#32933"
-msgid "Show FFWD/RWD buttons"
-msgstr "Zeige Vor-/Zurückspulen-Knopf"
+msgid "FFWD/RWD"
+msgstr "Vor-/Zurückspulen"
 
 #: 
 msgctxt "#32934"
-msgid "Show repeat button"
-msgstr "Zeige Wiederholen-Knopf"
+msgid "Repeat"
+msgstr "Wiederholen"
 
 #: 
 msgctxt "#32935"
-msgid "Show shuffle button"
-msgstr "Zeige Zufällige-Wiedergabe-Knopf"
+msgid "Shuffle"
+msgstr "Zufällige-Wiedergabe"
 
 #: 
 msgctxt "#32936"
@@ -2533,3 +2533,11 @@ msgstr "plex.direct (bereitgestellt vom Addon)"
 msgctxt "#33055"
 msgid "Custom"
 msgstr "Benutzerdefiniert"
+
+msgctxt "#33056"
+msgid "None"
+msgstr "Keine"
+
+msgctxt "#33057"
+msgid "Show buttons"
+msgstr "Knöpfe anzeigen"
