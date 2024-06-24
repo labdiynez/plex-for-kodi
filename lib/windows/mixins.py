@@ -154,7 +154,8 @@ class SpoilersMixin(object):
     def storeSpoilerSettings(self):
         self.spoilerSetting = util.getSetting('no_episode_spoilers2', "unwatched")
         self.noTitles = util.getSetting('no_unwatched_episode_titles', False)
-        self.spoilersAllowedFor = util.getSetting('spoilers_allowed_genres', True)
+        self.spoilersAllowedFor = util.getSetting('spoilers_allowed_genres2', ["Reality", "Game Show", "Documentary",
+                                                                               "Sport"])
 
     @property
     def noSpoilers(self):
@@ -195,7 +196,8 @@ class SpoilersMixin(object):
                 genres = show.genres()
 
             for g in genres:
-                if g.tag in util.SPOILER_ALLOWED_GENRES:
+                main_tag = util.GENRES_TV_BY_SYN.get(g.tag)
+                if main_tag and main_tag in self.spoilersAllowedFor:
                     nope = "off"
                     break
 

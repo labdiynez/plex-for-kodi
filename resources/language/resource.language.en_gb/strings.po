@@ -1867,11 +1867,11 @@ msgid "When checking for plex.direct host mapping, ignore local Docker IPv4 addr
 msgstr ""
 
 msgctxt "#33016"
-msgid "Allow TV spoilers for specific genres"
+msgid "Allow TV spoilers for"
 msgstr ""
 
 msgctxt "#33017"
-msgid "Overrides the above for: {}"
+msgid "Overrides the above for specific genres. Default: Reality, Game Show, Documentary, Sport"
 msgstr ""
 
 msgctxt "#33018"

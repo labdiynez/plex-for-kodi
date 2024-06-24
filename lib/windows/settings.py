@@ -343,11 +343,11 @@ class Settings(object):
                 ).description(
                     T(33013, "")
                 ),
-                BoolSetting(
-                    'spoilers_allowed_genres', T(33016, ''), True
-                ).description(
-                    T(33017, "").format(", ".join('"{}"'.format(t) for t in util.SPOILER_ALLOWED_GENRES))
-                ),
+                MultiOptionsSetting(
+                    'spoilers_allowed_genres2', T(33016, ''),
+                    ["Reality", "Game Show", "Documentary", "Sport"],
+                    [(g, g) for g in util.GENRES_TV]
+                ).description(T(33017, "")),
                 BoolSetting(
                     'hubs_use_new_continue_watching', T(32998, ''), False
                 ).description(

@@ -2325,13 +2325,13 @@ msgstr "Wenn das plex.direct-Host-Mapping überprüft wird, lokale Docker-IPv4-A
 
 #: 
 msgctxt "#33016"
-msgid "Allow TV spoilers for specific genres"
-msgstr "Erlaube TV-Spoiler für bestimmte Genres"
+msgid "Allow TV spoilers for"
+msgstr "Erlaube TV-Spoiler für"
 
 #: 
 msgctxt "#33017"
-msgid "Overrides the above for: {}"
-msgstr "Überschreibt die vorherigen Einstellungen für: {}"
+msgid "Overrides the above for specific genres. Default: Reality, Game Show, Documentary, Sport"
+msgstr "Überschreibt die vorherigen Einstellungen für bestimmte Genres. Standard: Reality, Game Show, Documentary, Sport"
 
 #: 
 msgctxt "#32303"

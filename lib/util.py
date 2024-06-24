@@ -31,6 +31,7 @@ from kodi_six import xbmcaddon
 from kodi_six import xbmcvfs
 
 from . import colors
+from .genres import GENRES_TV, GENRES_TV_BY_SYN
 # noinspection PyUnresolvedReferences
 from .exceptions import NoDataException
 from plexnet import signalsmixin
@@ -554,9 +555,6 @@ def scaleResolution(w, h, by=None):
         hratio = w / float(h)
         return int(round((px / wratio) ** .5)), int(round((px / hratio) ** .5))
     return w, h
-
-
-SPOILER_ALLOWED_GENRES = ("Reality", "Game Show", "Documentary", "Sport")
 
 
 class TextBox:
