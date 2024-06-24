@@ -722,8 +722,11 @@ class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):
             self.checkSection()
             controlID = self.getFocusId()
             if action in (xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_PREVIOUS_MENU):
-                if self.getFocusId() == self.OPTIONS_LIST_ID:
+                if controlID == self.OPTIONS_LIST_ID:
                     self.setFocusId(self.SETTINGS_LIST_ID)
+                    return
+                elif controlID == self.SETTINGS_LIST_ID:
+                    self.setFocusId(self.SECTION_LIST_ID)
                     return
                 # elif not xbmc.getCondVisibility('ControlGroup({0}).HasFocus(0)'.format(self.TOP_GROUP_ID)):
                 #     self.setFocusId(self.TOP_GROUP_ID)
@@ -861,9 +864,10 @@ class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):
         if isinstance(idx, int):
             idx = [idx]
         for _idx in idx:
-            self.optionsList.selectItem(_idx)
             if setting.type == 'MULTI':
                 self.optionsList[_idx].setProperty('checkbox.checked', '1')
+        if idx:
+            self.optionsList.selectItem(idx[-1])
         self.setFocusId(self.OPTIONS_LIST_ID)
 
     def toggleBool(self, mli, setting):
