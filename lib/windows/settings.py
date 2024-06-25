@@ -509,12 +509,15 @@ class Settings(object):
                 BoolSetting('no_spoilers', T(33004, ''), False).description(
                     T(33005, '')),
                 MultiUAOptionsSetting(
-                    'player_show_buttons', T(33057, 'Show buttons'), ['subtitle_downloads'],
+                    'player_show_buttons', T(33057, 'Show buttons'),
+                    ['subtitle_downloads', 'skip_intro', 'skip_credits'],
                     (
                         ('subtitle_downloads', T(32932, 'Show subtitle quick-actions button')),
                         ('video_show_ffwdrwd', T(32933, 'Show FFWD/RWD buttons')),
                         ('video_show_repeat', T(32934, 'Show repeat button')),
                         ('video_show_shuffle', T(32935, 'Show shuffle button')),
+                        ('skip_intro', T(32495, 'Skip Intro')),
+                        ('skip_credits', T(32496, 'Skip Credits')),
                     )
                 ).description(T(32939, 'Only applies to video player UI')),
                 OptionsSetting(

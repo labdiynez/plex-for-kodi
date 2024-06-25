@@ -128,10 +128,12 @@ def getUserSetting(key, default=None):
     if not plexnet.util.ACCOUNT:
         return default
 
+    is_json = key in JSON_SETTINGS
+
     key = '{}.{}'.format(key, plexnet.util.ACCOUNT.ID)
     with SETTINGS_LOCK:
         setting = ADDON.getSetting(key)
-        return _processSetting(setting, default)
+        return _processSetting(setting, default, is_json=is_json)
 
 
 JSON_SETTINGS = []
