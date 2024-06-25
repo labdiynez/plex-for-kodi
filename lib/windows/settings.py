@@ -14,6 +14,9 @@ from . import kodigui
 from . import windowutils
 
 
+UNDEF = "__UNDEF__"
+
+
 class Setting(object):
     type = None
     ID = None
@@ -25,15 +28,19 @@ class Setting(object):
     def translate(self, val):
         return str(val)
 
-    def get(self):
-        return util.getSetting(self.ID, self.default)
+    def get(self, *args, _id=UNDEF, default=UNDEF, **kwargs):
+        return util.getSetting(_id if _id != UNDEF else self.ID,
+                               default if default != UNDEF else self.default)
 
-    def set(self, val):
-        old = Setting.get(self)
-        setRet = util.setSetting(self.ID, val)
-        if old != val:
-            util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]', self.ID, old, val)
-            plexnet.util.APP.trigger('change:{0}'.format(self.ID), value=val)
+    def set(self, val, skip_get=False):
+        if not skip_get:
+            old = Setting.get(self)
+            setRet = util.setSetting(self.ID, val)
+            if old != val:
+                util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]', self.ID, old, val)
+                plexnet.util.APP.trigger('change:{0}'.format(self.ID), value=val)
+        else:
+            setRet = util.setSetting(self.ID, val)
         return setRet
 
     def valueLabel(self):
@@ -68,8 +75,8 @@ class ListSetting(BasicSetting):
     def optionIndex(self):
         return len(self.options) - 1 - self.get()
 
-    def set(self, val):
-        BasicSetting.set(self, len(self.options) - 1 - val)
+    def set(self, val, skip_get=False):
+        BasicSetting.set(self, len(self.options) - 1 - val, skip_get=skip_get)
 
 
 class QualitySetting(ListSetting):
@@ -105,25 +112,36 @@ class BoolSetting(BasicSetting):
     type = 'BOOL'
 
 
-class BoolUserSetting(BoolSetting):
+class UserAwareSetting(BasicSetting):
     """
     A user-aware BoolSetting
     """
     userAware = True
 
+    def __init__(self, *args, **kwargs):
+        super(UserAwareSetting, self).__init__(*args, **kwargs)
+        util.USER_SETTINGS.append(self.ID)
+
     @property
     def userAwareID(self):
         return '{}.{}'.format(self.ID, plexnet.plexapp.ACCOUNT.ID)
 
-    def get(self):
-        return util.getSetting(self.userAwareID, self.default)
+    def get(self, *args, _id=UNDEF, default=UNDEF, **kwargs):
+        return super(UserAwareSetting, self).get(*args,
+                                                 _id=_id if _id != UNDEF else self.userAwareID, default=default,
+                                                 **kwargs)
 
-    def set(self, val):
-        old = self.get()
-        if old != val:
-            util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]', self.userAwareID, old, val)
-            plexnet.util.APP.trigger('change:{0}'.format(self.ID), key=self.userAwareID, value=val, skey=self.ID)
+    def set(self, val, skip_get=False):
+        if not skip_get:
+            old = self.get(_id=self.userAwareID)
+            if old != val:
+                util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]', self.userAwareID, old, val)
+                plexnet.util.APP.trigger('change:{0}'.format(self.ID), key=self.userAwareID, value=val, skey=self.ID)
         return util.setSetting(self.userAwareID, val)
+
+
+class BoolUserSetting(UserAwareSetting, BoolSetting):
+    pass
 
 
 class OptionsSetting(BasicSetting):
@@ -164,8 +182,8 @@ class MultiOptionsSetting(OptionsSetting):
         self.noneOption = none_option
         util.JSON_SETTINGS.append(self.ID)
 
-    def get(self, with_default=True):
-        val = util.getSetting(self.ID, DEFAULT)
+    def get(self, *args, with_default=True, **kwargs):
+        val = super(MultiOptionsSetting, self).get(*args, default=DEFAULT, **kwargs)
         if val and val != DEFAULT:
             try:
                 return json.loads(val)
@@ -183,12 +201,12 @@ class MultiOptionsSetting(OptionsSetting):
                 if lval != DEFAULT and lval == "true":
                     ret.append(o[0])
             if ret:
-                self.set(ret)
+                self.set(ret, skip_get=True)
                 return ret
         return with_default and self.default or []
 
-    def set(self, val):
-        super(MultiOptionsSetting, self).set(json.dumps(val))
+    def set(self, val, skip_get=False):
+        super(MultiOptionsSetting, self).set(json.dumps(val), skip_get=skip_get)
 
     def translate(self, val, return_str=False, delim=", "):
         if isinstance(val, (list, tuple, set)):
@@ -214,28 +232,34 @@ class MultiOptionsSetting(OptionsSetting):
         return ret
 
 
+class MultiUAOptionsSetting(MultiOptionsSetting, UserAwareSetting):
+    pass
+
+
 class BufferSetting(OptionsSetting):
-    def get(self):
+    def get(self, *args, **kwargs):
         return lib.cache.kcm.memorySize
 
-    def set(self, val):
-        old = self.get()
-        if old != val:
-            util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]', self.ID, old, val)
-            plexnet.util.APP.trigger('change:{0}'.format(self.ID), value=val)
+    def set(self, val, skip_get=False):
+        if not skip_get:
+            old = self.get()
+            if old != val:
+                util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]', self.ID, old, val)
+                plexnet.util.APP.trigger('change:{0}'.format(self.ID), value=val)
 
         lib.cache.kcm.write(memorySize=val)
 
 
 class ReadFactorSetting(OptionsSetting):
-    def get(self):
+    def get(self, *args, **kwargs):
         return lib.cache.kcm.readFactor
 
-    def set(self, val):
-        old = self.get()
-        if old != val:
-            util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]', self.ID, old, val)
-            plexnet.util.APP.trigger('change:{0}'.format(self.ID), value=val)
+    def set(self, val, skip_get=False):
+        if not skip_get:
+            old = self.get()
+            if old != val:
+                util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]', self.ID, old, val)
+                plexnet.util.APP.trigger('change:{0}'.format(self.ID), value=val)
 
         lib.cache.kcm.write(readFactor=val)
 
@@ -484,7 +508,7 @@ class Settings(object):
                     T(33046, '')),
                 BoolSetting('no_spoilers', T(33004, ''), False).description(
                     T(33005, '')),
-                MultiOptionsSetting(
+                MultiUAOptionsSetting(
                     'player_show_buttons', T(33057, 'Show buttons'), ['subtitle_downloads'],
                     (
                         ('subtitle_downloads', T(32932, 'Show subtitle quick-actions button')),

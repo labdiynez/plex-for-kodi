@@ -1563,7 +1563,7 @@ msgid "Only for Episodes/Playlists"
 msgstr ""
 
 msgctxt "#32939"
-msgid "Only applies to video player UI"
+msgid "User-specific.\nOnly applies to video player UI"
 msgstr ""
 
 msgctxt "#32940"

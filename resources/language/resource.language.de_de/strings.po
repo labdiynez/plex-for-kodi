@@ -1937,8 +1937,8 @@ msgstr "Zeige Vorheriger/Nächster-Knopf"
 
 #: 
 msgctxt "#32939"
-msgid "Only applies to video player UI"
-msgstr "Gilt nur für die Video-Abspieloberfläche"
+msgid "User-specific.\nOnly applies to video player UI"
+msgstr "Benutzerspezifisch.\nGilt nur für die Video-Abspieloberfläche"
 
 #: 
 msgctxt "#32940"

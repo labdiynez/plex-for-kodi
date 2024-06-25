@@ -135,6 +135,7 @@ def getUserSetting(key, default=None):
 
 
 JSON_SETTINGS = []
+USER_SETTINGS = []
 
 
 def _processSetting(setting, default, is_json=False):
