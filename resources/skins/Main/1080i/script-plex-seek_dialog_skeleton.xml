@@ -769,7 +769,7 @@
                 <animation type="Conditional" condition="String.IsEmpty(Window.Property(show.OSD)) + !Window.IsVisible(seekbar)" reversible="false">
                     <effect type="slide" end="0,100" time="100" delay="100"></effect>
                 </animation>
-                <width min="200">auto</width>
+                <width min="366">auto</width>
                 <height>143</height>
                 <align>center</align>
                 <right>0</right>
