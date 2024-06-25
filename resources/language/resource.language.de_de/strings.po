@@ -109,13 +109,13 @@ msgstr "Debug-Protokollierung"
 
 #: 
 msgctxt "#32025"
-msgid "Allow Direct Play"
-msgstr "Direkte Wiedergabe erlauben"
+msgid "Direct Play"
+msgstr "Direkte Wiedergabe"
 
 #: 
 msgctxt "#32026"
-msgid "Allow Direct Stream"
-msgstr "Direktes Streamen erlauben"
+msgid "Direct Stream"
+msgstr "Direktes Streamen"
 
 #: 
 msgctxt "#32027"
@@ -159,13 +159,13 @@ msgstr "Immer"
 
 #: 
 msgctxt "#32036"
-msgid "Allow 4K"
-msgstr "4K erlauben"
+msgid "4K"
+msgstr "4K"
 
 #: 
 msgctxt "#32037"
-msgid "Allow HEVC (h265)"
-msgstr "HEVC erlauben (H265)"
+msgid "HEVC (h265)"
+msgstr "HEVC (H265)"
 
 #: 
 msgctxt "#32038"
@@ -1351,8 +1351,8 @@ msgstr "Endet um"
 
 #: 
 msgctxt "#32601"
-msgid "Allow AV1"
-msgstr "AV1 zulassen"
+msgid "AV1"
+msgstr "AV1"
 
 #: 
 msgctxt "#32602"
@@ -2128,8 +2128,8 @@ msgstr "Adaptiv"
 
 #: 
 msgctxt "#32977"
-msgid "Allow VC1"
-msgstr "VC1 zulassen"
+msgid "VC1"
+msgstr "VC1"
 
 #: 
 msgctxt "#32978"
@@ -2541,3 +2541,19 @@ msgstr "Keine"
 msgctxt "#33057"
 msgid "Show buttons"
 msgstr "Knöpfe anzeigen"
+
+msgctxt "#33058"
+msgid "Playback features"
+msgstr "Abspielfunktionen"
+
+msgctxt "#33059"
+msgid "Additional codecs"
+msgstr "Weitere Codecs"
+
+msgctxt "#33060"
+msgid "{feature_ds}: {desc_ds}\n{feature_4k}: {desc_4k}"
+msgstr "{feature_ds}: {desc_ds}\n{feature_4k}: {desc_4k}"
+
+msgctxt "#33061"
+msgid "Enable certain codecs if your hardware supports them. Disable them to force transcoding."
+msgstr "Bestimmte Codecs erlauben, wenn die Hardware diese unterstützt. Deaktivierung erzwingt Transcodierung."
