@@ -192,7 +192,8 @@ class MultiOptionsSetting(OptionsSetting):
 
     def translate(self, val, return_str=False, delim=", "):
         if isinstance(val, (list, tuple, set)):
-            data = [super(MultiOptionsSetting, self).translate(v) for v in val]
+            # keep options order
+            data = [super(MultiOptionsSetting, self).translate(o[0]) for o in self.options if o[0] in val]
             if return_str:
                 return delim.join(data)
             return data
