@@ -853,36 +853,37 @@ shortDF = getShortDateFormat()
 DEF_THEME = "modern-colored"
 THEME_VERSION = 7
 
-BUTTON_THEMES_ENABLED_FOR = ("seek_dialog", "music_player", "music_current_playlist", "playlist", "posters",
-                             "posters-small", "listview-16x9", "listview-square", "squares", "episodes", "seasons",
-                             "pre_play", "album", "photo", "artist")
+THEMED_INTERFACES = ("seek_dialog", "music_player", "music_current_playlist", "playlist", "posters",
+                     "posters-small", "listview-16x9", "listview-square", "squares", "episodes", "seasons",
+                     "pre_play", "album", "photo", "artist")
 
 
-def applyTheme(thm=None):
+def applyTheme(thm=None, interfaces=None):
     """
     Dynamically build script-plex-PLAYER_INTERFACE_NAME.xml by combining a player button template with
     script-plex-PLAYER_INTERFACE_NAME_skeleton.xml
     """
-    for context in BUTTON_THEMES_ENABLED_FOR:
+    interfaces = THEMED_INTERFACES if interfaces is None else interfaces
+    for interface in interfaces:
         thm = thm or getSetting('theme', DEF_THEME)
         skel = os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i",
-                            "script-plex-{}_skeleton.xml".format(context))
+                            "script-plex-{}_skeleton.xml".format(interface))
         if thm == "custom":
-            btnFn = "{}_buttons_custom.xml".format(context)
+            btnFn = "{}_buttons_custom.xml".format(interface)
             btnTheme = os.path.join(ADDON.getAddonInfo("profile"), "templates",
-                                    "{}_buttons_custom.xml".format(context))
+                                    "{}_buttons_custom.xml".format(interface))
             customSkel = os.path.join(ADDON.getAddonInfo("profile"), "templates", btnFn)
             if xbmcvfs.exists(customSkel):
                 skel = customSkel
         else:
-            btnFn = "{}_buttons_{}.xml".format(context, thm)
+            btnFn = "{}_buttons_{}.xml".format(interface, thm)
             btnTheme = os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i", "templates",
                                     btnFn)
 
         if not xbmcvfs.exists(btnTheme):
             LOG("Theme {} ({}) doesn't exist, falling back to {}".format(thm, btnFn, DEF_THEME))
-            setSetting('theme', DEF_THEME)
-            return applyTheme(DEF_THEME)
+            applyTheme(DEF_THEME, [interface])
+            continue
 
         try:
             # read skeleton
@@ -890,7 +891,7 @@ def applyTheme(thm=None):
             skelData = f.read()
             f.close()
         except:
-            ERROR("Couldn't find {}".format("script-plex-{}_skeleton.xml".format(context)))
+            ERROR("Couldn't find {}".format("script-plex-{}_skeleton.xml".format(interface)))
         else:
             try:
                 # read button theme
@@ -898,18 +899,18 @@ def applyTheme(thm=None):
                 btnData = f.read()
                 f.close()
             except:
-                ERROR("Couldn't find {}".format("{}_buttons_{}.xml".format(context, thm)))
+                ERROR("Couldn't find {}".format("{}_buttons_{}.xml".format(interface, thm)))
             else:
                 # combine both
                 finalXML = skelData.replace('<!-- BUTTON_INCLUDE -->', btnData)
                 try:
                     # write final file
                     f = xbmcvfs.File(os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i",
-                                     "script-plex-{}.xml".format(context)), "w")
+                                     "script-plex-{}.xml".format(interface)), "w")
                     f.write(finalXML)
                     f.close()
                 except:
-                    ERROR("Couldn't write script-plex-{}.xml".format(context))
+                    ERROR("Couldn't write script-plex-{}.xml".format(interface))
                 else:
                     LOG('Using theme: {}'.format(thm))
 
@@ -924,7 +925,7 @@ if curThemeVer < THEME_VERSION:
 
 # apply theme if most recently added xml missing
 if not xbmcvfs.exists(os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i",
-                                   "script-plex-{}.xml".format(BUTTON_THEMES_ENABLED_FOR[-1]))):
+                                   "script-plex-{}.xml".format(THEMED_INTERFACES[-1]))):
     applyTheme(theme)
 
 
