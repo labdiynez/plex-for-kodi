@@ -99,7 +99,7 @@
                     <texturefocus>script.plex/buttons/player/modern/shuffle.png</texturefocus>
                     <texturenofocus colordiffuse="88FFFFFF">script.plex/buttons/player/modern/shuffle.png</texturenofocus>
                     <usealttexture>!String.IsEmpty(Window.Property(pq.shuffled))</usealttexture>
-                    <alttexturefocus colordiffuse="FFCC7B19">script.plex/buttons/player/modern/shuffle.png</alttexturefocus>
+                    <alttexturefocus colordiffuse="FFE5A00D">script.plex/buttons/player/modern/shuffle.png</alttexturefocus>
                     <alttexturenofocus colordiffuse="FFCC7B19">script.plex/buttons/player/modern/shuffle.png</alttexturenofocus>
                     <label> </label>
                 </control>

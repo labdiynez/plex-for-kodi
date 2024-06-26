@@ -851,61 +851,66 @@ def getShortDateFormat():
 shortDF = getShortDateFormat()
 
 DEF_THEME = "modern-colored"
-THEME_VERSION = 5
+THEME_VERSION = 6
+
+BUTTON_THEMES_ENABLED_FOR = ("seek_dialog", "music_player", "music_current_playlist", "playlist", "posters",
+                             "posters-small", "listview-16x9", "listview-square", "squares")
 
 
-def applyTheme(theme=None):
+def applyTheme(thm=None):
     """
-    Dynamically build script-plex-seek_dialog.xml by combining a player button template with
-    script-plex-seek_dialog_skeleton.xml
+    Dynamically build script-plex-PLAYER_INTERFACE_NAME.xml by combining a player button template with
+    script-plex-PLAYER_INTERFACE_NAME_skeleton.xml
     """
-    theme = theme or getSetting('theme', DEF_THEME)
-    skel = os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i",
-                        "script-plex-seek_dialog_skeleton.xml")
-    if theme == "custom":
-        btnTheme = os.path.join(ADDON.getAddonInfo("profile"), "templates",
-                                "seek_dialog_buttons_custom.xml")
-        customSkel = os.path.join(ADDON.getAddonInfo("profile"), "templates",
-                                  "script-plex-seek_dialog_skeleton_custom.xml")
-        if xbmcvfs.exists(customSkel):
-            skel = customSkel
-    else:
-        btnTheme = os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i", "templates",
-                                "seek_dialog_buttons_{}.xml".format(theme))
+    for context in BUTTON_THEMES_ENABLED_FOR:
+        thm = thm or getSetting('theme', DEF_THEME)
+        skel = os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i",
+                            "script-plex-{}_skeleton.xml".format(context))
+        if thm == "custom":
+            btnFn = "{}_buttons_custom.xml".format(context)
+            btnTheme = os.path.join(ADDON.getAddonInfo("profile"), "templates",
+                                    "{}_buttons_custom.xml".format(context))
+            customSkel = os.path.join(ADDON.getAddonInfo("profile"), "templates", btnFn)
+            if xbmcvfs.exists(customSkel):
+                skel = customSkel
+        else:
+            btnFn = "{}_buttons_{}.xml".format(context, thm)
+            btnTheme = os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i", "templates",
+                                    btnFn)
 
-    if not xbmcvfs.exists(btnTheme):
-        LOG("Theme {} doesn't exist, falling back to modern".format(theme))
-        setSetting('theme', DEF_THEME)
-        return applyTheme(DEF_THEME)
+        if not xbmcvfs.exists(btnTheme):
+            LOG("Theme {} ({}) doesn't exist, falling back to {}".format(thm, btnFn, DEF_THEME))
+            setSetting('theme', DEF_THEME)
+            return applyTheme(DEF_THEME)
 
-    try:
-        # read skeleton
-        f = xbmcvfs.File(skel)
-        skelData = f.read()
-        f.close()
-    except:
-        ERROR("Couldn't find {}".format("script-plex-seek_dialog_skeleton.xml"))
-    else:
         try:
-            # read button theme
-            f = xbmcvfs.File(btnTheme)
-            btnData = f.read()
+            # read skeleton
+            f = xbmcvfs.File(skel)
+            skelData = f.read()
             f.close()
         except:
-            ERROR("Couldn't find {}".format("seek_dialog_buttons_{}.xml".format(theme)))
+            ERROR("Couldn't find {}".format("script-plex-{}_skeleton.xml".format(context)))
         else:
-            # combine both
-            finalXML = skelData.replace('<!-- BUTTON_INCLUDE -->', btnData)
             try:
-                # write final file
-                f = xbmcvfs.File(os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i",
-                                 "script-plex-seek_dialog.xml"), "w")
-                f.write(finalXML)
+                # read button theme
+                f = xbmcvfs.File(btnTheme)
+                btnData = f.read()
                 f.close()
             except:
-                ERROR("Couldn't write script-plex-seek_dialog.xml")
+                ERROR("Couldn't find {}".format("{}_buttons_{}.xml".format(context, thm)))
             else:
-                LOG('Using theme: {}'.format(theme))
+                # combine both
+                finalXML = skelData.replace('<!-- BUTTON_INCLUDE -->', btnData)
+                try:
+                    # write final file
+                    f = xbmcvfs.File(os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i",
+                                     "script-plex-{}.xml".format(context)), "w")
+                    f.write(finalXML)
+                    f.close()
+                except:
+                    ERROR("Couldn't write script-plex-{}.xml".format(context))
+                else:
+                    LOG('Using theme: {}'.format(thm))
 
 
 # apply theme if version changed
@@ -916,9 +921,9 @@ if curThemeVer < THEME_VERSION:
     # apply seekdialog button theme
     applyTheme(theme)
 
-# apply theme if seek_dialog xml missing
+# apply theme if most recently added xml missing
 if not xbmcvfs.exists(os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i",
-                                   "script-plex-seek_dialog.xml")):
+                                   "script-plex-{}.xml".format(BUTTON_THEMES_ENABLED_FOR[-1]))):
     applyTheme(theme)
 
 
