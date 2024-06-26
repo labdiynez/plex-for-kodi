@@ -207,7 +207,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.skipPostPlay = False
         self.prePlayWitnessed = False
         self.queuingNext = False
-        self.useAlternateSeek = util.deviceModel in ["UGOOS AM6B"]
+        self.useAlternateSeek = util.isCoreELEC()
         self.reset()
 
     def reset(self):

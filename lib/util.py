@@ -13,7 +13,7 @@ import datetime
 import contextlib
 import types
 import subprocess
-
+import platform as plat
 import unicodedata
 
 import six.moves.urllib.request, six.moves.urllib.parse, six.moves.urllib.error
@@ -963,25 +963,17 @@ def getPlatform():
 platform = getPlatform()
 
 
-# There are lots of different devices and different ways to get the device model.  This way is known
-# to work with the Ugoos am6b+ device but probably doesn't work for others.
-def getDeviceModel():
+def isCoreELEC():
     try:
-        deviceModel = "Unknown"
-        if platform == "RaspberryPi":
-            stdout = subprocess.check_output('cat /proc/cpuinfo', shell=True).decode()
-            hardwareRegex = re.compile(r'Hardware\s*:\s*(.*)')
-            match = hardwareRegex.search(stdout)
-            deviceModel = "Unknown"
+        if platform in ['Linux', 'RaspberryPi']:
+            stdout = subprocess.check_output('lsb_release', shell=True).decode()
+            match = re.search(r'CoreELEC', stdout)
             if match:
-                deviceModel = match.group(1)
+                return True
 
-        return deviceModel
+        return False
     except:
-        return "Unknown"
-
-
-deviceModel = getDeviceModel()
+        return False
 
 
 def getRunningAddons():
