@@ -791,6 +791,7 @@ class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):
             label = self.settings[sectionID][0]
             item = kodigui.ManagedListItem(label, data_source=sectionID)
             items.append(item)
+        items[-1].setProperty('is.last', '1')
 
         self.sectionList.addItems(items)
 
