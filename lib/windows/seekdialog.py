@@ -2145,7 +2145,7 @@ class SeekDialog(kodigui.BaseDialog):
             if markerDef["countdown"] > 0:
                 markerName = "{} ({})".format(markerDef["autoSkipName"], markerDef["countdown"])
             else:
-                markerName = markerDef["autoSkipName"]
+                markerName = "  {}   ".format(markerDef["autoSkipName"])
         else:
             markerName = markerDef["name"]
         self.setProperty('skipMarkerName', markerName)
