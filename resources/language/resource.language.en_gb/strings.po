@@ -1987,7 +1987,7 @@ msgid "Behave like official Plex clients"
 msgstr ""
 
 msgctxt "#33046"
-msgid "When pressing up/down while the OSD isn't shown, show OSD instead of skipping chapters."
+msgid "When pressing up/down while the OSD isn't shown, show OSD instead of skipping chapters. Additionally, when pressing down while the OSD is shown, open the chapters (if available)."
 msgstr ""
 
 msgctxt "#33047"

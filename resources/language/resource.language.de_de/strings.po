@@ -2495,8 +2495,8 @@ msgid "Behave like official Plex clients"
 msgstr "Verhalten wie Plex Clients"
 
 msgctxt "#33046"
-msgid "When pressing up/down while the OSD isn't shown, show OSD instead of skipping chapters."
-msgstr "Das OSD anzeigen wenn ohne OSD hoch/runter gedrückt wird, anstatt Kapitel zu wechseln."
+msgid "When pressing up/down while the OSD isn't shown, show OSD instead of skipping chapters. Additionally, when pressing down while the OSD is shown, open the chapters (if available)."
+msgstr "Das OSD anzeigen wenn ohne OSD hoch/runter gedrückt wird, anstatt Kapitel zu wechseln. Darüberhinaus werden beim Runterdrücken während das OSD angezeigt wird, die Kapitel geöffnet (wenn vorhanden)."
 
 msgctxt "#33047"
 msgid "Hubs round-robin item limit"
