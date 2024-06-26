@@ -1735,11 +1735,11 @@ msgid "Depending on how many cores your CPU has and how much it can handle, incr
 msgstr ""
 
 msgctxt "#32983"
-msgid "Player Theme"
+msgid "Theme"
 msgstr ""
 
 msgctxt "#32984"
-msgid "Sets the player theme. Currently only customizes the playback control buttons. ATTENTION: [I]Might[/I] need an addon restart.\nIn order to customize this, copy one of the xml's in script.plexmod/resources/skins/Main/1080i/templates to addon_data/script.plexmod/templates/seek_dialog_buttons_custom.xml and adjust it to your liking, then select \"Custom\" as your theme."
+msgid "Sets the theme. Currently only customizes all control buttons. ATTENTION: [I]Might[/I] need an addon restart.\nIn order to customize this, copy one of the xml's in script.plexmod/resources/skins/Main/1080i/templates to addon_data/script.plexmod/templates/{templatename}_custom.xml and adjust it to your liking, then select \"Custom\" as your theme."
 msgstr ""
 
 msgctxt "#32985"
