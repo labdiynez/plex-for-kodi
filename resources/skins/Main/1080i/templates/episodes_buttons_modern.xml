@@ -1,0 +1,201 @@
+            <control type="image">
+                <posx>60</posx>
+                <posy>393</posy>
+                <width>657</width>
+                <height>104</height>
+                <texture>script.plex/white-square.png</texture>
+                <colordiffuse>66000000</colordiffuse>
+            </control>
+            <control type="grouplist" id="300">
+                <visible allowhiddenfocus="!String.IsEmpty(Container(400).ListItem.Property(media.multiple))">String.IsEmpty(Container(400).ListItem.Property(media.multiple)) + !String.IsEmpty(Window.Property(initialized))</visible>
+                <defaultcontrol always="true">301</defaultcontrol>
+                <posx>30</posx>
+                <posy>393</posy>
+                <width>717</width>
+                <height>200</height>
+                <onup>200</onup>
+                <ondown>400</ondown>
+                <align>center</align>
+                <itemgap>-50</itemgap>
+                <orientation>horizontal</orientation>
+                <scrolltime tween="quadratic" easing="out">200</scrolltime>
+                <usecontrolcoords>true</usecontrolcoords>
+                <control type="button" id="304">
+                    <hitrect x="40" y="40" w="96" h="60" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>131</width>
+                    <height>104</height>
+                    <font>font12</font>
+                    <texturefocus>script.plex/buttons/player/modern/info.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">script.plex/buttons/player/modern/info.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="301">
+                    <visible allowhiddenfocus="true">!String.IsEmpty(Window.Property(current_item.loaded))</visible>
+                    <enable>!String.IsEmpty(Window.Property(current_item.loaded))</enable>
+                    <hitrect x="40" y="40" w="96" h="60" />
+                    <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false" condition="Control.HasFocus(301)">Conditional</animation>
+                    <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false" condition="!Control.HasFocus(301)">Conditional</animation>
+                    <onleft>304</onleft>
+                    <onright>305</onright>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>131</width>
+                    <height>104</height>
+                    <font>font12</font>
+                    <texturefocus>script.plex/buttons/player/modern/play.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">script.plex/buttons/player/modern/play.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="306">
+                    <visible>String.IsEmpty(Window.Property(current_item.loaded))</visible>
+                    <hitrect x="40" y="40" w="96" h="60" />
+                    <onleft>304</onleft>
+                    <onright>305</onright>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>131</width>
+                    <height>104</height>
+                    <font>font12</font>
+                    <texturefocus colordiffuse="44FFFFFF">script.plex/buttons/player/modern/play.png</texturefocus>
+                    <texturenofocus colordiffuse="33FFFFFF">script.plex/buttons/player/modern/play.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="305">
+                    <hitrect x="40" y="40" w="96" h="60" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>131</width>
+                    <height>104</height>
+                    <font>font12</font>
+                    <texturefocus>script.plex/buttons/player/modern/settings.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">script.plex/buttons/player/modern/settings.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="303">
+                    <hitrect x="40" y="40" w="96" h="60" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>131</width>
+                    <height>104</height>
+                    <font>font12</font>
+                    <texturefocus>script.plex/buttons/player/modern/more.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">script.plex/buttons/player/modern/more.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="302">
+                    <hitrect x="40" y="40" w="96" h="60" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>131</width>
+                    <height>104</height>
+                    <font>font12</font>
+                    <texturefocus>script.plex/buttons/player/modern/shuffle.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">script.plex/buttons/player/modern/shuffle.png</texturenofocus>
+                    <label> </label>
+                </control>
+            </control>
+            <control type="grouplist" id="1300">
+                <visible>!String.IsEmpty(Container(400).ListItem.Property(media.multiple)) + !String.IsEmpty(Window.Property(initialized))</visible>
+                <defaultcontrol always="true">1301</defaultcontrol>
+                <posx>30</posx>
+                <posy>393</posy>
+                <width>717</width>
+                <height>200</height>
+                <onup>200</onup>
+                <ondown>400</ondown>
+                <align>center</align>
+                <itemgap>-50</itemgap>
+                <orientation>horizontal</orientation>
+                <scrolltime tween="quadratic" easing="out">200</scrolltime>
+                <usecontrolcoords>true</usecontrolcoords>
+                <control type="button" id="1304">
+                    <hitrect x="40" y="40" w="96" h="60" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>131</width>
+                    <height>104</height>
+                    <font>font12</font>
+                    <texturefocus>script.plex/buttons/player/modern/info.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">script.plex/buttons/player/modern/info.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="1301">
+                    <visible allowhiddenfocus="true">!String.IsEmpty(Window.Property(current_item.loaded))</visible>
+                    <enable>!String.IsEmpty(Window.Property(current_item.loaded))</enable>
+                    <hitrect x="40" y="40" w="96" h="60" />
+                    <animation effect="zoom" start="100" end="124" time="100" center="63,50" reversible="false" condition="Control.HasFocus(1301)">Conditional</animation>
+                    <animation effect="zoom" start="124" end="100" time="100" center="63,50" reversible="false" condition="!Control.HasFocus(1301)">Conditional</animation>
+                    <onleft>1304</onleft>
+                    <onright>1307</onright>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>131</width>
+                    <height>104</height>
+                    <font>font12</font>
+                    <texturefocus>script.plex/buttons/player/modern/play.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">script.plex/buttons/player/modern/play.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="1306">
+                    <visible>String.IsEmpty(Window.Property(current_item.loaded))</visible>
+                    <hitrect x="40" y="40" w="96" h="60" />
+                    <onleft>1304</onleft>
+                    <onright>1307</onright>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>131</width>
+                    <height>104</height>
+                    <font>font12</font>
+                    <onleft>304</onleft>
+                    <onright>305</onright>
+                    <texturefocus colordiffuse="44FFFFFF">script.plex/buttons/player/modern/play.png</texturefocus>
+                    <texturenofocus colordiffuse="33FFFFFF">script.plex/buttons/player/modern/play.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="1307">
+                    <hitrect x="40" y="40" w="96" h="60" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>131</width>
+                    <height>104</height>
+                    <font>font12</font>
+                    <texturefocus>script.plex/buttons/player/modern/media.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">script.plex/buttons/player/modern/media.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="1305">
+                    <hitrect x="40" y="40" w="96" h="60" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>131</width>
+                    <height>104</height>
+                    <font>font12</font>
+                    <texturefocus>script.plex/buttons/player/modern/settings.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">script.plex/buttons/player/modern/settings.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="1303">
+                    <hitrect x="40" y="40" w="96" h="60" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>131</width>
+                    <height>104</height>
+                    <font>font12</font>
+                    <texturefocus>script.plex/buttons/player/modern/more.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">script.plex/buttons/player/modern/more.png</texturenofocus>
+                    <label> </label>
+                </control>
+                <control type="button" id="1302">
+                    <hitrect x="40" y="40" w="96" h="60" />
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>131</width>
+                    <height>104</height>
+                    <font>font12</font>
+                    <texturefocus>script.plex/buttons/player/modern/shuffle.png</texturefocus>
+                    <texturenofocus colordiffuse="99FFFFFF">script.plex/buttons/player/modern/shuffle.png</texturenofocus>
+                    <label> </label>
+                </control>
+            </control>

@@ -854,7 +854,8 @@ DEF_THEME = "modern-colored"
 THEME_VERSION = 6
 
 BUTTON_THEMES_ENABLED_FOR = ("seek_dialog", "music_player", "music_current_playlist", "playlist", "posters",
-                             "posters-small", "listview-16x9", "listview-square", "squares")
+                             "posters-small", "listview-16x9", "listview-square", "squares", "episodes", "seasons",
+                             "pre_play", "album", "photo", "artist")
 
 
 def applyTheme(thm=None):
