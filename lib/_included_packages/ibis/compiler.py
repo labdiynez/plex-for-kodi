@@ -30,7 +30,9 @@ class Token:
         self.line_number = line_number
 
     def __str__(self):
-        return f"({self.type}, {repr(self.text)}, {self.template_id}, {self.line_number})"
+        return "({type}, {text}, {template_id}, {line_number})".format(type=self.type, text=repr(self.text),
+                                                                       template_id=self.template_id,
+                                                                       line_number=self.line_number)
 
 
 # The Lexer takes a template string as input and chops it into a list of Tokens.
@@ -117,7 +119,7 @@ class Lexer:
                 self.index += len(instruction_end)
                 return
             self.advance()
-        msg = f"Unclosed instruction tag."
+        msg = "Unclosed instruction tag."
         raise errors.TemplateLexingError(msg, self.template_id, start_line_number)
 
     def read_text(self):
@@ -163,28 +165,29 @@ class Parser:
                     expecting.append(endword)
             elif token.keyword in nodes.instruction_endwords:
                 if len(expecting) == 0:
-                    msg = f"Unexpected '{token.keyword}' tag."
+                    msg = "Unexpected '{}' tag.".format(token.keyword)
                     raise errors.TemplateSyntaxError(msg, token)
                 elif expecting[-1] != token.keyword:
-                    msg = f"Unexpected '{token.keyword}' tag. "
-                    msg += f"Ibis was expecting the following closing tag: '{expecting[-1]}'."
+                    msg = "Unexpected '{}' tag. ".format(token.keyword)
+                    msg += "Ibis was expecting the following closing tag: '{}'.".format(expecting[-1])
                     raise errors.TemplateSyntaxError(msg, token)
                 else:
                     stack[-1].exit_scope()
                     stack.pop()
                     expecting.pop()
             elif token.keyword == '':
-                msg = f"Empty instruction tag."
+                msg = "Empty instruction tag."
                 raise errors.TemplateSyntaxError(msg, token)
             else:
-                msg = f"Unrecognised instruction tag '{token.keyword}'."
+                msg = "Unrecognised instruction tag '{}'.".format(token.keyword)
                 raise errors.TemplateSyntaxError(msg, token)
 
         if expecting:
             token = stack[-1].token
-            msg = f"Unexpected end of template. "
-            msg += f"Ibis was expecting a closing '{expecting[-1]}' tag to close the "
-            msg += f"'{token.keyword}' tag opened in line {token.line_number}."
+            msg = "Unexpected end of template. "
+            msg += "Ibis was expecting a closing '{}' tag to close the ".format(expecting[-1])
+            msg += "'{keyword}' tag opened in line {line_number}.".format(keyword=token.keyword,
+                                                                          line_number=token.line_number)
             raise errors.TemplateSyntaxError(msg, token)
 
         return stack.pop()

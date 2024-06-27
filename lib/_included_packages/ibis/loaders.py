@@ -1,7 +1,7 @@
 import os
 
 from .template import Template
-from .errors import TemplateLoadError
+from .errors import TemplateLoadError, raise_from
 
 
 # Loads templates from the file system. Assumes files are utf-8 encoded. Compiled templates are
@@ -40,14 +40,14 @@ class FileLoader:
                     with open(path, encoding='utf-8') as file:
                         template_string = file.read()
                 except OSError as err:
-                    msg = f"FileLoader cannot load the template file '{path}'."
-                    raise TemplateLoadError(msg) from err
+                    msg = "FileLoader cannot load the template file '{}'.".format(path)
+                    raise_from(TemplateLoadError(msg), err)
 
                 template = Template(template_string, filename)
                 self.cache[filename] = template
                 return template
 
-        msg = f"FileLoader cannot locate the template file '{filename}'."
+        msg = "FileLoader cannot locate the template file '{}'.".format(filename)
         raise TemplateLoadError(msg)
 
 
@@ -72,14 +72,14 @@ class FileReloader:
                     with open(path, encoding='utf-8') as file:
                         template_string = file.read()
                 except OSError as err:
-                    msg = f"FileReloader cannot load the template file '{path}'."
-                    raise TemplateLoadError(msg) from err
+                    msg = "FileReloader cannot load the template file '{}'.".format(path)
+                    raise_from(TemplateLoadError(msg), err)
 
                 template = Template(template_string, filename)
                 self.cache[filename] = (mtime, template)
                 return template
 
-        msg = f"FileReloader cannot locate the template file '{filename}'."
+        msg = "FileReloader cannot locate the template file '{}'.".format(filename)
         raise TemplateLoadError(msg)
 
 
@@ -98,5 +98,5 @@ class DictLoader:
             template = Template(self.template_strings[name], name)
             self.templates[name] = template
             return template
-        msg = f"DictLoader has no entry matching the template name '{name}'."
+        msg = "DictLoader has no entry matching the template name '{}'.".format(name)
         raise TemplateLoadError(msg)

@@ -28,8 +28,8 @@ class Template:
                 parent_template = ibis.loader(self.root_node.children[0].parent_name)
                 return parent_template._render(context)
             else:
-                msg = f"No template loader has been specified. A template loader is required "
-                msg += f"by the 'extends' tag in template '{self.template_id}'."
+                msg = "No template loader has been specified. A template loader is required "
+                msg += "by the 'extends' tag in template '{}'.".format(self.template_id)
                 raise ibis.errors.TemplateLoadError(msg)
         else:
             return self.root_node.render(context)

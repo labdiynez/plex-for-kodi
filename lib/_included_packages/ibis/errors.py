@@ -1,3 +1,6 @@
+from six import reraise as raise_from
+
+
 # Base class for all exception types raised by the template engine.
 class TemplateError(Exception):
 
@@ -6,7 +9,9 @@ class TemplateError(Exception):
 
     def __str__(self):
         if hasattr(self, "token") and self.token is not None:
-            return f"Template '{self.token.template_id}', line {self.token.line_number}: {self.msg}"
+            return "Template '{template_id}', line {line_number}: {msg}".format(template_id=self.token.template_id,
+                                                                                line_number=self.token.line_number,
+                                                                                msg=self.msg)
         return self.msg
 
 
@@ -19,19 +24,21 @@ class TemplateLoadError(TemplateError):
 class TemplateLexingError(TemplateError):
 
     def __init__(self, msg, template_id, line_number):
-        super().__init__(msg)
+        super(TemplateLexingError, self).__init__(msg)
         self.template_id = template_id
         self.line_number = line_number
 
     def __str__(self):
-        return f"Template '{self.template_id}', line {self.line_number}: {self.msg}"
+        return "Template '{template_id}', line {line_number}: {msg}".format(template_id=self.template_id,
+                                                                                      line_number=self.line_number,
+                                                                                      msg=self.msg)
 
 
 # This exception type may be raised while a template is being compiled.
 class TemplateSyntaxError(TemplateError):
 
     def __init__(self, msg, token):
-        super().__init__(msg)
+        super(TemplateSyntaxError, self).__init__(msg)
         self.token = token
 
 
@@ -39,7 +46,7 @@ class TemplateSyntaxError(TemplateError):
 class TemplateRenderingError(TemplateError):
 
     def __init__(self, msg, token):
-        super().__init__(msg)
+        super(TemplateRenderingError, self).__init__(msg)
         self.token = token
 
 
@@ -47,6 +54,6 @@ class TemplateRenderingError(TemplateError):
 class UndefinedVariable(TemplateError):
 
     def __init__(self, msg, token):
-        super().__init__(msg)
+        super(UndefinedVariable, self).__init__(msg)
         self.token = token
 

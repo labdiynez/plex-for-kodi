@@ -87,9 +87,10 @@ class Context:
                         result = result[int(word)]
                     except:
                         if self.strict_mode:
-                            msg = f"Cannot resolve the variable '{'.'.join(words)}' in template "
-                            msg += f"'{token.template_id}', line {token.line_number}."
-                            raise errors.UndefinedVariable(msg, token) from None
+                            msg = "Cannot resolve the variable '{}' in template ".format('.'.join(words))
+                            msg += "'{template_id}', line {line_number}.".format(template_id=token.template_id,
+                                                                                 line_number=token.line_number)
+                            errors.raise_from(errors.UndefinedVariable(msg, token), None)
                         return Undefined()
         return result
 

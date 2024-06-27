@@ -73,8 +73,8 @@ class Expression:
             self.is_literal = False
             self.is_func_call, self.varstring, self.func_args = self._try_parse_as_func_call(expr)
             if not self.is_func_call and not self.re_varstring.match(expr):
-                msg = f"Unparsable expression '{expr}'."
-                raise errors.TemplateSyntaxError(msg, self.token) from None
+                msg = "Unparsable expression '{}'.".format(expr)
+                errors.raise_from(errors.TemplateSyntaxError(msg, self.token), None)
 
     def _try_parse_as_func_call(self, expr):
         match = self.re_func_call.match(expr)
@@ -86,8 +86,8 @@ class Expression:
             try:
                 func_args[index] = ast.literal_eval(arg)
             except Exception as err:
-                msg = f"Unparsable argument '{arg}'. Arguments must be valid Python literals."
-                raise errors.TemplateSyntaxError(msg, self.token) from err
+                msg = "Unparsable argument '{}'. Arguments must be valid Python literals.".format(arg)
+                errors.raise_from(errors.TemplateSyntaxError(msg, self.token), err)
         return True, func_name, func_args
 
     def _parse_filters(self, filter_list):
@@ -96,7 +96,7 @@ class Expression:
             if filter_name in filters.filtermap:
                 self.filters.append((filter_name, filters.filtermap[filter_name], filter_args))
             else:
-                msg = f"Unrecognised filter name '{filter_name}'."
+                msg = "Unrecognised filter name '{}'.".format(filter_name)
                 raise errors.TemplateSyntaxError(msg, self.token)
 
     def _apply_filters_to_literal(self, obj):
@@ -104,8 +104,8 @@ class Expression:
             try:
                 obj = func(obj, *args)
             except Exception as err:
-                msg = f"Error applying filter '{name}'. "
-                raise errors.TemplateSyntaxError(msg, self.token) from err
+                msg = "Error applying filter '{}'. ".format(name)
+                errors.raise_from(errors.TemplateSyntaxError(msg, self.token), err)
         return obj
 
     def eval(self, context):
@@ -120,8 +120,8 @@ class Expression:
             try:
                 obj = obj(*self.func_args)
             except Exception as err:
-                msg = f"Error calling function '{self.varstring}'."
-                raise errors.TemplateRenderingError(msg, self.token) from err
+                msg = "Error calling function '{}'.".format(self.varstring)
+                errors.raise_from(errors.TemplateRenderingError(msg, self.token), err)
         return self._apply_filters_to_variable(obj)
 
     def _apply_filters_to_variable(self, obj):
@@ -129,8 +129,8 @@ class Expression:
             try:
                 obj = func(obj, *args)
             except Exception as err:
-                msg = f"Error applying filter '{name}'."
-                raise errors.TemplateRenderingError(msg, self.token) from err
+                msg = "Error applying filter '{}'.".format(name)
+                errors.raise_from(errors.TemplateRenderingError(msg, self.token), err)
         return obj
 
 
@@ -148,18 +148,18 @@ class Node:
             raise
         except Exception as err:
             if token:
-                tagname = f"'{token.keyword}'" if token.type == "INSTRUCTION" else token.type
-                msg = f"An unexpected error occurred while parsing the {tagname} tag: "
-                msg += f"{err.__class__.__name__}: {err}"
+                tagname = "'{}'".format(token.keyword) if token.type == "INSTRUCTION" else token.type
+                msg = "An unexpected error occurred while parsing the {} tag: ".format(tagname)
+                msg += "{name}: {err}".format(name=err.__class__.__name__, err=err)
             else:
-                msg = f"Unexpected syntax error: {err.__class__.__name__}: {err}"
-            raise errors.TemplateSyntaxError(msg, token) from err
+                msg = "Unexpected syntax error: {name}: {err}".format(name=err.__class__.__name__, err=err)
+            errors.raise_from(errors.TemplateSyntaxError(msg, token), err)
 
     def __str__(self):
         return self.to_str()
 
     def to_str(self, depth=0):
-        output = ["·  " * depth + f"{self.__class__.__name__}"]
+        output = ["·  " * depth + "{}".format(self.__class__.__name__)]
         for child in self.children:
             output.append(child.to_str(depth + 1))
         return "\n".join(output)
@@ -171,12 +171,12 @@ class Node:
             raise
         except Exception as err:
             if self.token:
-                tagname = f"'{self.token.keyword}'" if self.token.type == "INSTRUCTION" else self.token.type
-                msg = f"An unexpected error occurred while rendering the {tagname} tag: "
-                msg += f"{err.__class__.__name__}: {err}"
+                tagname = "'{}'".format(self.token.keyword) if self.token.type == "INSTRUCTION" else self.token.type
+                msg = "An unexpected error occurred while rendering the {} tag: ".format(tagname)
+                msg += "{name}: {err}".format(name=err.__class__.__name__, err=err)
             else:
-                msg = f"Unexpected rendering error: {err.__class__.__name__}: {err}"
-            raise errors.TemplateRenderingError(msg, self.token) from err
+                msg = "Unexpected rendering error: {name}: {err}".format(name=err.__class__.__name__, err=err)
+            errors.raise_from(errors.TemplateRenderingError(msg, self.token), err)
 
     def wrender(self, context):
         return ''.join(child.render(context) for child in self.children)
@@ -259,7 +259,7 @@ class ForNode(Node):
     def process_token(self, token):
         match = self.regex.match(token.text)
         if match is None:
-            msg = f"Malformed 'for' tag."
+            msg = "Malformed 'for' tag."
             raise errors.TemplateSyntaxError(msg, token)
         self.loopvars = [var.strip() for var in match.group(1).split(',')]
         self.expr = Expression(match.group(2), token)
@@ -277,8 +277,8 @@ class ForNode(Node):
                     try:
                         unpacked = dict(zip(self.loopvars, item))
                     except Exception as err:
-                        msg = f"Unpacking error."
-                        raise errors.TemplateRenderingError(msg, self.token) from err
+                        msg = "Unpacking error."
+                        errors.raise_from(errors.TemplateRenderingError(msg, self.token), err)
                     else:
                         context.update(unpacked)
                 else:
@@ -352,8 +352,8 @@ class IfNode(Node):
         try:
             conditions = token.text.split(None, 1)[1]
         except:
-            msg = f"Malformed '{self.tag}' tag."
-            raise errors.TemplateSyntaxError(msg, token) from None
+            msg = "Malformed '{}' tag.".format(self.tag)
+            errors.raise_from(errors.TemplateSyntaxError(msg, token), None)
 
         self.condition_groups = [
             [
@@ -387,9 +387,9 @@ class IfNode(Node):
             else:
                 result = operator.truth(cond.lhs.eval(context))
         except Exception as err:
-            msg = f"An exception was raised while evaluating the condition in the "
-            msg += f"'{self.tag}' tag."
-            raise errors.TemplateRenderingError(msg, self.token) from err
+            msg = "An exception was raised while evaluating the condition in the "
+            msg += "'{}' tag.".format(self.tag)
+            errors.raise_from(errors.TemplateRenderingError(msg, self.token), err)
         if cond.negated:
             result = not result
         return result
@@ -448,8 +448,8 @@ class CycleNode(Node):
         try:
             tag, arg = token.text.split(None, 1)
         except:
-            msg = f"Malformed 'cycle' tag."
-            raise errors.TemplateSyntaxError(msg, token) from None
+            msg = "Malformed 'cycle' tag."
+            errors.raise_from(errors.TemplateSyntaxError(msg, token), None)
         self.expr = Expression(arg, token)
 
     def wrender(self, context):
@@ -492,7 +492,7 @@ class IncludeNode(Node):
                     name, expr = chunk.split('=', 1)
                     self.variables[name.strip()] = Expression(expr.strip(), token)
                 except:
-                    raise errors.TemplateSyntaxError("Malformed 'include' tag.", token) from None
+                    errors.raise_from(errors.TemplateSyntaxError("Malformed 'include' tag.", token), None)
         else:
             raise errors.TemplateSyntaxError("Malformed 'include' tag.", token)
 
@@ -508,14 +508,15 @@ class IncludeNode(Node):
                 context.pop()
                 return rendered
             else:
-                msg = f"No template loader has been specified. "
-                msg += f"A template loader is required by the 'include' tag in "
-                msg += f"template '{self.token.template_id}', line {self.token.line_number}."
+                msg = "No template loader has been specified. "
+                msg += "A template loader is required by the 'include' tag in "
+                msg += "template '{template_id}', line {line_number}.".format(template_id=self.token.template_id,
+                                                                              line_number=self.token.line_number)
                 raise errors.TemplateLoadError(msg)
         else:
-            msg = f"Invalid argument for the 'include' tag. "
-            msg += f"The variable '{self.template_arg}' should evaluate to a string. "
-            msg += f"This variable has the value: {repr(template_name)}."
+            msg = "Invalid argument for the 'include' tag. "
+            msg += "The variable '{}' should evaluate to a string. ".format(self.template_arg)
+            msg += "This variable has the value: {}.".format(repr(template_name))
             raise errors.TemplateRenderingError(msg, self.token)
 
 
@@ -532,13 +533,13 @@ class ExtendsNode(Node):
         try:
             tag, arg = token.text.split(None, 1)
         except:
-            raise errors.TemplateSyntaxError("Malformed 'extends' tag.", token) from None
+            errors.raise_from(errors.TemplateSyntaxError("Malformed 'extends' tag.", token), None)
 
         expr = Expression(arg, token)
         if expr.is_literal and isinstance(expr.literal, str):
             self.parent_name = expr.literal
         else:
-            msg ="Malformed 'extends' tag. The template name must be a string literal."
+            msg = "Malformed 'extends' tag. The template name must be a string literal."
             raise errors.TemplateSyntaxError(msg, token)
 
 
@@ -556,7 +557,8 @@ class BlockNode(Node):
     def wrender(self, context):
         block_list = []
         for template in context.templates:
-            if block_node := template.blocks.get(self.title):
+            block_node = template.blocks.get(self.title)
+            if block_node:
                 block_list.append(block_node)
         return self.render_block(context, block_list)
 
@@ -606,7 +608,7 @@ class WithNode(Node):
                 name, expr = chunk.split('=', 1)
                 self.variables[name.strip()] = Expression(expr.strip(), token)
             except:
-                raise errors.TemplateSyntaxError("Malformed 'with' tag.", token) from None
+                errors.raise_from(errors.TemplateSyntaxError("Malformed 'with' tag.", token), None)
 
     def wrender(self, context):
         context.push()
