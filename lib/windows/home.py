@@ -689,7 +689,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         if hubs is None:
             return
 
-        if time.time() - hubs.lastUpdated > HUBS_REFRESH_INTERVAL and not xbmc.Player().isPlayingVideo():
+        if (self.is_active and time.time() - hubs.lastUpdated > HUBS_REFRESH_INTERVAL and
+                not xbmc.Player().isPlayingVideo()):
             self.showHubs(self.lastSection, update=True)
 
     def shutdown(self):
@@ -942,6 +943,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         self.processCommand(search.dialog(self))
 
     def updateOnDeckHubs(self, **kwargs):
+        util.DEBUG_LOG('UpdateOnDeckHubs called')
         if util.getSetting("speedy_home_hubs2", False):
             util.DEBUG_LOG("Using alternative home hub refresh")
             sections = set()

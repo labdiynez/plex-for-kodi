@@ -236,6 +236,10 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
         xbmcgui.WindowXML.show(self)
         self.isOpen = xbmcgui.getCurrentWindowId() >= 13000
 
+    @property
+    def is_active(self):
+        return self._winID and BaseFunctions.lastWinID == self._winID
+
     def onClosed(self):
         pass
 
