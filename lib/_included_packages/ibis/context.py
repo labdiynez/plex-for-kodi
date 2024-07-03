@@ -90,7 +90,7 @@ class Context:
                             msg = "Cannot resolve the variable '{}' in template ".format('.'.join(words))
                             msg += "'{template_id}', line {line_number}.".format(template_id=token.template_id,
                                                                                  line_number=token.line_number)
-                            errors.raise_from(errors.UndefinedVariable(msg, token), None)
+                            errors.raise_(errors.UndefinedVariable(msg, token), None)
                         return Undefined()
         return result
 

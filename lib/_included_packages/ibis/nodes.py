@@ -51,6 +51,15 @@ def register(keyword, endword=None):
 #
 #     foo.bar.baz('bam')|filter(25, 'text')
 #
+
+class ContextVariable(str):
+    pass
+
+
+class ResolveContextVariable(str):
+    pass
+
+
 class Expression:
 
     re_func_call = re.compile(r'^([\w.]+)\((.*)\)$')
@@ -74,7 +83,7 @@ class Expression:
             self.is_func_call, self.varstring, self.func_args = self._try_parse_as_func_call(expr)
             if not self.is_func_call and not self.re_varstring.match(expr):
                 msg = "Unparsable expression '{}'.".format(expr)
-                errors.raise_from(errors.TemplateSyntaxError(msg, self.token), None)
+                errors.raise_(errors.TemplateSyntaxError(msg, self.token), None)
 
     def _try_parse_as_func_call(self, expr):
         match = self.re_func_call.match(expr)
@@ -85,9 +94,15 @@ class Expression:
         for index, arg in enumerate(func_args):
             try:
                 func_args[index] = ast.literal_eval(arg)
-            except Exception as err:
+            except Exception:
+                # try resolving as variable
+                if arg.isidentifier():
+                    func_args[index] = ContextVariable(arg)
+                    continue
+
                 msg = "Unparsable argument '{}'. Arguments must be valid Python literals.".format(arg)
-                errors.raise_from(errors.TemplateSyntaxError(msg, self.token), err)
+                errors.raise_(errors.TemplateSyntaxError(msg, self.token))
+
         return True, func_name, func_args
 
     def _parse_filters(self, filter_list):
@@ -105,7 +120,7 @@ class Expression:
                 obj = func(obj, *args)
             except Exception as err:
                 msg = "Error applying filter '{}'. ".format(name)
-                errors.raise_from(errors.TemplateSyntaxError(msg, self.token), err)
+                errors.raise_(errors.TemplateSyntaxError(msg, self.token), err)
         return obj
 
     def eval(self, context):
@@ -114,23 +129,41 @@ class Expression:
         else:
             return self._resolve_variable(context)
 
+    def _resolve_arg_to_variable(self, arg, context):
+        if isinstance(arg, ContextVariable):
+            return context.resolve(arg, self.token)
+        return arg
+
     def _resolve_variable(self, context):
         obj = context.resolve(self.varstring, self.token)
         if self.is_func_call:
             try:
+                for index, arg in enumerate(self.func_args):
+                    self.func_args[index] = self._resolve_arg_to_variable(arg, context)
+
                 obj = obj(*self.func_args)
+
+                # a filter/builtin might return a masked variable name whose content should be resolved in the current
+                # context. try to do so.
+                if isinstance(obj, ResolveContextVariable):
+                    value = context.resolve(obj, self.token)
+                    obj = context.resolve(value, self.token)
+
             except Exception as err:
                 msg = "Error calling function '{}'.".format(self.varstring)
-                errors.raise_from(errors.TemplateRenderingError(msg, self.token), err)
-        return self._apply_filters_to_variable(obj)
+                errors.raise_(errors.TemplateRenderingError(msg, self.token), err)
+        return self._apply_filters_to_variable(obj, context)
 
-    def _apply_filters_to_variable(self, obj):
+    def _apply_filters_to_variable(self, obj, context):
         for name, func, args in self.filters:
             try:
+                for index, arg in enumerate(args):
+                    args[index] = self._resolve_arg_to_variable(arg, context)
+
                 obj = func(obj, *args)
             except Exception as err:
                 msg = "Error applying filter '{}'.".format(name)
-                errors.raise_from(errors.TemplateRenderingError(msg, self.token), err)
+                errors.raise_(errors.TemplateRenderingError(msg, self.token), err)
         return obj
 
 
@@ -153,7 +186,7 @@ class Node:
                 msg += "{name}: {err}".format(name=err.__class__.__name__, err=err)
             else:
                 msg = "Unexpected syntax error: {name}: {err}".format(name=err.__class__.__name__, err=err)
-            errors.raise_from(errors.TemplateSyntaxError(msg, token), err)
+            errors.raise_(errors.TemplateSyntaxError(msg, token), err)
 
     def __str__(self):
         return self.to_str()
@@ -176,7 +209,7 @@ class Node:
                 msg += "{name}: {err}".format(name=err.__class__.__name__, err=err)
             else:
                 msg = "Unexpected rendering error: {name}: {err}".format(name=err.__class__.__name__, err=err)
-            errors.raise_from(errors.TemplateRenderingError(msg, self.token), err)
+            errors.raise_(errors.TemplateRenderingError(msg, self.token), err)
 
     def wrender(self, context):
         return ''.join(child.render(context) for child in self.children)
@@ -278,7 +311,7 @@ class ForNode(Node):
                         unpacked = dict(zip(self.loopvars, item))
                     except Exception as err:
                         msg = "Unpacking error."
-                        errors.raise_from(errors.TemplateRenderingError(msg, self.token), err)
+                        errors.raise_(errors.TemplateRenderingError(msg, self.token), err)
                     else:
                         context.update(unpacked)
                 else:
@@ -353,7 +386,7 @@ class IfNode(Node):
             conditions = token.text.split(None, 1)[1]
         except:
             msg = "Malformed '{}' tag.".format(self.tag)
-            errors.raise_from(errors.TemplateSyntaxError(msg, token), None)
+            errors.raise_(errors.TemplateSyntaxError(msg, token), None)
 
         self.condition_groups = [
             [
@@ -389,7 +422,7 @@ class IfNode(Node):
         except Exception as err:
             msg = "An exception was raised while evaluating the condition in the "
             msg += "'{}' tag.".format(self.tag)
-            errors.raise_from(errors.TemplateRenderingError(msg, self.token), err)
+            errors.raise_(errors.TemplateRenderingError(msg, self.token), err)
         if cond.negated:
             result = not result
         return result
@@ -449,7 +482,7 @@ class CycleNode(Node):
             tag, arg = token.text.split(None, 1)
         except:
             msg = "Malformed 'cycle' tag."
-            errors.raise_from(errors.TemplateSyntaxError(msg, token), None)
+            errors.raise_(errors.TemplateSyntaxError(msg, token), None)
         self.expr = Expression(arg, token)
 
     def wrender(self, context):
@@ -492,7 +525,7 @@ class IncludeNode(Node):
                     name, expr = chunk.split('=', 1)
                     self.variables[name.strip()] = Expression(expr.strip(), token)
                 except:
-                    errors.raise_from(errors.TemplateSyntaxError("Malformed 'include' tag.", token), None)
+                    errors.raise_(errors.TemplateSyntaxError("Malformed 'include' tag.", token), None)
         else:
             raise errors.TemplateSyntaxError("Malformed 'include' tag.", token)
 
@@ -533,7 +566,7 @@ class ExtendsNode(Node):
         try:
             tag, arg = token.text.split(None, 1)
         except:
-            errors.raise_from(errors.TemplateSyntaxError("Malformed 'extends' tag.", token), None)
+            errors.raise_(errors.TemplateSyntaxError("Malformed 'extends' tag.", token), None)
 
         expr = Expression(arg, token)
         if expr.is_literal and isinstance(expr.literal, str):
@@ -608,7 +641,7 @@ class WithNode(Node):
                 name, expr = chunk.split('=', 1)
                 self.variables[name.strip()] = Expression(expr.strip(), token)
             except:
-                errors.raise_from(errors.TemplateSyntaxError("Malformed 'with' tag.", token), None)
+                errors.raise_(errors.TemplateSyntaxError("Malformed 'with' tag.", token), None)
 
     def wrender(self, context):
         context.push()

@@ -34,6 +34,9 @@ else:
     _Timer = threading.Timer
 
 
+util.render_templates()
+
+
 def waitForThreads():
     util.DEBUG_LOG('Main: Checking for any remaining threads')
     while len(threading.enumerate()) > 1:
@@ -66,7 +69,6 @@ def signout():
 
 def main():
     global BACKGROUND
-    util.ensureHome()
 
     try:
         with util.Cron(0.1):

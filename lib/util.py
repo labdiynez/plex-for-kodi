@@ -11,9 +11,7 @@ import math
 import time
 import datetime
 import contextlib
-import types
 import subprocess
-import platform as plat
 import unicodedata
 
 import six.moves.urllib.request, six.moves.urllib.parse, six.moves.urllib.error
@@ -34,6 +32,8 @@ from . import colors
 from .genres import GENRES_TV, GENRES_TV_BY_SYN
 # noinspection PyUnresolvedReferences
 from .exceptions import NoDataException
+from .templating import engine
+from .logging import log, log_error
 from plexnet import signalsmixin
 
 DEBUG = True
@@ -225,16 +225,7 @@ addonSettings = AddonSettings()
 
 
 def LOG(msg, *args, **kwargs):
-    if args:
-        # resolve dynamic args
-        msg = msg.format(*[arg() if isinstance(arg, types.FunctionType) else arg for arg in args])
-
-    level = kwargs.pop("level", xbmc.LOGINFO)
-
-    if kwargs:
-        # resolve dynamic kwargs
-        msg = msg.format(**dict((k, v()) if isinstance(v, types.FunctionType) else v for k, v in kwargs.items()))
-    xbmc.log('script.plex: {0}'.format(msg), level)
+    return log(msg, *args, **kwargs)
 
 
 def DEBUG_LOG(msg, *args, **kwargs):
@@ -244,23 +235,11 @@ def DEBUG_LOG(msg, *args, **kwargs):
     if not addonSettings.debug and not xbmc.getCondVisibility('System.GetBool(debug.showloginfo)'):
         return
 
-    LOG(msg, *args, **kwargs)
+    return log(msg, *args, **kwargs)
 
 
 def ERROR(txt='', hide_tb=False, notify=False, time_ms=3000):
-    short = str(sys.exc_info()[1])
-    if hide_tb:
-        xbmc.log('script.plex: ERROR: {0} - {1}'.format(txt, short), xbmc.LOGERROR)
-        return short
-
-    import traceback
-    tb = traceback.format_exc()
-    xbmc.log("_________________________________________________________________________________", xbmc.LOGERROR)
-    xbmc.log('script.plex: ERROR: ' + txt, xbmc.LOGERROR)
-    for l in tb.splitlines():
-        xbmc.log('    ' + l, xbmc.LOGERROR)
-    xbmc.log("_________________________________________________________________________________", xbmc.LOGERROR)
-    xbmc.log("`", xbmc.LOGERROR)
+    short = log_error(txt, hide_tb)
     if notify:
         showNotification('ERROR: {0}'.format(txt or short), time_ms=time_ms)
     return short
@@ -854,8 +833,8 @@ DEF_THEME = "modern-colored"
 THEME_VERSION = 7
 
 THEMED_INTERFACES = ("seek_dialog", "music_player", "music_current_playlist", "playlist", "posters",
-                     "posters-small", "listview-16x9", "listview-square", "squares", "episodes", "seasons",
-                     "pre_play", "album", "photo", "artist")
+                     "posters-small", "listview-16x9", "listview-square", "squares", "seasons", #"episodes", "seasons",
+                     "pre_play", "photo")
 
 
 def applyTheme(thm=None, interfaces=None):
@@ -915,18 +894,33 @@ def applyTheme(thm=None, interfaces=None):
                     LOG('Using theme: {}'.format(thm))
 
 
-# apply theme if version changed
-theme = getSetting('theme', DEF_THEME)
-curThemeVer = getSetting('theme_version', 0)
-if curThemeVer < THEME_VERSION:
-    setSetting('theme_version', THEME_VERSION)
-    # apply seekdialog button theme
-    applyTheme(theme)
+def render_templates():
+    # apply theme if version changed
+    theme = getSetting('theme', DEF_THEME)
 
-# apply theme if most recently added xml missing
-if not xbmcvfs.exists(os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i",
-                                   "script-plex-{}.xml".format(THEMED_INTERFACES[-1]))):
-    applyTheme(theme)
+    if not engine.initialized:
+        target_dir = os.path.join(translatePath(ADDON.getAddonInfo('path')), "resources", "skins", "Main", "1080i")
+        template_dir = os.path.join(target_dir, "templates")
+        engine.init(target_dir, template_dir,
+                    [os.path.join(translatePath(ADDON.getAddonInfo("profile")), "templates"), template_dir])
+
+    engine.apply(theme)
+
+    curThemeVer = getSetting('theme_version', 0)
+    render = False
+    if curThemeVer < THEME_VERSION:
+        setSetting('theme_version', THEME_VERSION)
+        # apply seekdialog button theme
+        render = True
+
+    else:
+        # apply theme if most recently added xml missing
+        if not xbmcvfs.exists(os.path.join(ADDON.getAddonInfo('path'), "resources", "skins", "Main", "1080i",
+                                           "script-plex-{}.xml".format(engine.TEMPLATES[-1]))):
+            render = True
+
+    if render:
+        engine.apply(theme)
 
 
 # get mounts

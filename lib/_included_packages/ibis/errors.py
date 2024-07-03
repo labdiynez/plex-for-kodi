@@ -1,6 +1,10 @@
 from six import reraise as raise_from
 
 
+def raise_(value, exc=None, *args, **kwargs):
+    raise_from(type(value), value, exc and exc.__traceback__ or None)
+
+
 # Base class for all exception types raised by the template engine.
 class TemplateError(Exception):
 

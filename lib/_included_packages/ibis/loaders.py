@@ -1,7 +1,7 @@
 import os
 
 from .template import Template
-from .errors import TemplateLoadError, raise_from
+from .errors import TemplateLoadError, raise_
 
 
 # Loads templates from the file system. Assumes files are utf-8 encoded. Compiled templates are
@@ -41,7 +41,7 @@ class FileLoader:
                         template_string = file.read()
                 except OSError as err:
                     msg = "FileLoader cannot load the template file '{}'.".format(path)
-                    raise_from(TemplateLoadError(msg), err)
+                    raise_(TemplateLoadError(msg), err)
 
                 template = Template(template_string, filename)
                 self.cache[filename] = template
@@ -73,7 +73,7 @@ class FileReloader:
                         template_string = file.read()
                 except OSError as err:
                     msg = "FileReloader cannot load the template file '{}'.".format(path)
-                    raise_from(TemplateLoadError(msg), err)
+                    raise_(TemplateLoadError(msg), err)
 
                 template = Template(template_string, filename)
                 self.cache[filename] = (mtime, template)
