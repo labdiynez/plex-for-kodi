@@ -198,7 +198,24 @@
             </control>
         </control> -->
 
-        <!-- BUTTON_INCLUDE -->
+        <control type="grouplist" id="400">
+            <defaultcontrol>406</defaultcontrol>
+            <hitrect x="460" y="998" w="1000" h="55" />
+            <posx>360</posx>
+            <posy>964</posy>
+            <width>1200</width>
+
+            <height>124</height>
+            <align>center</align>
+            <onup>100</onup>
+            <itemgap>-40</itemgap>
+            <orientation>horizontal</orientation>
+            <scrolltime tween="quadratic" easing="out">200</scrolltime>
+            <usecontrolcoords>true</usecontrolcoords>
+
+            {% include "includes/music_player_buttons.xml" %}
+
+        </control>
 
         <control type="group">
             <posx>0</posx>

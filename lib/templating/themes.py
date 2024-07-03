@@ -11,7 +11,10 @@ THEMES = {
         },
         "buttons": {
             "useFocusColor": True,
+            "useNoFocusColor": True,
             "zoomPlayButton": False,
+            "focusColor": None,
+            "noFocusColor": None
         },
 
         # specific interface config
@@ -62,6 +65,7 @@ THEMES = {
         "buttons": {
             "useFocusColor": False,
             "zoomPlayButton": True,
+            "noFocusColor": "88FFFFFF"
         },
         "episodes": {
             "buttongroup": {
