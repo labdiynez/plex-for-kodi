@@ -837,6 +837,8 @@ THEMED_INTERFACES = ("seek_dialog", "music_player", "music_current_playlist", "p
                      "pre_play", "photo")
 
 
+# WARNING, THEMES ARE NOT APPLIED RIGHT NOW
+
 def applyTheme(thm=None, interfaces=None):
     """
     Dynamically build script-plex-PLAYER_INTERFACE_NAME.xml by combining a player button template with
