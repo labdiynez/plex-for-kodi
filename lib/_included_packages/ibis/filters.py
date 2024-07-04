@@ -1,6 +1,7 @@
+# coding=utf-8
+
 import re
 import pprint
-import html
 import random
 
 from . import context
@@ -11,6 +12,11 @@ try:
     import pygments.formatters
 except ImportError:
     pygments = None
+
+try:
+    from html import escape as html_escape
+except ImportError:
+    from cgi import escape as html_escape
 
 
 # Dictionary of registered filter functions.
@@ -70,7 +76,7 @@ def endswith(s, suffix):
 @register('esc')
 def escape(s, quotes=True):
     """ Converts html syntax characters to character entities. """
-    return html.escape(s, quotes)
+    return html_escape(s, quotes)
 
 
 @register
@@ -184,9 +190,9 @@ def pygmentize(text, lang=None):
             formatter = pygments.formatters.HtmlFormatter(nowrap=True)
             text = pygments.highlight(text, lexer, formatter)
         else:
-            text = html.escape(text)
+            text = html_escape(text)
     else:
-        text = html.escape(text)
+        text = html_escape(text)
     return text
 
 

@@ -1,4 +1,8 @@
+# coding=utf-8
+
 import os
+
+from io import open
 
 from .template import Template
 from .errors import TemplateLoadError, raise_

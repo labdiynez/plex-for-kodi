@@ -975,7 +975,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
     def setThemeDirty(self, *args, **kwargs):
         self._applyTheme = util.getSetting("theme", "modern-colored")
 
-    def fullyRefreshHome(self, *args, section=None, **kwargs):
+    def fullyRefreshHome(self, *args, **kwargs):
+        section = kwargs.pop("section", None)
         self.showSections(focus_section=section or home_section)
         self.backgroundSet = False
         self.showHubs(section if section else home_section)

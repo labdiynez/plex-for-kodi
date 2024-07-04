@@ -30,7 +30,9 @@ class Setting(object):
     def translate(self, val):
         return str(val)
 
-    def get(self, *args, _id=UNDEF, default=UNDEF, **kwargs):
+    def get(self, *args, **kwargs):
+        _id = kwargs.pop("_id", UNDEF)
+        default = kwargs.pop("default", UNDEF)
         return util.getSetting(_id if _id != UNDEF else self.ID,
                                default if default != UNDEF else self.default)
 
@@ -140,7 +142,9 @@ class UserAwareSetting(BasicSetting):
     def emit_events(self, id_, val, **kwargs):
         plexnet.util.APP.trigger('change:{0}'.format(self.ID), key=self.userAwareID, value=val, skey=self.ID)
 
-    def get(self, *args, _id=UNDEF, default=UNDEF, **kwargs):
+    def get(self, *args, **kwargs):
+        _id = kwargs.pop("_id", UNDEF)
+        default = kwargs.pop("default", UNDEF)
         return super(UserAwareSetting, self).get(*args,
                                                  _id=_id if _id != UNDEF else self.userAwareID, default=default,
                                                  **kwargs)
@@ -198,7 +202,8 @@ class MultiOptionsSetting(OptionsSetting):
         self.noneOption = none_option
         util.JSON_SETTINGS.append(self.ID)
 
-    def get(self, *args, with_default=True, **kwargs):
+    def get(self, *args, **kwargs):
+        with_default = kwargs.pop('with_default', True)
         val = super(MultiOptionsSetting, self).get(*args, default=DEFAULT, **kwargs)
         if val and val != DEFAULT:
             try:
