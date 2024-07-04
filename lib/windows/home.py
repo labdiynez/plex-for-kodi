@@ -17,6 +17,7 @@ from lib import util
 from lib.path_mapping import pmm
 from lib.plex_hosts import pdm
 from lib.util import T
+from lib.templating import render_templates
 from . import busy
 from . import dropdown
 from . import kodigui
@@ -605,7 +606,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
     def setTheme(self, theme):
         self.showBusy()
-        util.render_templates(theme, force=True)
+        render_templates(theme, force=True)
         self.showBusy(False)
 
     def focusFirstValidHub(self, startIndex=None):

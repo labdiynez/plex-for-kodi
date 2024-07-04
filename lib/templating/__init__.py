@@ -1,3 +1,3 @@
 # coding=utf-8
 
-from .core import engine
+from .render import render_templates

@@ -18,6 +18,7 @@ sys.modules['_asyncio'] = None
 from . import plex
 
 from plexnet import plexapp
+from .templating import render_templates
 from .windows import background, userselect, home, windowutils
 from . import player
 from . import backgroundthread
@@ -34,7 +35,7 @@ else:
     _Timer = threading.Timer
 
 
-util.render_templates()
+render_templates()
 
 
 def waitForThreads():
