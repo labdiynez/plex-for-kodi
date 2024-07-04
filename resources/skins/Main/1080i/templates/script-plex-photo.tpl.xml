@@ -92,10 +92,11 @@
             <alttexturenofocus>-</alttexturenofocus>
             <label> </label>
             <onclick>SetProperty(OSD,1)</onclick>
-            <onclick>SetFocus(400)</onclick>
+            <onclick>SetFocus(406)</onclick>
             <altclick>SetProperty(OSD,)</altclick>
             <ondown>SetProperty(OSD,1)</ondown>
             <ondown>SetFocus(400)</ondown>
+            <ondown>SetFocus(406)</ondown>
             <onfocus condition="!String.IsEmpty(Window.Property(show.pqueue))">SetFocus(501)</onfocus>
             <onfocus condition="!String.IsEmpty(Window.Property(OSD))">SetFocus(400)</onfocus>
         </control>
