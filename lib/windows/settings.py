@@ -25,6 +25,7 @@ class Setting(object):
     desc = None
     default = None
     userAware = False
+    isThemeRelevant = False
 
     def translate(self, val):
         return str(val)
@@ -33,13 +34,21 @@ class Setting(object):
         return util.getSetting(_id if _id != UNDEF else self.ID,
                                default if default != UNDEF else self.default)
 
+    def emit_events(self, id_, val, **kwargs):
+        plexnet.util.APP.trigger('change:{0}'.format(id_), value=val)
+
+    def emit_tr_events(self, id_, val, **kwargs):
+        plexnet.util.APP.trigger('theme_relevant_setting', id=id_, value=val, **kwargs)
+
     def set(self, val, skip_get=False):
         if not skip_get:
             old = Setting.get(self)
             setRet = util.setSetting(self.ID, val)
             if old != val:
                 util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]', self.ID, old, val)
-                plexnet.util.APP.trigger('change:{0}'.format(self.ID), value=val)
+                self.emit_events(self.ID, val)
+                if self.isThemeRelevant:
+                    self.emit_tr_events(self.ID, val)
         else:
             setRet = util.setSetting(self.ID, val)
         return setRet
@@ -52,11 +61,12 @@ class Setting(object):
 
 
 class BasicSetting(Setting):
-    def __init__(self, ID, label, default, desc=''):
+    def __init__(self, ID, label, default, desc='', theme_relevant=False):
         self.ID = ID
         self.label = label
         self.default = default
         self.desc = desc
+        self.isThemeRelevant = theme_relevant
 
     def description(self, desc):
         self.desc = desc
@@ -127,6 +137,9 @@ class UserAwareSetting(BasicSetting):
     def userAwareID(self):
         return '{}.{}'.format(self.ID, plexnet.plexapp.ACCOUNT.ID)
 
+    def emit_events(self, id_, val, **kwargs):
+        plexnet.util.APP.trigger('change:{0}'.format(self.ID), key=self.userAwareID, value=val, skey=self.ID)
+
     def get(self, *args, _id=UNDEF, default=UNDEF, **kwargs):
         return super(UserAwareSetting, self).get(*args,
                                                  _id=_id if _id != UNDEF else self.userAwareID, default=default,
@@ -137,7 +150,9 @@ class UserAwareSetting(BasicSetting):
             old = self.get(_id=self.userAwareID)
             if old != val:
                 util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]', self.userAwareID, old, val)
-                plexnet.util.APP.trigger('change:{0}'.format(self.ID), key=self.userAwareID, value=val, skey=self.ID)
+                self.emit_events(self.userAwareID, val)
+                if self.isThemeRelevant:
+                    self.emit_tr_events(self.userAwareID, val)
         return util.setSetting(self.userAwareID, val)
 
 
@@ -148,8 +163,8 @@ class BoolUserSetting(UserAwareSetting, BoolSetting):
 class OptionsSetting(BasicSetting):
     type = 'OPTIONS'
 
-    def __init__(self, ID, label, default, options):
-        BasicSetting.__init__(self, ID, label, default)
+    def __init__(self, ID, label, default, options, **kwargs):
+        BasicSetting.__init__(self, ID, label, default, **kwargs)
         self.options = options
 
     def translate(self, val):
@@ -177,8 +192,8 @@ class MultiOptionsSetting(OptionsSetting):
     valueLabelDelim = ', '
     noneOption = None
 
-    def __init__(self, ID, label, default, options, none_option=None):
-        super(MultiOptionsSetting, self).__init__(ID, label, [], options)
+    def __init__(self, ID, label, default, options, none_option=None, **kwargs):
+        super(MultiOptionsSetting, self).__init__(ID, label, [], options, **kwargs)
         self.default = default
         self.noneOption = none_option
         util.JSON_SETTINGS.append(self.ID)
@@ -237,32 +252,31 @@ class MultiUAOptionsSetting(MultiOptionsSetting, UserAwareSetting):
     pass
 
 
-class BufferSetting(OptionsSetting):
+class KCMSetting(OptionsSetting):
+    key = None
+
+    def emit_events(self, id_, val, **kwargs):
+        plexnet.util.APP.trigger('change:{0}'.format(self.ID), value=val)
+
     def get(self, *args, **kwargs):
-        return lib.cache.kcm.memorySize
+        return getattr(lib.cache.kcm, self.key)
 
     def set(self, val, skip_get=False):
         if not skip_get:
             old = self.get()
             if old != val:
                 util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]', self.ID, old, val)
-                plexnet.util.APP.trigger('change:{0}'.format(self.ID), value=val)
+                self.emit_events(self.ID, val)
 
-        lib.cache.kcm.write(memorySize=val)
+        lib.cache.kcm.write(**{self.key: val})
+
+
+class BufferSetting(OptionsSetting):
+    key = "memorySize"
 
 
 class ReadFactorSetting(OptionsSetting):
-    def get(self, *args, **kwargs):
-        return lib.cache.kcm.readFactor
-
-    def set(self, val, skip_get=False):
-        if not skip_get:
-            old = self.get()
-            if old != val:
-                util.DEBUG_LOG('Setting: {0} - changed from [{1}] to [{2}]', self.ID, old, val)
-                plexnet.util.APP.trigger('change:{0}'.format(self.ID), value=val)
-
-        lib.cache.kcm.write(readFactor=val)
+    key = "readFactor"
 
 
 class InfoSetting(BasicSetting):
@@ -346,12 +360,12 @@ class Settings(object):
                     T(32100, 'Skip user selection and pin entry on startup.')
                 ),
                 BoolSetting(
-                    'use_alt_watched', T(33022, ''), True
+                    'use_alt_watched', T(33022, ''), True, theme_relevant=True
                 ).description(
                     T(33023, "")
                 ),
                 BoolSetting(
-                    'hide_aw_bg', T(33024, ''), False
+                    'hide_aw_bg', T(33024, ''), False, theme_relevant=True
                 ).description(
                     T(33025, "")
                 ),
@@ -365,7 +379,7 @@ class Settings(object):
                         ('modern-colored', T(32989, 'Modern (colored)')),
                         ('classic', T(32987, 'Classic')),
                         ('custom', T(32988, 'Custom')),
-                    )
+                    ), theme_relevant=True
                 ).description(
                     T(32984, 'stub')
                 ),
@@ -376,7 +390,7 @@ class Settings(object):
                         ('off', T(32481, '')),
                         ('unwatched', T(33010, '')),
                         ('funwatched', T(33011, '')),
-                    )
+                    ), theme_relevant=True
                 ).description(T(33007, "")),
                 BoolSetting(
                     'no_unwatched_episode_titles', T(33012, ''), True
@@ -399,12 +413,14 @@ class Settings(object):
                     T(33044, "").format(util.addonSettings.hubsRrMax)
                 ),
                 BoolSetting(
-                    'hubs_bifurcation_lines', T(32961, 'Show hub bifurcation lines'), False
+                    'hubs_bifurcation_lines', T(32961, 'Show hub bifurcation lines'), False,
+                    theme_relevant=True
                 ).description(
                     T(32962, "Visually separate hubs horizontally using a thin line.")
                 ),
                 BoolSetting(
-                    'path_mapping_indicators', T(33032, 'Show path mapping indicators'), True
+                    'path_mapping_indicators', T(33032, 'Show path mapping indicators'), True,
+                    theme_relevant=True
                 ).description(
                     T(33033, "When path mapping is active for a library, display an indicator.")
                 ),

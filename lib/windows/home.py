@@ -404,6 +404,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         self._shuttingDown = False
         self._skipNextAction = False
         self._reloadOnReinit = False
+        self._applyTheme = False
         self._ignoreTick = False
         self.librarySettings = None
         self.hubSettings = None
@@ -475,6 +476,10 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         self.checkPlexDirectHosts(plexapp.SERVERMANAGER.allConnections, source="stored")
 
     def onReInit(self):
+        if self._applyTheme:
+            self.setTheme(self._applyTheme)
+            self._applyTheme = False
+
         if self._reloadOnReinit:
             self.serverRefresh()
             self._reloadOnReinit = False
@@ -598,8 +603,10 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
     def updateProperties(self, *args, **kwargs):
         self.setBoolProperty('bifurcation_lines', util.getSetting('hubs_bifurcation_lines', False))
 
-    def setTheme(self, *args, **kwargs):
-        util.render_templates(kwargs["value"], force=True)
+    def setTheme(self, theme):
+        self.showBusy()
+        util.render_templates(theme, force=True)
+        self.showBusy(False)
 
     def focusFirstValidHub(self, startIndex=None):
         indices = self.hubFocusIndexes
@@ -644,7 +651,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         plexapp.util.APP.on('change:use_alt_watched', self.setDirty)
         plexapp.util.APP.on('change:hide_aw_bg', self.setDirty)
         plexapp.util.APP.on('change:path_mapping_indicators', self.setDirty)
-        plexapp.util.APP.on('change:theme', self.setTheme)
+        plexapp.util.APP.on('theme_relevant_setting', self.setThemeDirty)
 
         player.PLAYER.on('session.ended', self.updateOnDeckHubs)
         util.MONITOR.on('changed.watchstatus', self.updateOnDeckHubs)
@@ -671,7 +678,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         plexapp.util.APP.off('change:use_alt_watched', self.setDirty)
         plexapp.util.APP.off('change:hide_aw_bg', self.setDirty)
         plexapp.util.APP.off('change:path_mapping_indicators', self.setDirty)
-        plexapp.util.APP.off('change:theme', self.setTheme)
+        plexapp.util.APP.off('theme_relevant_setting', self.setThemeDirty)
 
         player.PLAYER.off('session.ended', self.updateOnDeckHubs)
         util.MONITOR.off('changed.watchstatus', self.updateOnDeckHubs)
@@ -963,6 +970,9 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
     def setDirty(self, *args, **kwargs):
         self._reloadOnReinit = True
         self.storeSpoilerSettings()
+
+    def setThemeDirty(self, *args, **kwargs):
+        self._applyTheme = util.getSetting("theme", "modern-colored")
 
     def fullyRefreshHome(self, *args, section=None, **kwargs):
         self.showSections(focus_section=section or home_section)
