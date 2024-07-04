@@ -16,7 +16,6 @@ import unicodedata
 
 import six.moves.urllib.request, six.moves.urllib.parse, six.moves.urllib.error
 import six
-import os
 import struct
 import requests
 
