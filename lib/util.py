@@ -29,7 +29,6 @@ from kodi_six import xbmcaddon
 from kodi_six import xbmcvfs
 
 from . import colors
-from .genres import GENRES_TV, GENRES_TV_BY_SYN
 # noinspection PyUnresolvedReferences
 from .exceptions import NoDataException
 from .templating import engine

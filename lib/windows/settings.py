@@ -9,6 +9,7 @@ from kodi_six import xbmcgui
 
 import lib.cache
 from lib import util
+from lib import genres
 from lib.util import T
 from . import kodigui
 from . import windowutils
@@ -385,7 +386,7 @@ class Settings(object):
                 MultiOptionsSetting(
                     'spoilers_allowed_genres2', T(33016, ''),
                     ["Reality", "Game Show", "Documentary", "Sport"],
-                    [(g, g) for g in util.GENRES_TV]
+                    [(g, g) for g in genres.GENRES_TV]
                 ).description(T(33017, "")),
                 BoolSetting(
                     'hubs_use_new_continue_watching', T(32998, ''), False

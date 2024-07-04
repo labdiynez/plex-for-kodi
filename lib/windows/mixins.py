@@ -7,6 +7,7 @@ from plexnet import util as pnUtil
 from lib import util
 from lib.data_cache import dcm
 from lib.util import T
+from lib.genres import GENRES_TV_BY_SYN
 from . import busy
 from . import kodigui
 from . import optionsdialog
@@ -196,7 +197,7 @@ class SpoilersMixin(object):
                 genres = show.genres()
 
             for g in genres:
-                main_tag = util.GENRES_TV_BY_SYN.get(g.tag)
+                main_tag = GENRES_TV_BY_SYN.get(g.tag)
                 if main_tag and main_tag in self.spoilersAllowedFor:
                     nope = "off"
                     break
