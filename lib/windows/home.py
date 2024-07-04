@@ -599,8 +599,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         self.setBoolProperty('bifurcation_lines', util.getSetting('hubs_bifurcation_lines', False))
 
     def setTheme(self, *args, **kwargs):
-        util.theme = kwargs["value"]
-        util.applyTheme()
+        util.render_templates(kwargs["value"])
 
     def focusFirstValidHub(self, startIndex=None):
         indices = self.hubFocusIndexes

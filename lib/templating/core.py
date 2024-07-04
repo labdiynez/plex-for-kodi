@@ -35,13 +35,16 @@ class TemplateEngine(object):
     loader = None
     target_dir = None
     template_dir = None
+    custom_template_dir = None
     initialized = False
     TEMPLATES = None
 
-    def init(self, target_dir, template_dir, paths):
+    def init(self, target_dir, template_dir, custom_template_dir):
         self.target_dir = target_dir
         self.template_dir = template_dir
+        self.custom_template_dir = custom_template_dir
         self.get_available_templates()
+        paths = [custom_template_dir, template_dir]
 
         LOG("Looking for templates in: {}", paths)
         self.prepare_loader(paths)
@@ -69,21 +72,30 @@ class TemplateEngine(object):
             f.close()
             return True
         except:
-            ERROR("Couldn't write script-plex-{}.xml".format(template))
+            ERROR("Couldn't write script-plex-{}.xml", template)
             return False
 
     def apply(self, theme=None, templates=None):
         templates = self.TEMPLATES if templates is None else templates
         theme_data = prepare_theme_data(theme)
 
+        custom_templates = []
+        if theme == "custom":
+            custom_templates = [f.split("script-plex-")[1].split(".custom.tpl.xml")[0] for f in
+                                glob.iglob(os.path.join(self.custom_template_dir, "*.custom.tpl.xml"))]
+            if not custom_templates:
+                LOG("No custom templates found in: {}", self.custom_template_dir)
+
         applied = []
         for template in templates:
-            compiled_template = self.compile("script-plex-{}.tpl.xml".format(template), theme_data)
+            fn = "script-plex-{}{}.tpl.xml".format(template, ".custom" if theme == "custom" and
+                                                   template in custom_templates else "")
+            compiled_template = self.compile(fn, theme_data)
             if self.write(template, compiled_template):
                 applied.append(template)
             else:
-                raise Exception("Couldn't write script-plex-{}.tpl.xml".format(template))
-        LOG('Using theme {} for: {}'.format(theme, applied))
+                raise Exception("Couldn't write script-plex-{}.tpl.xml", template)
+        LOG('Using theme {} for: {}', theme, applied)
 
 
 engine = TemplateEngine()
