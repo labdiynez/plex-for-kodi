@@ -224,6 +224,8 @@ class AddonSettings(object):
 
 addonSettings = AddonSettings()
 
+DEBUG = addonSettings.debug
+
 
 def LOG(msg, *args, **kwargs):
     return log(msg, *args, **kwargs)

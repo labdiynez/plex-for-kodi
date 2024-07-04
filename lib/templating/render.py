@@ -2,7 +2,7 @@
 import os
 
 from .core import engine
-from lib.util import DEF_THEME, ADDON, getSetting, translatePath, THEME_VERSION, setSetting
+from lib.util import DEF_THEME, ADDON, getSetting, translatePath, THEME_VERSION, setSetting, DEBUG
 
 
 def render_templates(theme=None, templates=None, force=False):
@@ -14,7 +14,9 @@ def render_templates(theme=None, templates=None, force=False):
         engine.init(target_dir, os.path.join(target_dir, "templates"),
                     os.path.join(translatePath(ADDON.getAddonInfo("profile")), "templates"))
 
-    engine.apply(theme, templates=templates)
+    # fixme: in-development, remove
+    if DEBUG:
+        engine.apply(theme, templates=templates)
 
     curThemeVer = getSetting('theme_version', 0)
     if curThemeVer < THEME_VERSION or force:
