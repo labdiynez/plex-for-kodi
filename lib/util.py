@@ -218,6 +218,8 @@ class AddonSettings(object):
         ("hubs_rr_max", 250),
         ("max_retries", 1),
         ("use_cert_bundle", "system"),
+        ("cache_templates", True),
+        ("always_compile_templates", False),
     )
 
     def __init__(self):

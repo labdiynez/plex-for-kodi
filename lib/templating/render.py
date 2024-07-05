@@ -7,7 +7,7 @@ import copy
 from .core import engine
 # noinspection PyUnresolvedReferences
 from lib.util import (DEF_THEME, ADDON, PROFILE, getSetting, translatePath, THEME_VERSION, setSetting, DEBUG, LOG, T,
-                      MONITOR, xbmcvfs)
+                      MONITOR, xbmcvfs, addonSettings)
 from .themes import THEMES
 from .util import deep_update
 from lib.windows.busy import ProgressDialog
@@ -61,16 +61,12 @@ def render_templates(theme=None, templates=None, force=False):
 
         LOG("Rendered templates in: {:.2f}s".format(end - start))
 
-    # fixme: in-development, remove
-    if DEBUG:
-        apply()
-
     curThemeVer = getSetting('theme_version', 0)
-    if curThemeVer < THEME_VERSION or force:
+    if curThemeVer < THEME_VERSION or (force or addonSettings.alwaysCompileTemplates):
         setSetting('theme_version', THEME_VERSION)
         # apply seekdialog button theme
         apply()
 
     # lose template cache for performance reasons
-    #fixme: create setting for this
-    engine.loader.cache = {}
+    if not addonSettings.cacheTemplates:
+        engine.loader.cache = {}

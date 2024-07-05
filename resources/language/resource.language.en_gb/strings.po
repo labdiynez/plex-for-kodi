@@ -2065,3 +2065,19 @@ msgstr ""
 msgctxt "#33065"
 msgid "Complete"
 msgstr ""
+
+msgctxt "#33066"
+msgid "Cache template files"
+msgstr ""
+
+msgctxt "#33067"
+msgid "Doesn't throw away the template source files after compiling them. Uses slightly more memory but increases the speed of theme-related changes."
+msgstr ""
+
+msgctxt "#33068"
+msgid "Always compile templates"
+msgstr ""
+
+msgctxt "#33069"
+msgid "Recompiles all templates on every startup. Useful for template/theme development."
+msgstr ""
