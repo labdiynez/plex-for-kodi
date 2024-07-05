@@ -2091,7 +2091,7 @@ msgid "Restart PM4K"
 msgstr ""
 
 msgctxt "#33072"
-msgid "Wait for {} seconds"
+msgid "Wait for {}s"
 msgstr ""
 
 msgctxt "#33073"
@@ -2099,5 +2099,9 @@ msgid "Wait after wakeup"
 msgstr ""
 
 msgctxt "#33074"
-msgid "Waiting {} seconds"
+msgid "Waiting {} second(s)"
+msgstr ""
+
+msgctxt "#33075"
+msgid "Wait for a time until resuming normal execution. Helps with networks coming back up after sleep events. Default: 1 second (5 seconds, CoreELEC)"
 msgstr ""

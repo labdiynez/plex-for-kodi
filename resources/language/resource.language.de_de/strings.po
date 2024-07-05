@@ -2598,12 +2598,16 @@ msgstr "PM4K neustarten"
 
 msgctxt "#33072"
 msgid "Wait for {} seconds"
-msgstr "{} Sekunden warten"
+msgstr "Warten für {}s"
 
 msgctxt "#33073"
 msgid "Wait after wakeup"
 msgstr "Warte nach Aufwachen"
 
 msgctxt "#33074"
-msgid "Waiting {} seconds"
-msgstr "Warte {} Sekunden"
+msgid "Waiting {} second(s)"
+msgstr "Warte {} Sekunde(n)"
+
+msgctxt "#33075"
+msgid "Wait for a time until resuming normal execution. Helps with networks coming back up after sleep events. Default: 1 second (5 seconds, CoreELEC)"
+msgstr "Warten, bis die normale Ausführung weiter geht. Hilft beim Aufwachen von Netzwerken nach Sleep-Ereignissen. Standard: 1 Sekunde (5 Sekunden, CoreELEC)"

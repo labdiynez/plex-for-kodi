@@ -696,9 +696,9 @@ class Settings(object):
                 OptionsSetting(
                     'action_on_wake',
                     T(33070, 'Action on Wake event'),
-                    'none',
+                    util.isCoreELEC and 'wait_5' or 'wait_1',
                     [('none', T(32702, 'Nothing')), ('restart', T(33071, 'Restart PM4K'))]
-                    + [('wait_{}'.format(s), T(33072, '').format(s)) for s in range(5, 65, 5)]
+                    + [('wait_{}'.format(s), T(33072, '').format(s)) for s in [1, 2, 3] + list(range(5, 65, 5))]
                 ),
                 OptionsSetting(
                     'player_stop_on_idle',
