@@ -395,7 +395,7 @@ class Settings(object):
                         ('off', T(32481, '')),
                         ('unwatched', T(33010, '')),
                         ('funwatched', T(33011, '')),
-                    ), theme_relevant=True
+                    )
                 ).description(T(33007, "")),
                 BoolSetting(
                     'no_unwatched_episode_titles', T(33012, ''), True
@@ -418,14 +418,12 @@ class Settings(object):
                     T(33044, "").format(util.addonSettings.hubsRrMax)
                 ),
                 BoolSetting(
-                    'hubs_bifurcation_lines', T(32961, 'Show hub bifurcation lines'), False,
-                    theme_relevant=True
+                    'hubs_bifurcation_lines', T(32961, 'Show hub bifurcation lines'), False
                 ).description(
                     T(32962, "Visually separate hubs horizontally using a thin line.")
                 ),
                 BoolSetting(
-                    'path_mapping_indicators', T(33032, 'Show path mapping indicators'), True,
-                    theme_relevant=True
+                    'path_mapping_indicators', T(33032, 'Show path mapping indicators'), True
                 ).description(
                     T(33033, "When path mapping is active for a library, display an indicator.")
                 ),
