@@ -27,6 +27,7 @@ from .data_cache import dcm
 
 BACKGROUND = None
 quitKodi = False
+restart = False
 
 
 if six.PY2:
@@ -61,6 +62,9 @@ def realExit():
         xbmc.log('Main: script.plex: QUITTING KODI', xbmc.LOGINFO)
         xbmc.executebuiltin('Quit')
 
+    elif restart:
+        xbmc.executebuiltin('RunScript(script.plexmod)')
+
 
 def signout():
     util.setSetting('auth.token', '')
@@ -90,7 +94,7 @@ def main():
 
 
 def _main():
-    global quitKodi
+    global quitKodi, restart
 
     # uncomment to profile code #1
     #pr = cProfile.Profile()
@@ -175,6 +179,10 @@ def _main():
                             render_templates(force=True)
                             util.LOG("Restarting Home")
                             continue
+                        elif closeOption == 'restart':
+                            util.LOG("Restarting Addon")
+                            restart = True
+                            return
                     finally:
                         windowutils.shutdownHome()
                         BACKGROUND.activate()
@@ -212,6 +220,5 @@ def _main():
         util.shutdown()
         gc.collect(2)
 
-        if util.KODI_VERSION_MAJOR == 18 and quitKodi:
-            xbmc.log('Main: script.plex: QUITTING KODI', xbmc.LOGINFO)
-            xbmc.executebuiltin('Quit')
+        if util.KODI_VERSION_MAJOR == 18:
+            realExit()

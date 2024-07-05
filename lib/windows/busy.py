@@ -17,6 +17,12 @@ class BusyWindow(kodigui.BaseDialog):
     height = 1080
 
 
+class BlockingBusyWindow(BusyWindow):
+    def onAction(self, action):
+        if action in (xbmcgui.ACTION_PREVIOUS_MENU, xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_STOP):
+            return False
+
+
 class BusyClosableWindow(BusyWindow):
     ctx = None
 
@@ -152,17 +158,22 @@ class BusyClosableMsgContext(BusyMsgContext):
     pass
 
 
+class BusyBlockingContext(BusyContext):
+    window_cls = BlockingBusyWindow
+
+
 class ProgressDialog(object):
     dialog = None
     header = None
     message = None
 
-    def __init__(self, header, message=None):
+    def __init__(self, header, message=None, bg=True):
         self.header = header
         self.message = message
+        self.bg = bg
 
     def __enter__(self):
-        self.dialog = xbmcgui.DialogProgressBG()
+        self.dialog = xbmcgui.DialogProgressBG() if self.bg else xbmcgui.DialogProgress()
         self.dialog.create(self.header, self.message)
         return self
 
@@ -176,4 +187,12 @@ class ProgressDialog(object):
         return True
 
     def update(self, perc, header=None, message=None):
-        self.dialog.update(perc, header or self.header, message or self.message)
+        if self.bg:
+            self.dialog.update(perc, header or self.header, message or self.message)
+        else:
+            self.dialog.update(perc, message or self.message)
+
+    def isCanceled(self):
+        if self.bg:
+            return False
+        return self.dialog.iscanceled()

@@ -2081,3 +2081,23 @@ msgstr ""
 msgctxt "#33069"
 msgid "Recompiles all templates on every startup. Useful for template/theme development."
 msgstr ""
+
+msgctxt "#33070"
+msgid "Action on Wake event"
+msgstr ""
+
+msgctxt "#33071"
+msgid "Restart PM4K"
+msgstr ""
+
+msgctxt "#33072"
+msgid "Wait for {} seconds"
+msgstr ""
+
+msgctxt "#33073"
+msgid "Wait after wakeup"
+msgstr ""
+
+msgctxt "#33074"
+msgid "Waiting {} seconds"
+msgstr ""

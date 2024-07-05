@@ -407,6 +407,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         self._reloadOnReinit = False
         self._applyTheme = False
         self._ignoreTick = False
+        self._ignoreInput = False
         self.librarySettings = None
         self.hubSettings = None
         self.anyLibraryHidden = False
@@ -657,7 +658,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         util.MONITOR.on('screensaver.deactivated', self.refreshLastSection)
         util.MONITOR.on('dpms.deactivated', self.refreshLastSection)
         util.MONITOR.on('system.sleep', self.disableUpdates)
-        util.MONITOR.on('system.wakeup', self.refreshLastSection)
+        util.MONITOR.on('system.wakeup', self.onWake)
 
     def unhookSignals(self):
         plexapp.SERVERMANAGER.off('new:server', self.onNewServer)
@@ -684,7 +685,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         util.MONITOR.off('screensaver.deactivated', self.refreshLastSection)
         util.MONITOR.off('dpms.deactivated', self.refreshLastSection)
         util.MONITOR.off('system.sleep', self.disableUpdates)
-        util.MONITOR.off('system.wakeup', self.refreshLastSection)
+        util.MONITOR.off('system.wakeup', self.onWake)
 
     def tick(self):
         if not self.lastSection or self._ignoreTick:
@@ -739,6 +740,9 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
     def onAction(self, action):
         controlID = self.getFocusId()
+
+        if self._ignoreInput:
+            return
 
         try:
             if self._skipNextAction:
@@ -874,6 +878,9 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         kodigui.BaseWindow.onAction(self, action)
 
     def onClick(self, controlID):
+        if self._ignoreInput:
+            return
+
         if controlID == self.SECTION_LIST_ID:
             if not self.movingSection:
                 self.sectionClicked()
@@ -992,6 +999,32 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             util.LOG("Refreshing last section after wake events")
             self.showHubs(self.lastSection, force=True)
             self.enableUpdates()
+
+    def onWake(self, *args, **kwargs):
+        wakeAction = util.getSetting('action_on_wake', 'none')
+        if wakeAction == "restart":
+            self.closeOption = "restart"
+            self.doClose()
+            return
+        elif wakeAction.startswith("wait_"):
+            seconds = int(wakeAction.split("_")[1])
+            established = 0
+            self._ignoreInput = True
+            try:
+                with busy.BusyBlockingContext():
+                    with busy.ProgressDialog(T(33073, ''), T(33074, '').format(seconds)) as pd:
+                        while established < seconds:
+                            util.MONITOR.waitForAbort(0.5)
+                            established += 0.5
+                            pd.update(int(established * 100 / float(seconds)))
+                            if pd.isCanceled():
+                                break
+                self.refreshLastSection(*args, **kwargs)
+                return
+            finally:
+                self._ignoreInput = False
+
+        self.refreshLastSection(*args, **kwargs)
 
     @busy.dialog()
     def serverRefresh(self, section=None):
