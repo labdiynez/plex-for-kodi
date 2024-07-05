@@ -22,15 +22,21 @@ import requests
 import plexnet.util
 
 from .kodijsonrpc import rpc
+# noinspection PyUnresolvedReferences
 from kodi_six import xbmc
+# noinspection PyUnresolvedReferences
 from kodi_six import xbmcgui
+# noinspection PyUnresolvedReferences
 from kodi_six import xbmcaddon
+# noinspection PyUnresolvedReferences
 from kodi_six import xbmcvfs
 
 from . import colors
 # noinspection PyUnresolvedReferences
 from .exceptions import NoDataException
 from .logging import log, log_error
+# noinspection PyUnresolvedReferences
+from .i18n import T
 from plexnet import signalsmixin
 
 DEBUG = True
@@ -345,10 +351,6 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
 
 
 MONITOR = UtilityMonitor()
-
-
-def T(ID, eng=''):
-    return ADDON.getLocalizedString(ID)
 
 
 hasCustomBGColour = False
