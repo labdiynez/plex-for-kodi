@@ -74,12 +74,12 @@
                     <height>145</height>
                     <onup>200</onup>
                     <ondown>400</ondown>
-                    <itemgap>-20</itemgap>
+                    <itemgap>{{ theme.seasons.buttongroup.itemgap }}</itemgap>
                     <orientation>horizontal</orientation>
                     <scrolltime tween="quadratic" easing="out">200</scrolltime>
                     <usecontrolcoords>true</usecontrolcoords>
 
-                    {% with attr = {"width": 126, "height": 100} & template = "includes/themed_button.xml" & hitrect = None %} {# fixme: should hitrect be None? #}
+                    {% with attr = theme.seasons.buttons & template = "includes/themed_button.xml" & hitrect = None %} {# fixme: should hitrect be None? #}
                         {% include template with name="info" & id=301 %}
                         {% include template with name="play" & id=302 %}
                         {% include template with name="shuffle" & id=303 %}

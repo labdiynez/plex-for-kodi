@@ -74,12 +74,12 @@
                     <height>145</height>
                     <onup>200</onup>
                     <ondown>400</ondown>
-                    <itemgap>-50</itemgap>
+                    <itemgap>{{ theme.pre_play.buttongroup.itemgap }}</itemgap>
                     <orientation>horizontal</orientation>
                     <scrolltime tween="quadratic" easing="out">200</scrolltime>
                     <usecontrolcoords>true</usecontrolcoords>
 
-                    {% with attr = {"width": 176, "height": 140} & template = "includes/themed_button.xml" %}
+                    {% with attr = theme.pre_play.buttons & template = "includes/themed_button.xml" %}
                         {% include template with name="info" & id=304 %}
                         {% include template with name="play" & id=302 & visible="String.IsEmpty(Window.Property(unavailable))" %}
                         {% include template with name="trailer" & id=303 & visible="!String.IsEmpty(Window.Property(trailer.button))" %}

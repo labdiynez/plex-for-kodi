@@ -22,13 +22,33 @@ THEMES = {
             "use_button_bg": False,
             "button_bg_color": None,
             "buttongroup": {
-                "posy": None
+                "posy": None,
+                "itemgap": -50,
             },
             # this button group will only exist when multiple media files for an episode exist, it adds another button
             "buttongroup_1300": {
-                "posy": None
+                "posy": None,
+                "itemgap": -50,
             },
             # applies to the main buttons
+            "buttons": {
+                "width": None,
+                "height": None,
+            }
+        },
+        "seasons": {
+            "buttongroup": {
+                "itemgap": -20
+            },
+            "buttons": {
+                "width": None,
+                "height": None,
+            }
+        },
+        "pre_play": {
+            "buttongroup": {
+                "itemgap": -20
+            },
             "buttons": {
                 "width": None,
                 "height": None,
@@ -52,7 +72,22 @@ THEMES = {
                 "width": 161,
                 "height": 125
             }
-        }
+        },
+        "seasons": {
+            "buttons": {
+                "width": 126,
+                "height": 100,
+            }
+        },
+        "pre_play": {
+            "buttongroup": {
+                "itemgap": -50
+            },
+            "buttons": {
+                "width": 176,
+                "height": 140,
+            }
+        },
     },
     "modern": {
         "INHERIT": "base",
@@ -68,6 +103,8 @@ THEMES = {
             "noFocusColor": "88FFFFFF"
         },
         "episodes": {
+            "use_button_bg": True,
+            "button_bg_color": "A0000000",
             "buttongroup": {
                 "posy": 393
             },
@@ -81,6 +118,24 @@ THEMES = {
             "buttons_1300": {
                 "width": 131,
                 "height": 104
+            }
+        },
+        "seasons": {
+            "buttongroup": {
+                "itemgap": -40
+            },
+            "buttons": {
+                "width": 152,
+                "height": 121,
+            }
+        },
+        "pre_play": {
+            "buttongroup": {
+                "itemgap": -40
+            },
+            "buttons": {
+                "width": 152,
+                "height": 121,
             }
         }
     },
