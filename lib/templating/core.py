@@ -7,10 +7,9 @@ from kodi_six import xbmcvfs
 from lib.logging import log as LOG, log_error as ERROR
 from .util import deep_update
 from .filters import *
-from .themes import THEMES
 
 
-def prepare_theme_data(thm):
+def prepare_theme_data(thm, themes):
     theme_data = {"INHERIT": thm}
     final_data = {}
 
@@ -21,7 +20,7 @@ def prepare_theme_data(thm):
     # build inheritance stack
     while "INHERIT" in theme_data:
         inherit_from = theme_data.pop("INHERIT")
-        theme_data = copy.deepcopy(THEMES[inherit_from])
+        theme_data = copy.deepcopy(themes[inherit_from])
         data_stack.append(theme_data)
         theme_tree.append(inherit_from)
 
@@ -37,6 +36,7 @@ class TemplateEngine(object):
     template_dir = None
     custom_template_dir = None
     initialized = False
+    themes = None
     TEMPLATES = None
 
     def init(self, target_dir, template_dir, custom_template_dir):
@@ -75,9 +75,9 @@ class TemplateEngine(object):
             ERROR("Couldn't write script-plex-{}.xml", template)
             return False
 
-    def apply(self, update_callback, theme=None, templates=None):
+    def apply(self, theme, update_callback, templates=None):
         templates = self.TEMPLATES if templates is None else templates
-        theme_data = prepare_theme_data(theme)
+        theme_data = prepare_theme_data(theme, self.themes)
 
         progress = {"at": 0, "steps": len(templates)}
 
