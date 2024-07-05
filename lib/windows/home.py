@@ -478,8 +478,11 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
     def onReInit(self):
         if self._applyTheme:
-            self.setTheme(self._applyTheme)
             self._applyTheme = False
+            self._shuttingDown = True
+            self.closeOption = "apply_theme"
+            self.doClose()
+            return
 
         if self._reloadOnReinit:
             self.serverRefresh()
@@ -603,11 +606,6 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
     def updateProperties(self, *args, **kwargs):
         self.setBoolProperty('bifurcation_lines', util.getSetting('hubs_bifurcation_lines', False))
-
-    def setTheme(self, theme):
-        self.showBusy()
-        render_templates(theme, force=True)
-        self.showBusy(False)
 
     def focusFirstValidHub(self, startIndex=None):
         indices = self.hubFocusIndexes

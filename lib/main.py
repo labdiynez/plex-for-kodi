@@ -171,6 +171,10 @@ def _main():
                         elif closeOption == 'switch':
                             plexapp.ACCOUNT.isAuthenticated = False
                             fromSwitch = True
+                        elif closeOption == 'apply_theme':
+                            render_templates(force=True)
+                            util.LOG("Restarting Home")
+                            continue
                     finally:
                         windowutils.shutdownHome()
                         BACKGROUND.activate()
