@@ -2555,3 +2555,19 @@ msgstr "{feature_ds}: {desc_ds}\n{feature_4k}: {desc_4k}"
 msgctxt "#33061"
 msgid "Enable certain codecs if your hardware supports them. Disable them to force transcoding."
 msgstr "Bestimmte Codecs erlauben, wenn die Hardware diese unterstützt. Deaktivierung erzwingt Transcodierung."
+
+msgctxt "#33062"
+msgid "Compiling templates"
+msgstr "Kompiliere Templates"
+
+msgctxt "#33063"
+msgid "Looking for custom templates"
+msgstr "Suche benutzerdef. Templates"
+
+msgctxt "#33064"
+msgid "Rendering: {}"
+msgstr "Rendere: {}"
+
+msgctxt "#33065"
+msgid "Complete"
+msgstr "Fertig"

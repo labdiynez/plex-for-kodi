@@ -75,12 +75,20 @@ class TemplateEngine(object):
             ERROR("Couldn't write script-plex-{}.xml", template)
             return False
 
-    def apply(self, theme=None, templates=None):
+    def apply(self, update_callback, theme=None, templates=None):
         templates = self.TEMPLATES if templates is None else templates
         theme_data = prepare_theme_data(theme)
 
+        progress = {"at": 0, "steps": len(templates)}
+
+        def step(message):
+            progress["at"] += 1
+            update_callback(progress["at"], progress["steps"], message)
+
         custom_templates = []
         if theme == "custom":
+            progress["steps"] += 1
+            step("custom_templates")
             custom_templates = [f.split("script-plex-")[1].split(".custom.tpl.xml")[0] for f in
                                 glob.iglob(os.path.join(self.custom_template_dir, "*.custom.tpl.xml"))]
             if not custom_templates:
@@ -95,6 +103,9 @@ class TemplateEngine(object):
                 applied.append(template)
             else:
                 raise Exception("Couldn't write script-plex-{}.tpl.xml", template)
+            step(template)
+
+        update_callback(progress["steps"], progress["steps"], "complete")
         LOG('Using theme {} for: {}', theme, applied)
 
 

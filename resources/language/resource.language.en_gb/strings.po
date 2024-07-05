@@ -2049,3 +2049,19 @@ msgstr ""
 msgctxt "#33061"
 msgid "Enable certain codecs if your hardware supports them. Disable them to force transcoding."
 msgstr ""
+
+msgctxt "#33062"
+msgid "Compiling templates"
+msgstr ""
+
+msgctxt "#33063"
+msgid "Looking for custom templates"
+msgstr ""
+
+msgctxt "#33064"
+msgid "Rendering: {}"
+msgstr ""
+
+msgctxt "#33065"
+msgid "Complete"
+msgstr ""

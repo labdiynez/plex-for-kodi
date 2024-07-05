@@ -150,3 +150,30 @@ class BusySignalContext(BusyMsgContext):
 
 class BusyClosableMsgContext(BusyMsgContext):
     pass
+
+
+class ProgressDialog(object):
+    dialog = None
+    header = None
+    message = None
+
+    def __init__(self, header, message=None):
+        self.header = header
+        self.message = message
+
+    def __enter__(self):
+        self.dialog = xbmcgui.DialogProgressBG()
+        self.dialog.create(self.header, self.message)
+        return self
+
+    def __exit__(self, exc_type, exc_value, tb):
+        if exc_type is not None:
+            util.ERROR()
+        self.dialog.close()
+        del self.dialog
+        self.dialog = None
+        util.garbageCollect()
+        return True
+
+    def update(self, perc, header=None, message=None):
+        self.dialog.update(perc, header or self.header, message or self.message)
