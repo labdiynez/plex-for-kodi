@@ -974,7 +974,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
     def setDirty(self, *args, **kwargs):
         self._reloadOnReinit = True
-        self.storeSpoilerSettings()
+        self.cacheSpoilerSettings()
 
     def setThemeDirty(self, *args, **kwargs):
         self._applyTheme = util.getSetting("theme", "modern-colored")
