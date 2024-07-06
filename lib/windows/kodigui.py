@@ -703,6 +703,9 @@ class ManagedControlList(object):
         if self.positionIsValid(pos):
             self.control.selectItem(pos)
 
+    def setSelectedItemByDataSource(self, data_source):
+        self.setSelectedItem(self.getListItemByDataSource(data_source))
+
     def removeItem(self, index):
         old = self.items.pop(index)
         old.onDestroy()
