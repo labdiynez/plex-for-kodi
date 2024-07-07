@@ -136,7 +136,6 @@
                     <posy>0</posy>
                     <width>1101</width>
                     <height>1080</height>
-                    <onup>200</onup>
                     <onright>152</onright>
                     <onleft>411</onleft>
                     <scrolltime>200</scrolltime>
