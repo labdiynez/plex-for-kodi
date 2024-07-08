@@ -104,12 +104,14 @@ THEMES = {
         },
         "episodes": {
             "use_button_bg": True,
-            "button_bg_color": "A0000000",
+            "button_bg_color": "66000000",
             "buttongroup": {
-                "posy": 393
+                "posy": 393,
+                "itemgap": -40,
             },
             "buttongroup_1300": {
-                "posy": 393
+                "posy": 393,
+                "itemgap": -40,
             },
             "buttons": {
                 "width": 131,
