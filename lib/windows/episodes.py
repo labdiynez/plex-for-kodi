@@ -870,8 +870,6 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             util.messageDialog(T(32312, 'unavailable'), T(32332, 'This item is currently unavailable.'))
             return
 
-        self.playBtnClicked = True
-
         resume = False
         if episode.viewOffset.asInt():
             choice = dropdown.showDropdown(
@@ -891,6 +889,9 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
             if choice['key'] == 'resume':
                 resume = True
+
+        if not from_auto_play:
+            self.playBtnClicked = True
 
         pl = playlist.LocalPlaylist(self.show_.all(), self.show_.getServer())
         try:
