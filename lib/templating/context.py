@@ -2,7 +2,14 @@
 
 TEMPLATE_CONTEXTS = {
     "indicators": {
+        "base": {
+            "use_scaling": False,
+            "scale": {
+
+            }
+        },
         "classic": {
+            "INHERIT": "base",
             "use_unwatched": True,
             "hide_aw_bg": None,
             "watched_bg": None,
@@ -13,6 +20,13 @@ TEMPLATE_CONTEXTS = {
             }
         },
         "modern": {
+            "INHERIT": "base",
+            "use_scaling": True,
+            "scale": {
+                "small": 1.0,
+                "medium": 1.175,
+                "large": 1.3
+            },
             "use_unwatched": False,
             "hide_aw_bg": False,
             "watched_bg": "CC000000",

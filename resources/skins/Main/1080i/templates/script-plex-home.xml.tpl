@@ -739,7 +739,7 @@
                             <textcolor>FFFFFFFF</textcolor>
                             <label>$INFO[ListItem.Label2]</label>
                         </control>
-                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
 
                     </control>
                 </control>
@@ -851,7 +851,7 @@
                                 <textcolor>FFFFFFFF</textcolor>
                                 <label>$INFO[ListItem.Label2]</label>
                             </control>
-                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                         </control>
                         <control type="image">
                             <visible>Control.HasFocus(401)</visible>
@@ -1002,7 +1002,7 @@
                             <textcolor>FFFFFFFF</textcolor>
                             <label>$INFO[ListItem.Label2]</label>
                         </control>
-                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                         
                     </control>
                 </control>
@@ -1114,7 +1114,7 @@
                                 <textcolor>FFFFFFFF</textcolor>
                                 <label>$INFO[ListItem.Label2]</label>
                             </control>
-                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                         </control>
                         <control type="image">
                             <visible>Control.HasFocus(402)</visible>
@@ -1265,7 +1265,7 @@
                             <textcolor>FFFFFFFF</textcolor>
                             <label>$INFO[ListItem.Label2]</label>
                         </control>
-                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
 
                     </control>
                 </control>
@@ -1377,7 +1377,7 @@
                                 <textcolor>FFFFFFFF</textcolor>
                                 <label>$INFO[ListItem.Label2]</label>
                             </control>
-                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                         </control>
                         <control type="image">
                             <visible>Control.HasFocus(403)</visible>
@@ -1528,7 +1528,7 @@
                             <textcolor>FFFFFFFF</textcolor>
                             <label>$INFO[ListItem.Label2]</label>
                         </control>
-                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                     </control>
                 </control>
             </itemlayout>
@@ -1639,7 +1639,7 @@
                                 <textcolor>FFFFFFFF</textcolor>
                                 <label>$INFO[ListItem.Label2]</label>
                             </control>
-                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                         </control>
                         <control type="image">
                             <visible>Control.HasFocus(404)</visible>
@@ -2316,8 +2316,7 @@
                             <textcolor>FFFFFFFF</textcolor>
                             <label>$INFO[ListItem.Label2]</label>
                         </control>
-                        <!-- scaled -->
-                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                     </control>
                 </control>
             </itemlayout>
@@ -2428,7 +2427,7 @@
                                 <textcolor>FFFFFFFF</textcolor>
                                 <label>$INFO[ListItem.Label2]</label>
                             </control>
-                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                         </control>
                         <control type="image">
                             <visible>Control.HasFocus(407)</visible>
@@ -2579,7 +2578,7 @@
                             <textcolor>FFFFFFFF</textcolor>
                             <label>$INFO[ListItem.Label2]</label>
                         </control>
-                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                     </control>
                 </control>
             </itemlayout>
@@ -2690,7 +2689,7 @@
                                 <textcolor>FFFFFFFF</textcolor>
                                 <label>$INFO[ListItem.Label2]</label>
                             </control>
-                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                         </control>
                         <control type="image">
                             <visible>Control.HasFocus(408)</visible>
@@ -4661,7 +4660,7 @@
                             <textcolor>FFFFFFFF</textcolor>
                             <label>$INFO[ListItem.Label2]</label>
                         </control>
-                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                     </control>
                 </control>
             </itemlayout>
@@ -4772,7 +4771,7 @@
                                 <textcolor>FFFFFFFF</textcolor>
                                 <label>$INFO[ListItem.Label2]</label>
                             </control>
-                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                         </control>
                         <control type="image">
                             <visible>Control.HasFocus(413)</visible>
@@ -4923,7 +4922,7 @@
                             <textcolor>FFFFFFFF</textcolor>
                             <label>$INFO[ListItem.Label2]</label>
                         </control>
-                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                     </control>
                 </control>
             </itemlayout>
@@ -5034,7 +5033,7 @@
                                 <textcolor>FFFFFFFF</textcolor>
                                 <label>$INFO[ListItem.Label2]</label>
                             </control>
-                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                         </control>
                         <control type="image">
                             <visible>Control.HasFocus(414)</visible>
@@ -5185,7 +5184,7 @@
                             <textcolor>FFFFFFFF</textcolor>
                             <label>$INFO[ListItem.Label2]</label>
                         </control>
-                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                     </control>
                 </control>
             </itemlayout>
@@ -5296,7 +5295,7 @@
                                 <textcolor>FFFFFFFF</textcolor>
                                 <label>$INFO[ListItem.Label2]</label>
                             </control>
-                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                         </control>
                         <control type="image">
                             <visible>Control.HasFocus(415)</visible>
@@ -5447,7 +5446,7 @@
                             <textcolor>FFFFFFFF</textcolor>
                             <label>$INFO[ListItem.Label2]</label>
                         </control>
-                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                     </control>
                 </control>
             </itemlayout>
@@ -5558,7 +5557,7 @@
                                 <textcolor>FFFFFFFF</textcolor>
                                 <label>$INFO[ListItem.Label2]</label>
                             </control>
-                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale=1.175 %}
+                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=48 & with_count=True & scale="medium" %}
                         </control>
                         <control type="image">
                             <visible>Control.HasFocus(416)</visible>
