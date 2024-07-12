@@ -52,8 +52,8 @@ class TemplateEngine(object):
 
     def get_available_templates(self):
         tpls = []
-        for f in glob.iglob(os.path.join(self.template_dir, "*.tpl.xml")):
-            tpls.append(f.split("script-plex-")[1].split(".tpl.xml")[0])
+        for f in glob.iglob(os.path.join(self.template_dir, "script-plex-*.xml.tpl")):
+            tpls.append(f.split("script-plex-")[1].split(".xml.tpl")[0])
         self.TEMPLATES = tpls
 
     def prepare_loader(self, fns):
@@ -89,20 +89,20 @@ class TemplateEngine(object):
         if theme == "custom":
             progress["steps"] += 1
             step("custom_templates")
-            custom_templates = [f.split("script-plex-")[1].split(".custom.tpl.xml")[0] for f in
-                                glob.iglob(os.path.join(self.custom_template_dir, "*.custom.tpl.xml"))]
+            custom_templates = [f.split("script-plex-")[1].split(".custom.xml.tpl")[0] for f in
+                                glob.iglob(os.path.join(self.custom_template_dir, "*.custom.xml.tpl"))]
             if not custom_templates:
                 LOG("No custom templates found in: {}", self.custom_template_dir)
 
         applied = []
         for template in templates:
-            fn = "script-plex-{}{}.tpl.xml".format(template, ".custom" if theme == "custom" and
+            fn = "script-plex-{}{}.xml.tpl".format(template, ".custom" if theme == "custom" and
                                                    template in custom_templates else "")
             compiled_template = self.compile(fn, theme_data)
             if self.write(template, compiled_template):
                 applied.append(template)
             else:
-                raise Exception("Couldn't write script-plex-{}.tpl.xml", template)
+                raise Exception("Couldn't write script-plex-{}.xml", template)
             step(template)
 
         update_callback(progress["steps"], progress["steps"], "complete")
