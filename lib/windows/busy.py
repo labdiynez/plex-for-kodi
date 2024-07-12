@@ -167,10 +167,11 @@ class ProgressDialog(object):
     header = None
     message = None
 
-    def __init__(self, header, message=None, bg=True):
+    def __init__(self, header, message=None, bg=True, raise_hard=False):
         self.header = header
         self.message = message
         self.bg = bg
+        self.raise_hard = raise_hard
 
     def __enter__(self):
         self.dialog = xbmcgui.DialogProgressBG() if self.bg else xbmcgui.DialogProgress()
@@ -180,10 +181,13 @@ class ProgressDialog(object):
     def __exit__(self, exc_type, exc_value, tb):
         if exc_type is not None:
             util.ERROR()
+
         self.dialog.close()
         del self.dialog
         self.dialog = None
         util.garbageCollect()
+        if exc_type is not None and self.raise_hard:
+            raise exc_value
         return True
 
     def update(self, perc, header=None, message=None):

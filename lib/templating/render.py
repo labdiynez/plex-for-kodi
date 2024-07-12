@@ -50,7 +50,7 @@ def render_templates(theme=None, templates=None, force=False):
         LOG("Rendering templates")
         start = time.time()
 
-        with ProgressDialog(T(33062, ''), "") as pd:
+        with ProgressDialog(T(33062, ''), "", raise_hard=True) as pd:
             def update_progress(at, length, message):
                 pd.update(int(at * 100 / float(length)),
                           message=T(STEP_MAP.get(message, STEP_MAP["default"]), '').format(message))
