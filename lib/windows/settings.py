@@ -280,11 +280,11 @@ class KCMSetting(OptionsSetting):
         lib.cache.kcm.write(**{self.key: val})
 
 
-class BufferSetting(OptionsSetting):
+class BufferSetting(KCMSetting):
     key = "memorySize"
 
 
-class ReadFactorSetting(OptionsSetting):
+class ReadFactorSetting(KCMSetting):
     key = "readFactor"
 
 
