@@ -326,6 +326,7 @@ class PlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         mli.setProperty('track.duration', util.durationToShortText(episode.duration.asInt()))
         mli.setProperty('video', '1')
         mli.setProperty('watched', episode.isWatched and '1' or '')
+        mli.setProperty('unwatched', episode.isWatched and '' or '1')
 
     def createMovieListItem(self, mli, movie):
         mli.setLabel(movie.defaultTitle)
@@ -334,6 +335,7 @@ class PlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         mli.setProperty('track.duration', util.durationToShortText(movie.duration.asInt()))
         mli.setProperty('video', '1')
         mli.setProperty('watched', movie.isWatched and '1' or '')
+        mli.setProperty('unwatched', movie.isWatched and '' or '1')
 
     @busy.dialog()
     def fillPlaylist(self):

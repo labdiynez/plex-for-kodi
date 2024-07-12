@@ -102,26 +102,7 @@
                             <texture>$INFO[ListItem.Thumb]</texture>
                             <aspectratio>scale</aspectratio>
                         </control>
-                        <control type="image">
-                            <visible>String.IsEmpty(ListItem.Property(use_alt_watched)) + !String.IsEmpty(ListItem.Property(unwatched)) + String.IsEmpty(ListItem.Property(watched))</visible>
-                            <posx>895</posx>
-                            <posy>-1</posy>
-                            <width>35</width>
-                            <height>35</height>
-                            <texture fallback="script.plex/indicators/unwatched.png">special://profile/addon_data/script.plexmod/media/unwatched.png</texture>
-                        </control>
-                        <control type="group">
-                            <visible>!String.IsEmpty(ListItem.Property(use_alt_watched)) + !String.IsEmpty(ListItem.Property(watched))</visible>
-                            <posx>895</posx>
-                            <posy>0</posy>
-                            <control type="image">
-                                <posx>0</posx>
-                                <posy>8</posy>
-                                <width>16</width>
-                                <height>16</height>
-                                <texture fallback="script.plex/indicators/watched.png">special://profile/addon_data/script.plexmod/media/watched.png</texture>
-                            </control>
-                        </control>
+                        {% include "includes/watched_indicator.xml.tpl" with xoff=132+63 & yoff=11 & uw_posy=11 & uw_size=24 & scale="tiny" %}
                         <control type="group">
                             <posx>226</posx>
                             <posy>0</posy>
@@ -247,26 +228,7 @@
                                 <texture>$INFO[ListItem.Thumb]</texture>
                                 <aspectratio>scale</aspectratio>
                             </control>
-                            <control type="image">
-                                <visible>String.IsEmpty(ListItem.Property(use_alt_watched)) + !String.IsEmpty(ListItem.Property(unwatched)) + String.IsEmpty(ListItem.Property(watched))</visible>
-                                <posx>895</posx>
-                                <posy>-1</posy>
-                                <width>35</width>
-                                <height>35</height>
-                                <texture fallback="script.plex/indicators/unwatched.png">special://profile/addon_data/script.plexmod/media/unwatched.png</texture>
-                            </control>
-                            <control type="group">
-                                <visible>!String.IsEmpty(ListItem.Property(use_alt_watched)) + !String.IsEmpty(ListItem.Property(watched))</visible>
-                                <posx>895</posx>
-                                <posy>0</posy>
-                                <control type="image">
-                                    <posx>0</posx>
-                                    <posy>8</posy>
-                                    <width>16</width>
-                                    <height>16</height>
-                                    <texture fallback="script.plex/indicators/watched.png">special://profile/addon_data/script.plexmod/media/watched.png</texture>
-                                </control>
-                            </control>
+                            {% include "includes/watched_indicator.xml.tpl" with xoff=132+63 & yoff=11 & uw_posy=11 & uw_size=24 & scale="tiny" %}
                             <control type="group">
                                 <posx>226</posx>
                                 <posy>0</posy>
@@ -421,26 +383,7 @@
                                 <texture>$INFO[ListItem.Thumb]</texture>
                                 <aspectratio>scale</aspectratio>
                             </control>
-                            <control type="image">
-                                <visible>String.IsEmpty(ListItem.Property(use_alt_watched)) + !String.IsEmpty(ListItem.Property(unwatched)) + String.IsEmpty(ListItem.Property(watched))</visible>
-                                <posx>951</posx>
-                                <posy>-1</posy>
-                                <width>35</width>
-                                <height>35</height>
-                                <texture fallback="script.plex/indicators/unwatched.png">special://profile/addon_data/script.plexmod/media/unwatched.png</texture>
-                            </control>
-                            <control type="group">
-                                <visible>!String.IsEmpty(ListItem.Property(use_alt_watched)) + !String.IsEmpty(ListItem.Property(watched))</visible>
-                                <posx>951</posx>
-                                <posy>0</posy>
-                                <control type="image">
-                                    <posx>0</posx>
-                                    <posy>8</posy>
-                                    <width>16</width>
-                                    <height>16</height>
-                                    <texture fallback="script.plex/indicators/watched.png">special://profile/addon_data/script.plexmod/media/watched.png</texture>
-                                </control>
-                            </control>
+                            {% include "includes/watched_indicator.xml.tpl" with xoff=178+103 %}
                             <control type="group">
                                 <posx>313</posx>
                                 <posy>0</posy>

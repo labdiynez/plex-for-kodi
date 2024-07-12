@@ -23,6 +23,7 @@ TEMPLATE_CONTEXTS = {
             "INHERIT": "base",
             "use_scaling": True,
             "scale": {
+                "tiny": 0.75,
                 "small": 1.0,
                 "medium": 1.175,
                 "large": 1.3

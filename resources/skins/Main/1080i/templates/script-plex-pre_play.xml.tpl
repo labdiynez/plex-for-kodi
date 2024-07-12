@@ -71,7 +71,7 @@
                 <texture background="true">$INFO[Window.Property(thumb)]</texture>
                 <aspectratio>scale</aspectratio>
             </control>
-            {% include "includes/watched_indicator.xml.tpl" with itemref="Window" & xoff=347+60 & uw_size=48 %}
+            {% include "includes/watched_indicator.xml.tpl" with itemref="Window" & xoff=347+60 & uw_size=48 & scale="medium" %}
 
         </control>
 

@@ -166,14 +166,8 @@
                             <texture>$INFO[ListItem.Thumb]</texture>
                             <aspectratio>scale</aspectratio>
                         </control>
-                        <control type="image">
-                            <visible>String.IsEmpty(ListItem.Property(watched))</visible>
-                            <posx>895</posx>
-                            <posy>-1</posy>
-                            <width>35</width>
-                            <height>35</height>
-                            <texture fallback="script.plex/indicators/unwatched.png">special://profile/addon_data/script.plexmod/media/unwatched.png</texture>
-                        </control>
+                        {% include "includes/watched_indicator.xml.tpl" with xoff=132+63 & yoff=11 & uw_posy=11 & uw_size=24 & with_count=True & scale="tiny" %}
+
                         <control type="group">
                             <posx>226</posx>
                             <posy>0</posy>
@@ -321,14 +315,7 @@
                                 <texture>$INFO[ListItem.Thumb]</texture>
                                 <aspectratio>scale</aspectratio>
                             </control>
-                            <control type="image">
-                                <visible>String.IsEmpty(ListItem.Property(watched))</visible>
-                                <posx>895</posx>
-                                <posy>-1</posy>
-                                <width>35</width>
-                                <height>35</height>
-                                <texture fallback="script.plex/indicators/unwatched.png">special://profile/addon_data/script.plexmod/media/unwatched.png</texture>
-                            </control>
+                            {% include "includes/watched_indicator.xml.tpl" with xoff=132+63 & yoff=11 & uw_posy=11 & uw_size=24 & with_count=True & scale="tiny" %}
                             <control type="group">
                                 <posx>226</posx>
                                 <posy>0</posy>
@@ -504,14 +491,8 @@
                                 <texture>$INFO[ListItem.Thumb]</texture>
                                 <aspectratio>scale</aspectratio>
                             </control>
-                            <control type="image">
-                                <visible>String.IsEmpty(ListItem.Property(watched))</visible>
-                                <posx>951</posx>
-                                <posy>0</posy>
-                                <width>48</width>
-                                <height>48</height>
-                                <texture fallback="script.plex/indicators/unwatched.png">special://profile/addon_data/script.plexmod/media/unwatched.png</texture>
-                            </control>
+                            {% include "includes/watched_indicator.xml.tpl" with xoff=178+103 & with_count=True %}
+
                             <control type="group">
                                 <posx>313</posx>
                                 <posy>0</posy>

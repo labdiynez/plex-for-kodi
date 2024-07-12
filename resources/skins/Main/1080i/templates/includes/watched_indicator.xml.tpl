@@ -11,7 +11,7 @@
     {% else %}
     <control type="group">
         <visible>!String.IsEmpty({{ itemref|default("ListItem") }}.Property(watched)) + String.IsEmpty({{ itemref|default("ListItem") }}.Property(unwatched.count))</visible>
-        {% if indicators.use_scaling and scale_fac > 1.0 %}<animation effect="zoom" start="{{ scale_fac|mul(100)|int }}" end="{{ scale_fac|mul(100)|int }}" time="0" reversible="false" center="{{ xoff }}" condition="true">Conditional</animation>{% endif %}
+        {% if indicators.use_scaling and scale_fac != 1.0 %}<animation effect="zoom" start="{{ scale_fac|mul(100)|int }}" end="{{ scale_fac|mul(100)|int }}" time="0" reversible="false" center="{{ xoff }}" condition="true">Conditional</animation>{% endif %}
         <posx>{{ xoff - wbg_w }}</posx>
         <posy>{{ yoff }}</posy>
         {% if not indicators.hide_aw_bg and not force_nowbg %}
@@ -36,7 +36,7 @@
     {% if with_count %}
     <control type="group">
         <visible>!String.IsEmpty({{ itemref|default("ListItem") }}.Property(unwatched.count))</visible>
-        {% if indicators.use_scaling and scale_fac > 1.0 %}<animation effect="zoom" start="{{ scale_fac|mul(100)|int }}" end="{{ scale_fac|mul(100)|int }}" time="0" reversible="false" center="{{ xoff }}" condition="true">Conditional</animation>{% endif %}
+        {% if indicators.use_scaling and scale_fac != 1.0 %}<animation effect="zoom" start="{{ scale_fac|mul(100)|int }}" end="{{ scale_fac|mul(100)|int }}" time="0" reversible="false" center="{{ xoff }}" condition="true">Conditional</animation>{% endif %}
         {% if indicators.style == "classic" %}
         <control type="image">
             <posx>{{ xoff - wbg_w - 1 }}</posx>
