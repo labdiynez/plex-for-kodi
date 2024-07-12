@@ -6,11 +6,14 @@ import operator
 import six
 
 from .util import register_builtin
+from ibis.context import Undefined
 
 
 @ibis.filters.register('get')
-def get_attr(obj, attr):
-    return obj.get(attr)
+def get_attr(obj, attr, fallback=None, default=None):
+    if isinstance(attr, Undefined):
+        return obj.get(fallback, default)
+    return obj.get(attr, default)
 
 
 @ibis.filters.register('calc')
