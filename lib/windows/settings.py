@@ -215,13 +215,17 @@ class MultiOptionsSetting(OptionsSetting):
                         return [val]
         elif val == DEFAULT:
             # backport old separated options
-            ret = []
+            ret = self.default[:]
             for o in self.options:
                 lval = util.getSetting(o[0], DEFAULT)
                 # we only support backporting booleans right now
-                if lval != DEFAULT and lval == "true":
-                    ret.append(o[0])
-            if ret:
+                if lval != DEFAULT:
+                    if lval == "true" and o[0] not in self.default:
+                        ret.append(o[0])
+                    elif lval == "false" and o[0] in self.default:
+                        ret.remove(o[0])
+
+            if ret and ret != self.default:
                 self.set(ret, skip_get=True)
                 return ret
         return with_default and self.default or []
