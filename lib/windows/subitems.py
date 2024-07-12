@@ -129,6 +129,10 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
         self.setProperty('duration', util.durationToText(self.mediaItem.fixedDuration()))
         self.setProperty('info', '')
         self.setProperty('date', self.mediaItem.year)
+        if not self.mediaItem.isWatched:
+            self.setProperty('unwatched.count', str(self.mediaItem.unViewedLeafCount) or '')
+        else:
+            self.setBoolProperty('watched', self.mediaItem.isWatched)
 
         self.setProperty('extras.header', T(32305, 'Extras'))
         self.setProperty('related.header', T(32306, 'Related Shows'))

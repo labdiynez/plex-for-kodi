@@ -95,67 +95,7 @@
                                 <colordiffuse>FFCC7B19</colordiffuse>
                             </control>
                         </control>
-                        <control type="group">
-                            <control type="image">
-                                <visible>String.IsEmpty(ListItem.Property(use_alt_watched)) + !String.IsEmpty(ListItem.Property(unwatched)) + String.IsEmpty(ListItem.Property(watched))</visible>
-                                <posx>199</posx>
-                                <posy>0</posy>
-                                <width>45</width>
-                                <height>45</height>
-                                <texture fallback="script.plex/indicators/unwatched.png">special://profile/addon_data/script.plexmod/media/unwatched.png</texture>
-                            </control>
-                            <control type="group">
-                                <visible>!String.IsEmpty(Window.Property(use_alt_watched)) + !String.IsEmpty(ListItem.Property(initialized)) + String.IsEmpty(ListItem.Property(unwatched)) + String.IsEmpty(ListItem.Property(unwatched.count)) + String.IsEmpty(ListItem.Property(progress))</visible>
-                                <posx>198</posx>
-                                <posy>0</posy>
-                                <control type="image">
-                                    <posx>0</posx>
-                                    <posy>0</posy>
-                                    <width>46</width>
-                                    <height>46</height>
-                                    <visible>String.IsEmpty(ListItem.Property(hide_aw_bg))</visible>
-                                    <texture>script.plex/white-square-bl-rounded_w.png</texture>
-                                    <colordiffuse>CC000000</colordiffuse>
-                                </control>
-                                <control type="image">
-                                    <posx>15</posx>
-                                    <posy>15</posy>
-                                    <width>16</width>
-                                    <height>16</height>
-                                    <texture fallback="script.plex/indicators/watched.png">special://profile/addon_data/script.plexmod/media/watched.png</texture>
-                                </control>
-                            </control>
-                            <control type="group">
-                                <visible>!String.IsEmpty(ListItem.Property(unwatched.count))</visible>
-                                <control type="image">
-                                    <posx>193</posx>
-                                    <posy>0</posy>
-                                    <width>51</width>
-                                    <height>39</height>
-                                    <texture>script.plex/white-square.png</texture>
-                                    <colordiffuse>FF000000</colordiffuse>
-                                </control>
-                                <control type="image">
-                                    <posx>194</posx>
-                                    <posy>0</posy>
-                                    <width>50</width>
-                                    <height>38</height>
-                                    <texture>script.plex/white-square.png</texture>
-                                    <colordiffuse>FFCC7B19</colordiffuse>
-                                </control>
-                                <control type="label">
-                                    <posx>194</posx>
-                                    <posy>0</posy>
-                                    <width>50</width>
-                                    <height>38</height>
-                                    <font>font12</font>
-                                    <align>center</align>
-                                    <aligny>center</aligny>
-                                    <textcolor>FF000000</textcolor>
-                                    <label>$INFO[ListItem.Property(unwatched.count)]</label>
-                                </control>
-                            </control>
-                        </control>
+                        {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=45 & with_count=True & scale="medium" %}
                         <control type="label">
                             <scroll>false</scroll>
                             <posx>0</posx>
@@ -240,67 +180,7 @@
                                     <colordiffuse>FFCC7B19</colordiffuse>
                                 </control>
                             </control>
-                            <control type="group">
-                                <control type="image">
-                                    <visible>String.IsEmpty(ListItem.Property(use_alt_watched)) + !String.IsEmpty(ListItem.Property(unwatched)) + String.IsEmpty(ListItem.Property(watched))</visible>
-                                    <posx>199</posx>
-                                    <posy>0</posy>
-                                    <width>45</width>
-                                    <height>45</height>
-                                    <texture fallback="script.plex/indicators/unwatched.png">special://profile/addon_data/script.plexmod/media/unwatched.png</texture>
-                                </control>
-                                <control type="group">
-                                    <visible>!String.IsEmpty(Window.Property(use_alt_watched)) + !String.IsEmpty(ListItem.Property(initialized)) + String.IsEmpty(ListItem.Property(unwatched)) + String.IsEmpty(ListItem.Property(unwatched.count)) + String.IsEmpty(ListItem.Property(progress))</visible>
-                                    <posx>198</posx>
-                                    <posy>0</posy>
-                                    <control type="image">
-                                        <posx>0</posx>
-                                        <posy>0</posy>
-                                        <width>46</width>
-                                        <height>46</height>
-                                        <visible>String.IsEmpty(ListItem.Property(hide_aw_bg))</visible>
-                                        <texture>script.plex/white-square-bl-rounded_w.png</texture>
-                                        <colordiffuse>CC000000</colordiffuse>
-                                    </control>
-                                    <control type="image">
-                                        <posx>15</posx>
-                                        <posy>15</posy>
-                                        <width>16</width>
-                                        <height>16</height>
-                                        <texture fallback="script.plex/indicators/watched.png">special://profile/addon_data/script.plexmod/media/watched.png</texture>
-                                    </control>
-                                </control>
-                                <control type="group">
-                                    <visible>!String.IsEmpty(ListItem.Property(unwatched.count))</visible>
-                                    <control type="image">
-                                        <posx>193</posx>
-                                        <posy>0</posy>
-                                        <width>51</width>
-                                        <height>39</height>
-                                        <texture>script.plex/white-square.png</texture>
-                                        <colordiffuse>FF000000</colordiffuse>
-                                    </control>
-                                    <control type="image">
-                                        <posx>194</posx>
-                                        <posy>0</posy>
-                                        <width>50</width>
-                                        <height>38</height>
-                                        <texture>script.plex/white-square.png</texture>
-                                        <colordiffuse>FFCC7B19</colordiffuse>
-                                    </control>
-                                    <control type="label">
-                                        <posx>194</posx>
-                                        <posy>0</posy>
-                                        <width>50</width>
-                                        <height>38</height>
-                                        <font>font12</font>
-                                        <align>center</align>
-                                        <aligny>center</aligny>
-                                        <textcolor>FF000000</textcolor>
-                                        <label>$INFO[ListItem.Property(unwatched.count)]</label>
-                                    </control>
-                                </control>
-                            </control>
+                            {% include "includes/watched_indicator.xml.tpl" with xoff=244 & uw_size=45 & with_count=True & scale="medium" %}
                             <control type="label">
                                 <scroll>true</scroll>
                                 <posx>0</posx>

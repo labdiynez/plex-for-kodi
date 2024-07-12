@@ -49,6 +49,13 @@ def div(a, b):
 def mul(a, b):
     return calc(a, b, op="mul")
 
+
+@ibis.filters.register('int')
+@register_builtin
+def cast_int(a):
+    return int(a)
+
+
 @ibis.filters.register('resolve')
 @register_builtin('resolve')
 def resolve_variable(arg):
