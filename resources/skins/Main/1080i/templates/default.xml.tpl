@@ -1,4 +1,4 @@
-{% extends "base.xml.tpl" %}
+{% extends "base.xml.tpl" %}{# this extends base and adds background and default header blocks #}
 {% block controls %}
     {% block background %}
     <control type="group">
@@ -48,6 +48,7 @@
         <posy>0</posy>
         <width>1920</width>
         <height>135</height>
+        {% block header_bgfade %}
         <control type="image">
             <animation effect="fade" start="0" end="100" time="200" tween="quadratic" easing="out" reversible="true">VisibleChange</animation>
             <visible>ControlGroup(200).HasFocus(0) + !String.IsEmpty(Window.Property(on.extras))</visible>
@@ -58,6 +59,7 @@
             <texture>script.plex/white-square.png</texture>
             <colordiffuse>C0000000</colordiffuse>
         </control>
+        {% endblock %}
         <control type="grouplist">
             <posx>60</posx>
             <posy>47.5</posy>
