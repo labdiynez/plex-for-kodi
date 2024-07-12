@@ -364,8 +364,15 @@ class Settings(object):
                 ).description(
                     T(32100, 'Skip user selection and pin entry on startup.')
                 ),
-                BoolSetting(
-                    'use_alt_watched', T(33022, ''), True, theme_relevant=True
+                OptionsSetting(
+                    'watched_indicators', T(33022, ''),
+                    "modern_2024",
+                    (
+                        ('classic', T(32987, 'Classic')),
+                        ('modern', T(32985, 'Modern')),
+                        ('modern_2024', T(33076, 'Modern (2024)')),
+                    ),
+                    theme_relevant=True
                 ).description(
                     T(33023, "")
                 ),

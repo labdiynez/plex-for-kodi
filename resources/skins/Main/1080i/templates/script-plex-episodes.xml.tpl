@@ -119,7 +119,8 @@
                 <texture background="true">$INFO[Container(400).ListItem.Thumb]</texture>
                 <aspectratio>scale</aspectratio>
             </control>
-            <control type="image">
+            {% include "includes/watched_indicator.xml.tpl" with itemref="Container(400).ListItem" & xoff=657+60 & uw_size=35 & wbg_w=50 & wbg_h=40 %}
+            <!--<control type="image">
                 <visible>String.IsEmpty(Window.Property(use_alt_watched)) + !String.IsEmpty(Container(400).ListItem.Property(unwatched)) + String.IsEmpty(Container(400).ListItem.Property(watched))</visible>
                 <posx>682</posx>
                 <posy>0</posy>
@@ -147,7 +148,7 @@
                     <height>16</height>
                     <texture fallback="script.plex/indicators/watched.png">special://profile/addon_data/script.plexmod/media/watched.png</texture>
                 </control>
-            </control>
+            </control>-->
         </control>
 
         <control type="grouplist">

@@ -653,8 +653,6 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         plexapp.util.APP.on('change:no_unwatched_episode_titles', self.setDirty)
         plexapp.util.APP.on('change:spoilers_allowed_genres2', self.setDirty)
         plexapp.util.APP.on('change:hubs_use_new_continue_watching', self.setDirty)
-        plexapp.util.APP.on('change:use_alt_watched', self.setDirty)
-        plexapp.util.APP.on('change:hide_aw_bg', self.setDirty)
         plexapp.util.APP.on('change:path_mapping_indicators', self.setDirty)
         plexapp.util.APP.on('theme_relevant_setting', self.setThemeDirty)
 
@@ -681,8 +679,6 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         plexapp.util.APP.off('change:no_unwatched_episode_titles', self.setDirty)
         plexapp.util.APP.off('change:spoilers_allowed_genres2', self.setDirty)
         plexapp.util.APP.off('change:hubs_use_new_continue_watching', self.setDirty)
-        plexapp.util.APP.off('change:use_alt_watched', self.setDirty)
-        plexapp.util.APP.off('change:hide_aw_bg', self.setDirty)
         plexapp.util.APP.off('change:path_mapping_indicators', self.setDirty)
         plexapp.util.APP.off('theme_relevant_setting', self.setThemeDirty)
 

@@ -2378,13 +2378,13 @@ msgstr "Aktion wählen"
 
 #: 
 msgctxt "#33022"
-msgid "Use modern inverted watched states"
-msgstr "Modernen, invertierten Geschaut-Status benutzen"
+msgid "Watched indicators"
+msgstr "Geschaut-Status"
 
 #: 
 msgctxt "#33023"
-msgid "Instead of marking unwatched items, mark watched items with a checkmark (modern clients; default: off)"
-msgstr "Anstatt nicht geschaute Elemente zu markieren, geschaute Elemente mit einem Haken markieren (moderne Clients; standard: aus)"
+msgid "Classic: Show orange triangle for unwatched items\nModern: Show green checkmark for watched items\nModern (2024): Show white checkmark for watched items\n(default: Modern (2024))"
+msgstr "Klassisch: Zeige oranges Dreieck für nicht geschaute Elemente\nModern: Zeige grünen Haken für geschaute Elemente\nModern (2024): Zeige weißen Haken für geschaute Elements\n(Standard: Modern (2024))"
 
 #: 
 msgctxt "#33024"
@@ -2611,3 +2611,7 @@ msgstr "Warte {} Sekunde(n)"
 msgctxt "#33075"
 msgid "Do something after waking up. Waiting for a time until resuming normal execution helps with networks coming back up after sleep events. Default: 1 second (5 seconds, CoreELEC)"
 msgstr "Aktion ausführen nach dem Aufwachen. Warten, bis die normale Ausführung weiter geht, hilft beim Aufwachen von Netzwerken nach Sleep-Ereignissen. Standard: 1 Sekunde (5 Sekunden, CoreELEC)"
+
+msgctxt "#33076"
+msgid "Modern (2024)"
+msgstr "Modern (2024)"

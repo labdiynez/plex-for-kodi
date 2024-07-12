@@ -7,27 +7,44 @@ from kodi_six import xbmcvfs
 from lib.logging import log as LOG, log_error as ERROR
 from .util import deep_update
 from .filters import *
+from .context import TEMPLATE_CONTEXTS
 
 
-def prepare_theme_data(thm, themes):
+def build_stack(inheritor, sources):
+    inherit_from = inheritor.pop("INHERIT", None)
+    data_stack = [inheritor]
+    while inherit_from:
+        inheritor = copy.deepcopy(sources[inherit_from])
+        inherit_from = inheritor.pop("INHERIT", None)
+        data_stack.append(inheritor)
+
+    return data_stack
+
+
+def prepare_template_data(thm, themes, overrides):
     theme_data = {"INHERIT": thm}
-    final_data = {}
+    final_theme_data = {}
 
     # data stack
-    data_stack = []
-    theme_tree = []
+    data_stack = build_stack(theme_data, themes)
 
     # build inheritance stack
-    while "INHERIT" in theme_data:
-        inherit_from = theme_data.pop("INHERIT")
-        theme_data = copy.deepcopy(themes[inherit_from])
-        data_stack.append(theme_data)
-        theme_tree.append(inherit_from)
-
     while data_stack:
-        deep_update(final_data, data_stack.pop())
+        deep_update(final_theme_data, data_stack.pop())
 
-    return {"theme": final_data}
+    ac_start_from = overrides or {}
+
+    additional_context = {}
+    for context in ("indicators",):
+        additional_context[context] = {}
+        ctx_start_from = ac_start_from[context]
+        data_stack = build_stack(ctx_start_from, TEMPLATE_CONTEXTS[context])
+        while data_stack:
+            deep_update(additional_context[context], data_stack.pop())
+
+    final_data = {"theme": final_theme_data}
+    final_data.update(additional_context)
+    return final_data
 
 
 class TemplateEngine(object):
@@ -75,9 +92,9 @@ class TemplateEngine(object):
             ERROR("Couldn't write script-plex-{}.xml", template)
             return False
 
-    def apply(self, theme, update_callback, templates=None):
+    def apply(self, theme, update_callback, templates=None, overrides=None):
         templates = self.TEMPLATES if templates is None else templates
-        theme_data = prepare_theme_data(theme, self.themes)
+        theme_data = prepare_template_data(theme, self.themes, overrides)
 
         progress = {"at": 0, "steps": len(templates)}
 

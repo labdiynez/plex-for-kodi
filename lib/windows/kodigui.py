@@ -117,8 +117,6 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
         carryProps = kwargs.get("window_props", None)
         if carryProps:
             self.setProperties(list(carryProps.keys()), list(carryProps.values()))
-        self.setBoolProperty('use_alt_watched', util.getSetting('use_alt_watched', True))
-        self.setBoolProperty('hide_aw_bg', util.getSetting('hide_aw_bg', False))
         self.setBoolProperty('is_plextuary', util.SKIN_PLEXTUARY)
 
     def onInit(self):
@@ -261,8 +259,6 @@ class BaseDialog(xbmcgui.WindowXMLDialog, BaseFunctions):
         carryProps = kwargs.get("dialog_props", None)
         if carryProps:
             self.setProperties(list(carryProps.keys()), list(carryProps.values()))
-        self.setBoolProperty('use_alt_watched', util.getSetting('use_alt_watched', True))
-        self.setBoolProperty('hide_aw_bg', util.getSetting('hide_aw_bg', False))
         self.setBoolProperty('is_plextuary', util.SKIN_PLEXTUARY)
 
     def onInit(self):
@@ -372,11 +368,6 @@ class ManagedListItem(object):
     __slots__ = ("_listItem", "dataSource", "properties", "label", "label2", "iconImage", "thumbnailImage", "path",
                  "_ID", "_manager", "_valid")
 
-    PROPS = {
-        'use_alt_watched': util.getSetting('use_alt_watched', True) and '1' or '',
-        'hide_aw_bg': util.getSetting('hide_aw_bg', False) and '1' or ''
-    }
-
     def __init__(self, label='', label2='', iconImage='', thumbnailImage='', path='', data_source=None,
                  properties=None):
         self._listItem = xbmcgui.ListItem(label, label2, path=path)
@@ -391,8 +382,6 @@ class ManagedListItem(object):
         self._ID = None
         self._manager = None
         self._valid = True
-        for k, v in self.PROPS.items():
-            self.setProperty(k, v)
 
         if properties:
             for k, v in properties.items():
@@ -535,15 +524,6 @@ class ManagedListItem(object):
 
     def onDestroy(self):
         pass
-
-
-def watchMarkerSettingsChanged(*args, **kwargs):
-    ManagedListItem.PROPS['use_alt_watched'] = util.getSetting('use_alt_watched', True) and '1' or ''
-    ManagedListItem.PROPS['hide_aw_bg'] = util.getSetting('hide_aw_bg', False) and '1' or ''
-
-
-pnUtil.APP.on('change:use_alt_watched', watchMarkerSettingsChanged)
-pnUtil.APP.on('change:hide_aw_bg', watchMarkerSettingsChanged)
 
 
 class ManagedControlList(object):

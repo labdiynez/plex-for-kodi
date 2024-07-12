@@ -5,6 +5,10 @@ import operator
 import re
 import itertools
 import collections
+import math
+
+import six
+
 import ibis
 
 from . import utils
@@ -62,6 +66,87 @@ class ResolveContextVariable(str):
     pass
 
 
+def safe_math_eval(s):
+    def checkmath(x, *args):
+        if x not in [a for a in dir(math) if "__" not in a]:
+            msg = "Unknown func {}()".format(x)
+            raise SyntaxError(msg)
+        fun = getattr(math, x)
+        return fun(*args)
+
+    bin_ops = {
+        ast.Add: operator.add,
+        ast.Sub: operator.sub,
+        ast.Mult: operator.mul,
+        ast.Div: operator.truediv,
+        ast.Mod: operator.mod,
+        ast.Pow: operator.pow,
+        ast.Call: checkmath,
+        ast.BinOp: ast.BinOp,
+    }
+
+    un_ops = {
+        ast.USub: operator.neg,
+        ast.UAdd: operator.pos,
+        ast.UnaryOp: ast.UnaryOp,
+    }
+
+    ops = tuple(bin_ops) + tuple(un_ops)
+
+    tree = ast.parse(s, mode="eval")
+
+    def _eval(node):
+        if isinstance(node, ast.Expression):
+            return _eval(node.body)
+        if isinstance(node, ast.Constant):
+            return node.value
+        if isinstance(node, ast.Name):
+            return node.id
+        if isinstance(node, ast.BinOp):
+            left = _eval(node.left)
+            right = _eval(node.right)
+
+            # collect lists of possible variables and return them
+            ret = []
+            if isinstance(left, list):
+                ret += left
+            elif isinstance(left, six.string_types):
+                ret.append(left)
+            if isinstance(right, list):
+                ret += right
+            elif isinstance(right, six.string_types):
+                ret.append(right)
+
+            if ret:
+                return ret
+            return bin_ops[type(node.op)](left, right)
+        if isinstance(node, ast.UnaryOp):
+            if isinstance(node.operand, ops):
+                operand = _eval(node.operand)
+            else:
+                operand = node.operand.value
+            return un_ops[type(node.op)](operand)
+        if isinstance(node, ast.Call):
+            args = [_eval(x) for x in node.args]
+            return checkmath(node.func.id, *args)
+        msg = "Bad syntax, {}".format(type(node))
+        raise SyntaxError(msg)
+
+    return _eval(tree)
+
+
+def apply_math_context(expr, argnames, args):
+    """
+    Takes an unparsable math expression, replaces argnames with args, then evaluates it again.
+    """
+    for index, arg in enumerate(argnames):
+        expr = expr.replace(arg, str(args[index]))
+
+    # re-evaluate math expr after resolving variables
+    ret = safe_math_eval(expr)
+    return ret
+
+
 class Expression:
 
     re_func_call = re.compile(r'^([\w.]+)\((.*)\)$')
@@ -81,6 +166,35 @@ class Expression:
             self.literal = ast.literal_eval(expr)
             self.is_literal = True
         except:
+            if any(ext in expr for ext in ('+', '-', '/', '*', '**', '%')):
+                # fixme: this currently doesn't work with variables with filters applied, e.g.: a|default(10) + 20
+                try:
+                    matheval = safe_math_eval(expr)
+                    if isinstance(matheval, list):
+                        # we've found possible variables in the math evaluation
+                        self.is_literal = False
+                        self.is_func_call = True
+
+                        func_args = []
+                        for index, arg in enumerate(matheval):
+                            if isinstance(arg, six.string_types):
+                                # try resolving as variable
+                                if arg.isidentifier():
+                                    func_args.append(ContextVariable(arg))
+                                    continue
+                            func_args.append(arg)
+
+                        self.varstring = lambda *args: apply_math_context(expr, matheval, args)
+
+                        self.func_args = func_args
+                        return
+
+                    self.literal = matheval
+                    self.is_literal = True
+                    return
+                except:
+                    pass
+
             self.is_literal = False
             self.is_func_call, self.varstring, self.func_args = self._try_parse_as_func_call(expr)
             if not self.is_func_call and not self.re_varstring.match(expr):
@@ -137,13 +251,18 @@ class Expression:
         return arg
 
     def _resolve_variable(self, context):
-        obj = context.resolve(self.varstring, self.token)
+        if isinstance(self.varstring, six.string_types):
+            obj = context.resolve(self.varstring, self.token)
+        else:
+            obj = self.varstring
+
         if self.is_func_call:
             try:
+                func_args = []
                 for index, arg in enumerate(self.func_args):
-                    self.func_args[index] = self._resolve_arg_to_variable(arg, context)
+                    func_args.append(self._resolve_arg_to_variable(arg, context))
 
-                obj = obj(*self.func_args)
+                obj = obj(*func_args)
 
                 # a filter/builtin might return a masked variable name whose content should be resolved in the current
                 # context. try to do so.
@@ -511,7 +630,6 @@ class CycleNode(Node):
 # resolving to a string. This name will be passed to the registered template loader.
 @register('include')
 class IncludeNode(Node):
-
     def process_token(self, token):
         self.variables = {}
         parts = utils.splitre(token.text[7:], ["with"])
@@ -634,7 +752,6 @@ class TrimNode(Node):
 #
 @register('with', 'endwith')
 class WithNode(Node):
-
     def process_token(self, token):
         self.variables = {}
         chunks = utils.splitc(token.text[4:], "&", strip=True, discard_empty=True)

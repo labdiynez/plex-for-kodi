@@ -8,7 +8,7 @@ from .core import engine
 # noinspection PyUnresolvedReferences
 from lib.util import (DEF_THEME, ADDON, PROFILE, getSetting, translatePath, THEME_VERSION, setSetting, DEBUG, LOG, T,
                       MONITOR, xbmcvfs, addonSettings)
-from .themes import THEMES
+from .context import TEMPLATE_CONTEXTS
 from .util import deep_update
 from lib.windows.busy import ProgressDialog
 
@@ -27,7 +27,7 @@ def render_templates(theme=None, templates=None, force=False):
 
     # try to find custom theme_overrides.json in userdata
     custom_theme_data_fn = os.path.join(PROFILE, "theme_overrides.json")
-    themes = copy.deepcopy(THEMES)
+    themes = copy.deepcopy(TEMPLATE_CONTEXTS["themes"])
     if xbmcvfs.exists(custom_theme_data_fn):
         try:
             f = xbmcvfs.File(custom_theme_data_fn)
@@ -55,7 +55,17 @@ def render_templates(theme=None, templates=None, force=False):
                 pd.update(int(at * 100 / float(length)),
                           message=T(STEP_MAP.get(message, STEP_MAP["default"]), '').format(message))
 
-            engine.apply(theme, update_progress, templates=templates)
+            # get template overrides
+            watch_state_type = getSetting('watched_indicators', 'modern_2024')
+            overrides = {
+                "indicators": {
+                    "INHERIT": watch_state_type,
+                    "style": watch_state_type,
+                    "hide_aw_bg": getSetting('hide_aw_bg', False),
+                }
+            }
+
+            engine.apply(theme, update_progress, templates=templates, overrides=overrides)
             end = time.time()
             MONITOR.waitForAbort(0.1)
 

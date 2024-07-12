@@ -1891,11 +1891,11 @@ msgid "Choose action"
 msgstr ""
 
 msgctxt "#33022"
-msgid "Use modern inverted watched states"
+msgid "Watched indicators"
 msgstr ""
 
 msgctxt "#33023"
-msgid "Instead of marking unwatched items, mark watched items with a checkmark (modern clients; default: off)"
+msgid "Classic: Show orange triangle for unwatched items\nModern: Show green checkmark for watched items\nModern (2024): Show white checkmark for watched items\n(default: Modern (2024))"
 msgstr ""
 
 msgctxt "#33024"
@@ -2104,4 +2104,8 @@ msgstr ""
 
 msgctxt "#33075"
 msgid "Do something after waking up. Waiting for a time until resuming normal execution helps with networks coming back up after sleep events. Default: 1 second (5 seconds, CoreELEC)"
+msgstr ""
+
+msgctxt "#33076"
+msgid "Modern (2024)"
 msgstr ""
