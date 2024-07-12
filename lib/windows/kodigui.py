@@ -119,6 +119,7 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
             self.setProperties(list(carryProps.keys()), list(carryProps.values()))
         self.setBoolProperty('use_alt_watched', util.getSetting('use_alt_watched', True))
         self.setBoolProperty('hide_aw_bg', util.getSetting('hide_aw_bg', False))
+        self.setBoolProperty('is_plextuary', util.SKIN_PLEXTUARY)
 
     def onInit(self):
         global LAST_BG_URL
@@ -262,6 +263,7 @@ class BaseDialog(xbmcgui.WindowXMLDialog, BaseFunctions):
             self.setProperties(list(carryProps.keys()), list(carryProps.values()))
         self.setBoolProperty('use_alt_watched', util.getSetting('use_alt_watched', True))
         self.setBoolProperty('hide_aw_bg', util.getSetting('hide_aw_bg', False))
+        self.setBoolProperty('is_plextuary', util.SKIN_PLEXTUARY)
 
     def onInit(self):
         self._winID = xbmcgui.getCurrentWindowDialogId()

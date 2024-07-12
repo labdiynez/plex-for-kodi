@@ -86,6 +86,8 @@ if KODI_VERSION_MAJOR > 18:
 else:
     translatePath = xbmc.translatePath
 
+SKIN_PLEXTUARY = xbmc.getSkinDir() == "skin.plextuary"
+
 PROFILE = translatePath(ADDON.getAddonInfo('profile'))
 
 

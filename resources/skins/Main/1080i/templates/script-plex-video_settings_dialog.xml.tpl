@@ -2,7 +2,8 @@
 {% block backgroundcolor %}{% endblock %}
 {% block controls %}
 <control type="group">
-    <visible>!String.IsEmpty(Window.Property(via.OSD))</visible>
+    <visible>String.IsEmpty(Window.Property(is_plextuary)) | [!String.IsEmpty(Window.Property(is_plextuary)) + Skin.HasSetting(OSDBackgroundPause)]</visible>
+    <visible>!String.IsEmpty(Window.Property(via.OSD)) + !Window.IsVisible(sliderdialog)</visible>
     <animation effect="fade" start="100" end="0">Hidden</animation>
     <posx>0</posx>
     <posy>0</posy>
