@@ -1899,7 +1899,7 @@ msgid "Classic: Show orange triangle for unwatched items\nModern: Show green che
 msgstr ""
 
 msgctxt "#33024"
-msgid "Hide black backdrop in inverted watched states"
+msgid "Hide background in modern indicators"
 msgstr ""
 
 msgctxt "#33025"

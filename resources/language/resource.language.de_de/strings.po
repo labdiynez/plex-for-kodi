@@ -2388,8 +2388,8 @@ msgstr "Klassisch: Zeige oranges Dreieck für nicht geschaute Elemente\nModern: 
 
 #: 
 msgctxt "#33024"
-msgid "Hide black backdrop in inverted watched states"
-msgstr "Kein Hintergrund beim invertierten Geschaut-Status"
+msgid "Hide background in modern indicators"
+msgstr "Hintergrund moderner Intikatoren verstecken"
 
 #: 
 msgctxt "#33025"
