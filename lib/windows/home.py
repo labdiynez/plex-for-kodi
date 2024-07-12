@@ -407,6 +407,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         self._applyTheme = False
         self._ignoreTick = False
         self._ignoreInput = False
+        self._anyItemAction = False
+        self._odHubsDirty = False
         self.librarySettings = None
         self.hubSettings = None
         self.anyLibraryHidden = False
@@ -477,6 +479,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         self.checkPlexDirectHosts(plexapp.SERVERMANAGER.allConnections, source="stored")
 
     def onReInit(self):
+        self._anyItemAction = False
         if self._applyTheme:
             self._applyTheme = False
             self._shuttingDown = True
@@ -505,6 +508,9 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             else:
                 if self.getFocusId() != self.lastFocusID:
                     self.setFocusId(self.lastFocusID)
+
+        if self._odHubsDirty:
+            self._updateOnDeckHubs()
 
     def checkPlexDirectHosts(self, hosts, source="stored", *args, **kwargs):
         handlePD = util.getSetting('handle_plexdirect', 'ask')
@@ -956,7 +962,11 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         self.processCommand(search.dialog(self))
 
     def updateOnDeckHubs(self, **kwargs):
+        self._odHubsDirty = True
+
+    def _updateOnDeckHubs(self, **kwargs):
         util.DEBUG_LOG('UpdateOnDeckHubs called')
+        self._odHubsDirty = False
         if util.getSetting("speedy_home_hubs2", False):
             util.DEBUG_LOG("Using alternative home hub refresh")
             sections = set()
@@ -1380,6 +1390,9 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         is_valid_mli = mli and mli.getProperty('is.end') != '1'
         is_last_item = is_valid_mli and control.isLastItem(mli)
 
+        if action:
+            self._anyItemAction = True
+
         if action in (xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_PREVIOUS_MENU):
             pos = control.getSelectedPos()
             if pos is not None and pos > 0:
@@ -1496,8 +1509,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 self.backgroundSet = False
 
             util.DEBUG_LOG('Section changed ({0}): {1}', section.key, repr(section.title))
-            self.showHubs(section)
             self.lastSection = section
+            self.showHubs(section)
 
         # timing issue
         cur_sel_ds = self.sectionList.getSelectedItem().dataSource
@@ -1969,9 +1982,11 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 return
 
             if pos < control.size() - (more and 1 or 0):
-                control.selectItem(pos)
-                if self.updateBackgroundFrom(control[pos].dataSource):
-                    self.backgroundSet = True
+                # we might've moved the selection in the hub while this was happening. If so, don't change the selection
+                if not self._anyItemAction:
+                    control.selectItem(pos)
+                    if self.updateBackgroundFrom(control[pos].dataSource):
+                        self.backgroundSet = True
             else:
                 if more:
                     # re-extend the hub to its original size so we can reselect the position
