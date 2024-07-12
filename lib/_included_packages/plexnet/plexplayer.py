@@ -744,6 +744,11 @@ class PlexAudioPlayer(BasePlayer):
         builder.addParam("directPlay", "0")
         builder.addParam("directStream", "0")
 
+        #todo: This fixes audio transcoding, maybe we'll want to investigate further whether we can customize
+        #      the generic profile instead
+        builder.addParam("X-Plex-Platform", "Chrome")
+        builder.addParam("copyts", "1")
+
         obj.url = builder.getUrl()
 
         return obj
