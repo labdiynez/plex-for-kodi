@@ -632,7 +632,7 @@ class CycleNode(Node):
 class IncludeNode(Node):
     def process_token(self, token):
         self.variables = {}
-        parts = utils.splitre(token.text[7:], ["with"])
+        parts = utils.splitre(token.text[7:], [r"with\s"])
         if len(parts) == 1:
             self.template_arg = parts[0]
             self.template_expr = Expression(parts[0], token)
