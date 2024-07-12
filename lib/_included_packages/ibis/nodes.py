@@ -278,10 +278,11 @@ class Expression:
     def _apply_filters_to_variable(self, obj, context):
         for name, func, args in self.filters:
             try:
+                _args = []
                 for index, arg in enumerate(args):
-                    args[index] = self._resolve_arg_to_variable(arg, context)
+                    _args.append(self._resolve_arg_to_variable(arg, context))
 
-                obj = func(obj, *args)
+                obj = func(obj, *_args)
             except Exception as err:
                 msg = "Error applying filter '{}'.".format(name)
                 errors.raise_(errors.TemplateRenderingError(msg, self.token), err)
