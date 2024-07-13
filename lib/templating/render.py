@@ -3,6 +3,7 @@ import json
 import os
 import time
 import copy
+import glob
 
 from .core import engine
 # noinspection PyUnresolvedReferences
@@ -73,7 +74,9 @@ def render_templates(theme=None, templates=None, force=False):
         LOG("Rendered templates in: {:.2f}s".format(end - start))
 
     curThemeVer = getSetting('theme_version', 0)
-    if curThemeVer < THEME_VERSION or (force or addonSettings.alwaysCompileTemplates):
+    if curThemeVer < THEME_VERSION or (force or addonSettings.alwaysCompileTemplates or
+                                       len(glob.glob(os.path.join(engine.template_dir, "script-plex-*.xml.tpl"))) !=
+                                       len(glob.glob(os.path.join(engine.target_dir, "script-plex-*.xml")))):
         setSetting('theme_version', THEME_VERSION)
         # apply seekdialog button theme
         apply()
