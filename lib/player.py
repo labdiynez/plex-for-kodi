@@ -896,6 +896,7 @@ class AudioPlayerHandler(BasePlayerHandler):
         self.updatePlayQueue()
         self.updateNowPlaying(state='stopped')
         self.ignoreTimelines = True
+        self.player.trigger('audio.stopped')
         self.finish()
 
     def onPlayBackEnded(self):

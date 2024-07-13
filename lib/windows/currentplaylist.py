@@ -206,6 +206,7 @@ class CurrentPlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         xbmc.executebuiltin('Action(Back, {})'.format(self.musicPlayerWinID))
         util.MONITOR.waitForAbort(0.5)
         player.PLAYER.stopAndWait()
+        self.exitCommand = "STOP"
         self.doClose()
 
     def selectPlayingItem(self):
