@@ -34,7 +34,7 @@ def prepare_template_data(thm, context):
         deep_update(template_context["theme"], data_stack.pop())
 
     for ctx in ("indicators",):
-        data_stack = build_stack({"INHERIT": context[ctx]["INHERIT"]}, context[ctx])
+        data_stack = build_stack(context[ctx]["START"], context[ctx])
         template_context[ctx] = {}
         while data_stack:
             deep_update(template_context[ctx], data_stack.pop())

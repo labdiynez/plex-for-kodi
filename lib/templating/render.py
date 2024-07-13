@@ -60,10 +60,12 @@ def render_templates(theme=None, templates=None, force=False):
             watch_state_type = getSetting('watched_indicators', 'modern_2024')
             overrides = {
                 "indicators": {
-                    "INHERIT": watch_state_type,
-                    "style": watch_state_type,
-                    "hide_aw_bg": getSetting('hide_aw_bg', False),
-                    "use_scaling": getSetting('scale_indicators', True)
+                    "START": {
+                        "INHERIT": watch_state_type,
+                        "style": watch_state_type,
+                        "hide_aw_bg": getSetting('hide_aw_bg', False),
+                        "use_scaling": getSetting('scale_indicators', True)
+                    }
                 }
             }
             deep_update(context, overrides)
