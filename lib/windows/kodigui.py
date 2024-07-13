@@ -138,6 +138,7 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
             self.setProperty('background_colour_opaque', "0xff111111")
 
         self.setBoolProperty('use_bg_fallback', util.addonSettings.useBgFallback)
+        self.setBoolProperty('dynamic_backgrounds', util.addonSettings.dynamicBackgrounds)
 
         try:
             if self.started:

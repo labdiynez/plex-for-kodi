@@ -20,7 +20,7 @@
             <texture background="true">script.plex/home/background-fallback.png</texture>
         </control>
         <control type="image">
-            <visible>String.IsEmpty(Window.Property(use_bg_fallback))</visible>
+            <visible>!String.IsEmpty(Window.Property(dynamic_backgrounds))</visible>
             <posx>0</posx>
             <posy>0</posy>
             <width>1920</width>
@@ -28,7 +28,7 @@
             <texture background="true" fallback="script.plex/home/background-fallback_black.png">$INFO[Window.Property(background_static)]</texture>
         </control>
         <control type="image">
-            <visible>String.IsEmpty(Window.Property(use_bg_fallback))</visible>
+            <visible>!String.IsEmpty(Window.Property(dynamic_backgrounds))</visible>
             <posx>0</posx>
             <posy>0</posy>
             <width>1920</width>
