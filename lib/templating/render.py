@@ -27,25 +27,25 @@ def render_templates(theme=None, templates=None, force=False):
     target_dir = os.path.join(translatePath(ADDON.getAddonInfo('path')), "resources", "skins", "Main", "1080i")
 
     # try to find custom theme_overrides.json in userdata
-    custom_theme_data_fn = os.path.join(PROFILE, "theme_overrides.json")
-    themes = copy.deepcopy(TEMPLATE_CONTEXTS["themes"])
-    if xbmcvfs.exists(custom_theme_data_fn):
+    custom_context_data_fn = os.path.join(PROFILE, "context_overrides.json")
+    context = copy.deepcopy(TEMPLATE_CONTEXTS)
+    if xbmcvfs.exists(custom_context_data_fn):
         try:
-            f = xbmcvfs.File(custom_theme_data_fn)
+            f = xbmcvfs.File(custom_context_data_fn)
             data = f.read()
             f.close()
             if data:
                 js = json.loads(data)
-                deep_update(themes, js)
-                LOG("Loaded theme overrides definitions from: {}".format(custom_theme_data_fn))
+                deep_update(context, js)
+                LOG("Loaded context overrides definitions from: {}".format(custom_context_data_fn))
         except:
-            LOG("Couldn't load {}", custom_theme_data_fn)
+            LOG("Couldn't load {}", custom_context_data_fn)
 
     if not engine.initialized:
         engine.init(target_dir, os.path.join(target_dir, "templates"),
                     os.path.join(translatePath(PROFILE), "templates"))
 
-    engine.themes = themes
+    engine.context = context
 
     def apply():
         LOG("Rendering templates")
@@ -66,8 +66,9 @@ def render_templates(theme=None, templates=None, force=False):
                     "use_scaling": getSetting('scale_indicators', True)
                 }
             }
+            deep_update(context, overrides)
 
-            engine.apply(theme, update_progress, templates=templates, overrides=overrides)
+            engine.apply(theme, update_progress, templates=templates)
             end = time.time()
             MONITOR.waitForAbort(0.1)
 

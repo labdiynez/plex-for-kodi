@@ -21,30 +21,25 @@ def build_stack(inheritor, sources):
     return data_stack
 
 
-def prepare_template_data(thm, themes, overrides):
+def prepare_template_data(thm, context):
+    template_context = {"theme": {}}
+
     theme_data = {"INHERIT": thm}
-    final_theme_data = {}
 
     # data stack
-    data_stack = build_stack(theme_data, themes)
+    data_stack = build_stack(theme_data, context.pop("themes"))
 
     # build inheritance stack
     while data_stack:
-        deep_update(final_theme_data, data_stack.pop())
+        deep_update(template_context["theme"], data_stack.pop())
 
-    ac_start_from = overrides or {}
-
-    additional_context = {}
-    for context in ("indicators",):
-        additional_context[context] = {}
-        ctx_start_from = ac_start_from[context]
-        data_stack = build_stack(ctx_start_from, TEMPLATE_CONTEXTS[context])
+    for ctx in ("indicators",):
+        data_stack = build_stack({"INHERIT": context[ctx]["INHERIT"]}, context[ctx])
+        template_context[ctx] = {}
         while data_stack:
-            deep_update(additional_context[context], data_stack.pop())
+            deep_update(template_context[ctx], data_stack.pop())
 
-    final_data = {"theme": final_theme_data}
-    final_data.update(additional_context)
-    return final_data
+    return template_context
 
 
 class TemplateEngine(object):
@@ -53,7 +48,7 @@ class TemplateEngine(object):
     template_dir = None
     custom_template_dir = None
     initialized = False
-    themes = None
+    context = None
     TEMPLATES = None
 
     def init(self, target_dir, template_dir, custom_template_dir):
@@ -92,9 +87,9 @@ class TemplateEngine(object):
             ERROR("Couldn't write script-plex-{}.xml", template)
             return False
 
-    def apply(self, theme, update_callback, templates=None, overrides=None):
+    def apply(self, theme, update_callback, templates=None):
         templates = self.TEMPLATES if templates is None else templates
-        theme_data = prepare_template_data(theme, self.themes, overrides)
+        theme_data = prepare_template_data(theme, self.context)
 
         progress = {"at": 0, "steps": len(templates)}
 
