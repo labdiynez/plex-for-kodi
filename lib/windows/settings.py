@@ -225,7 +225,7 @@ class MultiOptionsSetting(OptionsSetting):
                     elif lval == "false" and o[0] in self.default:
                         ret.remove(o[0])
 
-            if ret and ret != self.default:
+            if ret != self.default:
                 self.set(ret, skip_get=True)
                 return ret
         return with_default and self.default or []
