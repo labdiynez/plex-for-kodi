@@ -6,8 +6,8 @@ from kodi_six import xbmcvfs
 
 from lib.logging import log as LOG, log_error as ERROR
 from .util import deep_update
+from lib.os_utils import fast_iglob
 from .filters import *
-from .context import TEMPLATE_CONTEXTS
 
 
 def build_stack(inheritor, sources):
@@ -64,7 +64,7 @@ class TemplateEngine(object):
 
     def get_available_templates(self):
         tpls = []
-        for f in glob.iglob(os.path.join(self.template_dir, "script-plex-*.xml.tpl")):
+        for f in fast_iglob(os.path.join(self.template_dir, "script-plex-*.xml.tpl")):
             tpls.append(f.split("script-plex-")[1].split(".xml.tpl")[0])
         self.TEMPLATES = tpls
 

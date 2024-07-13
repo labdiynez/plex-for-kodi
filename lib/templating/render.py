@@ -3,7 +3,6 @@ import json
 import os
 import time
 import copy
-import glob
 
 from .core import engine
 # noinspection PyUnresolvedReferences
@@ -11,6 +10,7 @@ from lib.util import (DEF_THEME, ADDON, PROFILE, getSetting, translatePath, THEM
                       MONITOR, xbmcvfs, addonSettings)
 from .context import TEMPLATE_CONTEXTS
 from .util import deep_update
+from lib.os_utils import fast_glob
 from lib.windows.busy import ProgressDialog
 
 
@@ -78,8 +78,8 @@ def render_templates(theme=None, templates=None, force=False):
 
     curThemeVer = getSetting('theme_version', 0)
     if curThemeVer < THEME_VERSION or (force or addonSettings.alwaysCompileTemplates or
-                                       len(glob.glob(os.path.join(engine.template_dir, "script-plex-*.xml.tpl"))) !=
-                                       len(glob.glob(os.path.join(engine.target_dir, "script-plex-*.xml")))):
+                                       len(fast_glob(os.path.join(engine.template_dir, "script-plex-*.xml.tpl"))) !=
+                                       len(fast_glob(os.path.join(engine.target_dir, "script-plex-*.xml")))):
         setSetting('theme_version', THEME_VERSION)
         # apply seekdialog button theme
         apply()
