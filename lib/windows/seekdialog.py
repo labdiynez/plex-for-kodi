@@ -1926,7 +1926,7 @@ class SeekDialog(kodigui.BaseDialog):
         self.killTimeKeeper()
 
     def syncTimeKeeper(self):
-        if not not self.handler.player.playerObject:
+        if not self.handler.player.playerObject:
             return
 
         self.timeKeeperTime = self.trueOffset()#int(self.handler.player.getTime() * 1000)
