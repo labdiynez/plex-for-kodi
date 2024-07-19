@@ -404,20 +404,16 @@ class Settings(object):
                 ).description(
                     T(33078, "")
                 ),
-                OptionsSetting(
-                    'no_episode_spoilers2', T(33006, ''),
-                    'unwatched',
+                MultiOptionsSetting(
+                    'no_episode_spoilers3', T(33006, ''),
+                    ['unwatched'],
                     (
-                        ('off', T(32481, '')),
                         ('unwatched', T(33010, '')),
-                        ('funwatched', T(33011, '')),
+                        ('in_progress', T(33011, '')),
+                        ('no_unwatched_episode_titles', T(33012, '')),
+                        ('blur_chapters', T(33081, '')),
                     )
                 ).description(T(33007, "")),
-                BoolSetting(
-                    'no_unwatched_episode_titles', T(33012, ''), True
-                ).description(
-                    T(33013, "")
-                ),
                 MultiOptionsSetting(
                     'spoilers_allowed_genres2', T(33016, ''),
                     ["Reality", "Game Show", "Documentary", "Sport"],

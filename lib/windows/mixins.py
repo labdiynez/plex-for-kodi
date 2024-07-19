@@ -152,14 +152,14 @@ class RatingsMixin:
 class SpoilersMixin(object):
     def __init__(self, *args, **kwargs):
         self._noSpoilers = None
-        self.spoilerSetting = "unwatched"
+        self.spoilerSetting = ["unwatched"]
         self.noTitles = False
         self.spoilersAllowedFor = True
         self.cacheSpoilerSettings()
 
     def cacheSpoilerSettings(self):
-        self.spoilerSetting = util.getSetting('no_episode_spoilers2', "unwatched")
-        self.noTitles = util.getSetting('no_unwatched_episode_titles', False)
+        self.spoilerSetting = util.getSetting('no_episode_spoilers3', ["unwatched"])
+        self.noTitles = 'no_unwatched_episode_titles' in self.spoilerSetting
         self.spoilersAllowedFor = util.getSetting('spoilers_allowed_genres2', ["Reality", "Game Show", "Documentary",
                                                                                "Sport"])
 
@@ -184,7 +184,8 @@ class SpoilersMixin(object):
         if item and item.type != "episode":
             return "off"
 
-        nope = self.spoilerSetting
+        nope = "funwatched" if "in_progress" in self.spoilerSetting else "unwatched" \
+            if "unwatched" in self.spoilerSetting else "off"
 
         if nope != "off" and self.spoilersAllowedFor:
             # instead of making possibly multiple separate API calls to find genres for episode's shows, try to get

@@ -1831,7 +1831,7 @@ msgid "No TV spoilers"
 msgstr ""
 
 msgctxt "#33007"
-msgid "When visiting an episode/season view, blur unwatched/unwatched+in-progress episode thumbnails, previews and redact summaries. When the Addon Setting \"Use episode thumbnails in continue hub\" is enabled, blur them as well."
+msgid "Select in which cases to blur TV episode thumbnails, previews, redact summaries, hide episode titles and whether to blur chapter images. When the Addon Setting \"Use episode thumbnails in continue hub\" is enabled, blur them as well."
 msgstr ""
 
 msgctxt "#33008"
@@ -1847,7 +1847,7 @@ msgid "Unwatched"
 msgstr ""
 
 msgctxt "#33011"
-msgid "Unwatched/in progress"
+msgid "In progress"
 msgstr ""
 
 msgctxt "#33012"
@@ -2125,3 +2125,8 @@ msgstr ""
 msgctxt "#33080"
 msgid "Allow DirectPlay of high resolution music (e.g. FLAC, >= 192 kHz)"
 msgstr ""
+
+msgctxt "#33081"
+msgid "Blur chapter images"
+msgstr ""
+

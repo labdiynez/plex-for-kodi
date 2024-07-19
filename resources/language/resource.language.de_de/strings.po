@@ -2278,8 +2278,8 @@ msgstr "Keine TV-Spoiler"
 
 #: 
 msgctxt "#33007"
-msgid "When visiting an episode/season view, blur unwatched/unwatched+in-progress episode thumbnails, previews and redact summaries. When the Addon Setting \"Use episode thumbnails in continue hub\" is enabled, blur them as well."
-msgstr "In der Episoden-/Staffelansicht Vorschaubilder nicht geschauter oder angefangener Episoden verschleiern und Zusammenfassungen zensieren. Wenn die Addon-Einstellung \"Vorschaubild für Episoden im Fortsetzen-Hub verwenden\" aktiviert ist, diese ebenfalls verschleiern."
+msgid "Select in which cases to blur TV episode thumbnails, previews, redact summaries, hide episode titles and whether to blur chapter images. When the Addon Setting \"Use episode thumbnails in continue hub\" is enabled, blur them as well."
+msgstr "Wähle aus, in welchen Fällen Vorschaubilder von TV-Episoden verschleiert, Zusammenfassungen zensiert, Episodentitel versteckt und Kapitelbilder verschleiert werden sollen. Wenn die Addon-Einstellung \"Vorschaubild für Episoden im Fortsetzen-Hub verwenden\" aktiviert ist, diese ebenfalls verschleiern."
 
 #: 
 msgctxt "#33008"
@@ -2298,8 +2298,8 @@ msgstr "Nicht geschaut"
 
 #: 
 msgctxt "#33011"
-msgid "Unwatched/in progress"
-msgstr "Nicht geschaut/Angefangen"
+msgid "In progress"
+msgstr "Angefangen"
 
 #: 
 msgctxt "#33012"
@@ -2631,3 +2631,7 @@ msgstr "Hochauflös. Musik"
 msgctxt "#33080"
 msgid "Allow DirectPlay of high resolution music (e.g. FLAC, >= 192 kHz)"
 msgstr "Direktes Abspielen von hochauflösender Musik erlauben (z.B. FLAC, >= 192 kHz)"
+
+msgctxt "#33081"
+msgid "Blur chapter images"
+msgstr "Kapitelbilder verschleiern"

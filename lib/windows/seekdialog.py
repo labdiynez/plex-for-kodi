@@ -185,6 +185,7 @@ class SeekDialog(kodigui.BaseDialog):
         self._ignoreInput = False
         self._ignoreTick = False
         self._abortBufferWait = False
+        self.no_spoilers = util.getSetting('no_episode_spoilers3', ["unwatched"])
         self.clientLikePlex = util.getSetting('player_official', True)
 
         self._videoBelowOneHour = False
@@ -1443,13 +1444,11 @@ class SeekDialog(kodigui.BaseDialog):
         self.setProperty('is.show', is_show and '1' or '')
         self.setProperty('media.show_ends', self.showItemEndsInfo and '1' or '')
         self.setProperty('time.ends_label', self.showItemEndsLabel and (util.T(32543, 'Ends at')) or '')
-        self.setBoolProperty('no.osd.hide_info', util.getSetting('no_spoilers', False))
+        self.setBoolProperty('no.osd.hide_info', "unwatched" in self.no_spoilers or "in_progress" in self.no_spoilers)
 
-        no_spoilers = util.getSetting('no_episode_spoilers2', "unwatched")
         hide_title = False
-        if is_show and no_spoilers != "off" and util.getSetting('no_unwatched_episode_titles', False):
-            hide_title = ((no_spoilers == 'funwatched' and not v.isFullyWatched) or
-                          (no_spoilers == 'unwatched' and not v.isWatched))
+        if is_show and 'no_unwatched_episode_titles' in self.no_spoilers:
+            hide_title = True
 
         self.setBoolProperty('hide.title', hide_title)
 
@@ -1504,11 +1503,13 @@ class SeekDialog(kodigui.BaseDialog):
         if self.showChapters:
             chaps = []
             chapOffsets = []
+            thumb_opts = ("blur_chapters" in self.no_spoilers
+                          and {"blur": util.addonSettings.episodeNoSpoilerBlur} or {})
             if self.chapters:
                 self.setProperty('chapters.label', T(33605, 'Video Chapters').upper())
                 for index, chapter in enumerate(self.chapters):
                     thumb = chapter.thumb and chapter.thumb.asTranscodedImageURL(
-                        *PlaylistDialog.LI_AR16X9_THUMB_DIM) or None
+                        *PlaylistDialog.LI_AR16X9_THUMB_DIM, **thumb_opts) or None
                     # mli = kodigui.ManagedListItem(data_source=chapter.startTime(),
                     #                               thumbnailImage=thumb,
                     #                               label=chapter.tag or T(33607, 'Chapter {}').format(index + 1))
@@ -1558,7 +1559,12 @@ class SeekDialog(kodigui.BaseDialog):
                     if skipMarker:
                         continue
 
-                    chaps.append((offset, self.handler.player.playerObject.getBifUrl(offset),
+                    bifUrl = self.handler.player.playerObject.getBifUrl(offset)
+                    if "blur_chapters" in self.no_spoilers:
+                        bifUrl = self.player.video.server.getImageTranscodeURL(bifUrl,
+                                                                               *PlaylistDialog.LI_AR16X9_THUMB_DIM,
+                                                                               **thumb_opts)
+                    chaps.append((offset, bifUrl,
                                   label.format(" #{}".format(credCnt) if credits and creditsCounter > 1 else "")))
 
                     if credits:
