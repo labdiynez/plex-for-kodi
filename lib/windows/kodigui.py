@@ -116,7 +116,7 @@ class XMLBase(object):
                 if self.__class__.__name__ == "HomeWindow":
                     try:
                         self._errored = True
-                        self.closeWithApplyTheme()
+                        self.closeWRecompileTpls()
                     finally:
                         return
                 elif self.__class__.__name__ == "BackgroundWindow":
@@ -131,7 +131,7 @@ class XMLBase(object):
                     self.doClose()
                 finally:
                     from . import windowutils
-                    windowutils.HOME.closeWithApplyTheme()
+                    windowutils.HOME.closeWRecompileTpls()
                     return
             raise
         self._onInit()
