@@ -10,7 +10,7 @@
     <visible>[!String.IsEmpty(Window.Property(show.OSD)) | Window.IsVisible(seekbar) | !String.IsEmpty(Window.Property(button.seek))] + !Window.IsVisible(osdvideosettings) + !Window.IsVisible(osdaudiosettings) + !Window.IsVisible(osdsubtitlesettings) + !Window.IsVisible(subtitlesearch) + !Window.IsActive(playerprocessinfo) + !Window.IsActive(selectdialog) + !Window.IsVisible(osdcmssettings)</visible>
     <animation effect="fade" time="200" delay="200" end="0">Hidden</animation>
     <control type="group">
-        <visible>String.IsEmpty(Window.Property(settings.visible)) + [Window.IsVisible(seekbar) | Window.IsVisible(videoosd) | Player.ShowInfo]</visible>
+        <visible>String.IsEmpty(Window.Property(is_plextuary)) + String.IsEmpty(Window.Property(settings.visible)) + [Window.IsVisible(seekbar) | Window.IsVisible(videoosd) | Player.ShowInfo]</visible>
         <animation effect="fade" start="100" end="0">Hidden</animation>
         <posx>0</posx>
         <posy>0</posy>

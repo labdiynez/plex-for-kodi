@@ -95,6 +95,7 @@ def main(with_render=False):
             util.setGlobalProperty('running', '')
             util.setGlobalProperty('stop_running', '')
             util.setGlobalProperty('ignore_spinner', '')
+            util.setGlobalProperty('is_active', '1')
         except:
             pass
 
@@ -109,6 +110,7 @@ def _main():
     util.DEBUG_LOG('[ STARTED: {0} -------------------------------------------------------------------- ]', util.ADDON.getAddonInfo('version'))
     util.DEBUG_LOG('USER-AGENT: {0}', lambda: plex.defaultUserAgent())
     background.setSplash()
+    util.setGlobalProperty('is_active', '1')
 
     try:
         while not util.MONITOR.abortRequested() and not util.getGlobalProperty('stop_running'):

@@ -868,6 +868,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                         return
                     elif ex.button == 1:
                         self.storeLastBG()
+                        util.setGlobalProperty('is_active', '')
                         xbmc.executebuiltin('ActivateWindow(10000)')
                         return
                     elif ex.button == 0:
