@@ -1189,7 +1189,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
         else:
             options = []
-            if (not plexapp.ACCOUNT.isManaged or plexapp.ACCOUNT.isAdmin) and section != playlists_section:
+            if plexapp.ACCOUNT.isAdmin and section != playlists_section:
                 options = [{'key': 'refresh', 'display': T(33082, "Scan Library Files")},
                            {'key': 'emptyTrash', 'display': T(33083, "Empty Trash")},
                            {'key': 'analyze', 'display': T(33084, "Analyze")},
