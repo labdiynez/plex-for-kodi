@@ -186,6 +186,7 @@ class SeekDialog(kodigui.BaseDialog):
         self._ignoreTick = False
         self._abortBufferWait = False
         self.no_spoilers = util.getSetting('no_episode_spoilers3', ["unwatched"])
+        self.no_time_no_osd_spoilers = util.getSetting('no_osd_time_spoilers', False)
         self.clientLikePlex = util.getSetting('player_official', True)
 
         self._videoBelowOneHour = False
@@ -1444,7 +1445,7 @@ class SeekDialog(kodigui.BaseDialog):
         self.setProperty('is.show', is_show and '1' or '')
         self.setProperty('media.show_ends', self.showItemEndsInfo and '1' or '')
         self.setProperty('time.ends_label', self.showItemEndsLabel and (util.T(32543, 'Ends at')) or '')
-        self.setBoolProperty('no.osd.hide_info', "unwatched" in self.no_spoilers or "in_progress" in self.no_spoilers)
+        self.setBoolProperty('no.osd.hide_info', self.no_time_no_osd_spoilers)
 
         hide_title = False
         if is_show and 'no_unwatched_episode_titles' in self.no_spoilers:
