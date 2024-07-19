@@ -1189,7 +1189,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
         else:
             options = []
-            if not plexapp.ACCOUNT.isManaged or plexapp.ACCOUNT.isAdmin:
+            if (not plexapp.ACCOUNT.isManaged or plexapp.ACCOUNT.isAdmin) and section != playlists_section:
                 options = [{'key': 'refresh', 'display': T(33082, "Scan Library Files")},
                            {'key': 'emptyTrash', 'display': T(33083, "Empty Trash")},
                            {'key': 'analyze', 'display': T(33084, "Analyze")},
@@ -1286,9 +1286,16 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 section.refresh()
             return self.lastSection
         elif choice["key"] == "emptyTrash":
-            with busy.BusyContext(delay=True, delay_time=0.2):
-                section.emptyTrash()
-            return self.lastSection
+            button = optionsdialog.show(
+                T(33083, 'Empty Trash'),
+                section.title,
+                T(32328, 'Yes'),
+                T(32329, 'No')
+            )
+            if button == 0:
+                with busy.BusyContext(delay=True, delay_time=0.2):
+                    section.emptyTrash()
+                return self.lastSection
         elif choice["key"] == "analyze":
             with busy.BusyContext(delay=True, delay_time=0.2):
                 section.analyze()
