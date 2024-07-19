@@ -2635,3 +2635,15 @@ msgstr "Direktes Abspielen von hochauflösender Musik erlauben (z.B. FLAC, >= 19
 msgctxt "#33081"
 msgid "Blur chapter images"
 msgstr "Kapitelbilder verschleiern"
+
+msgctxt "#33082"
+msgid "Scan Library Files"
+msgstr "Mediathek-Dateien einlesen"
+
+msgctxt "#33083"
+msgid "Empty Trash"
+msgstr "Papierkorb leeren"
+
+msgctxt "#33084"
+msgid "Analyze"
+msgstr "Analysieren"

@@ -2130,3 +2130,14 @@ msgctxt "#33081"
 msgid "Blur chapter images"
 msgstr ""
 
+msgctxt "#33082"
+msgid "Scan Library Files"
+msgstr ""
+
+msgctxt "#33083"
+msgid "Empty Trash"
+msgstr ""
+
+msgctxt "#33084"
+msgid "Analyze"
+msgstr ""

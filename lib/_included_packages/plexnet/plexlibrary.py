@@ -252,10 +252,10 @@ class LibrarySection(plexobjects.PlexObject):
         return plexobjects.listItems(self.server, '/library/sections/%s/onDeck' % self.key)
 
     def analyze(self):
-        self.server.query('/library/sections/%s/analyze' % self.key)
+        self.server.query('/library/sections/%s/analyze' % self.key, method=self.server.session.put)
 
     def emptyTrash(self):
-        self.server.query('/library/sections/%s/emptyTrash' % self.key)
+        self.server.query('/library/sections/%s/emptyTrash' % self.key, method=self.server.session.put)
 
     def refresh(self):
         self.server.query('/library/sections/%s/refresh' % self.key)

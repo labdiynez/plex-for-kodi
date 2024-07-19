@@ -1189,6 +1189,11 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
         else:
             options = []
+            if not plexapp.ACCOUNT.isManaged or plexapp.ACCOUNT.isAdmin:
+                options = [{'key': 'refresh', 'display': T(33082, "Scan Library Files")},
+                           {'key': 'emptyTrash', 'display': T(33083, "Empty Trash")},
+                           {'key': 'analyze', 'display': T(33084, "Analyze")},
+                           dropdown.SEPARATOR]
 
             if section.locations:
                 for loc in section.locations:
@@ -1201,7 +1206,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                          }
                     )
 
-            options.append(dropdown.SEPARATOR)
+                options.append(dropdown.SEPARATOR)
+
             options.append({'key': 'hide', 'display': T(33028, "Hide library")})
             options.append({'key': 'move', 'display': T(33039, "Move")})
             options.append(dropdown.SEPARATOR)
@@ -1275,6 +1281,18 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 del self.librarySettings["order"]
                 self.saveLibrarySettings()
                 return self.lastSection
+        elif choice["key"] == "refresh":
+            with busy.BusyContext(delay=True, delay_time=0.2):
+                section.refresh()
+            return self.lastSection
+        elif choice["key"] == "emptyTrash":
+            with busy.BusyContext(delay=True, delay_time=0.2):
+                section.emptyTrash()
+            return self.lastSection
+        elif choice["key"] == "analyze":
+            with busy.BusyContext(delay=True, delay_time=0.2):
+                section.analyze()
+            return
 
     def hubMenu(self):
         hub = self.currentHub
