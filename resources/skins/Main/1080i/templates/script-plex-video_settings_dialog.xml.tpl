@@ -2,7 +2,6 @@
 {% block backgroundcolor %}{% endblock %}
 {% block controls %}
 <control type="group">
-    <visible>String.IsEmpty(Window.Property(is_plextuary)) | [!String.IsEmpty(Window.Property(is_plextuary)) + Skin.HasSetting(OSDBackgroundPause)]</visible>
     <visible>!String.IsEmpty(Window.Property(via.OSD)) + !Window.IsVisible(sliderdialog)</visible>
     <animation effect="fade" start="100" end="0">Hidden</animation>
     <posx>0</posx>
@@ -138,7 +137,7 @@
     <width>10</width>
     <height>600</height>
     <onleft>100</onleft>
-    <visible>true</visible>
+    <visible>!Window.IsVisible(sliderdialog)</visible>
     <texturesliderbackground colordiffuse="30000000" border="5">script.plex/white-square.png</texturesliderbackground>
     <texturesliderbar colordiffuse="77FFFFFF" border="5">script.plex/white-square.png</texturesliderbar>
     <texturesliderbarfocus colordiffuse="FFE5A00D" border="5">script.plex/white-square.png</texturesliderbarfocus>
