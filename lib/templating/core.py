@@ -76,7 +76,7 @@ class TemplateEngine(object):
         template = self.loader(fn)
         return template.render(data)
 
-    def write(self, template, data):
+    def write(self, template, data, retry=0):
         def ensure_file_exists(file_name, expected_size):
             if xbmcvfs.exists(file_name):
                 s = xbmcvfs.Stat(file_name)
@@ -109,7 +109,9 @@ class TemplateEngine(object):
             count += 1
 
         if not exists:
-            raise OSError("Timed out while waiting for template {} to be saved to disk".format(fn))
+            if retry > 0:
+                raise OSError("Timed out while waiting for template {} to be saved to disk".format(fn))
+            return self.write(template, data, retry=1)
         return True
 
     def apply(self, theme, update_callback, templates=None):
