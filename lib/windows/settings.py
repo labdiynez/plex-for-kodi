@@ -26,15 +26,33 @@ class Setting(object):
     default = None
     userAware = False
     isThemeRelevant = False
+    backport_from = None
 
     def translate(self, val):
         return str(val)
 
     def get(self, *args, **kwargs):
         _id = kwargs.pop("_id", UNDEF)
+        use_id = _id if _id != UNDEF else self.ID
         default = kwargs.pop("default", UNDEF)
-        return util.getSetting(_id if _id != UNDEF else self.ID,
-                               default if default != UNDEF else self.default)
+        use_default = default if default != UNDEF else self.default
+
+        value = util.getSetting(use_id, use_default)
+        if value == use_default and self.backport_from:
+            # fallback set and we're on default
+            old_val = util.getSetting(self.backport_from, DEFAULT)
+
+            # old setting was set
+            if old_val != DEFAULT:
+                # get correct old value
+                old_val_cast = util.getSetting(self.backport_from, use_default)
+                util.setSetting(self.backport_from, '')
+
+                # old value is different from the new one, set
+                if old_val_cast != use_default:
+                    self.set(old_val_cast, skip_get=True)
+                    value = old_val_cast
+        return value
 
     def emit_events(self, id_, val, **kwargs):
         plexnet.util.APP.trigger('change:{0}'.format(id_), value=val)
@@ -63,12 +81,13 @@ class Setting(object):
 
 
 class BasicSetting(Setting):
-    def __init__(self, ID, label, default, desc='', theme_relevant=False):
+    def __init__(self, ID, label, default, desc='', theme_relevant=False, backport_from=None):
         self.ID = ID
         self.label = label
         self.default = default
         self.desc = desc
         self.isThemeRelevant = theme_relevant
+        self.backport_from = backport_from
 
     def description(self, desc):
         self.desc = desc
@@ -542,7 +561,7 @@ class Settings(object):
             T(32940, 'Player UI'), (
                 BoolSetting('player_official', T(33045, 'Behave like official Plex clients'), True).description(
                     T(33046, '')),
-                BoolSetting('no_spoilers', T(33004, ''), False).description(
+                BoolSetting('no_osd_time_spoilers', T(33004, ''), False, backport_from="no_spoilers").description(
                     T(33005, '')),
                 MultiUAOptionsSetting(
                     'player_show_buttons', T(33057, 'Show buttons'),
