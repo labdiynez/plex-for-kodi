@@ -34,13 +34,15 @@ filtermap = {}
 #     @register('name')
 #
 # If no name is supplied the function name will be used.
-def register(nameorfunc=None):
+def register(nameorfunc=None, with_context=False):
 
     if callable(nameorfunc):
+        nameorfunc.with_context = with_context
         filtermap[nameorfunc.__name__] = nameorfunc
         return nameorfunc
 
     def register_filter_function(func):
+        func.with_context = with_context
         filtermap[nameorfunc or func.__name__] = func
         return func
 

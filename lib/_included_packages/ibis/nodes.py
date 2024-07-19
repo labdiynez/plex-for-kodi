@@ -262,7 +262,10 @@ class Expression:
                 for index, arg in enumerate(self.func_args):
                     func_args.append(self._resolve_arg_to_variable(arg, context))
 
-                obj = obj(*func_args)
+                if getattr(obj, "with_context", False):
+                    obj = obj(*func_args, context=context)
+                else:
+                    obj = obj(*func_args)
 
                 # a filter/builtin might return a masked variable name whose content should be resolved in the current
                 # context. try to do so.
