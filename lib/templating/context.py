@@ -103,10 +103,10 @@ TEMPLATE_CONTEXTS = {
             "INHERIT": "base",
             "episodes": {
                 "buttongroup": {
-                    "posy": 393
+                    "posy": 369
                 },
                 "buttongroup_1300": {
-                    "posy": "412.5"
+                    "posy": "388.5"
                 },
                 "buttons": {
                     "width": 176,
@@ -150,11 +150,11 @@ TEMPLATE_CONTEXTS = {
                 "use_button_bg": True,
                 "button_bg_color": "66000000",
                 "buttongroup": {
-                    "posy": 393,
+                    "posy": 369,
                     "itemgap": -40,
                 },
                 "buttongroup_1300": {
-                    "posy": 393,
+                    "posy": 369,
                     "itemgap": -40,
                 },
                 "buttons": {

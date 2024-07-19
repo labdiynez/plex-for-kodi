@@ -27,7 +27,7 @@
         {% if theme.episodes.use_button_bg %}
             <control type="image">
                 <posx>60</posx>
-                <posy>393</posy>
+                <posy>369</posy>
                 <width>657</width>
                 <height>104</height>
                 <texture>script.plex/white-square.png</texture>
@@ -103,23 +103,23 @@
         <height>600</height>
         <control type="group">
             <control type="image">
+                <visible>false</visible>
                 <posx>60</posx>
                 <posy>0</posy>
-                <width>657</width>
-                <height>393</height>
-                <texture background="true">script.plex/thumb_fallbacks/show.png</texture>
-                <animation effect="fade" start="0" end="100" time="0" delay="500">WindowOpen</animation>
+                <width>656</width>
+                <height>369</height>
+                <texture background="true">script.plex/home/background-fallback_black.png</texture>
                 <aspectratio>scale</aspectratio>
             </control>
             <control type="image">
                 <posx>60</posx>
                 <posy>0</posy>
-                <width>657</width>
-                <height>393</height>
-                <texture background="true">$INFO[Container(400).ListItem.Thumb]</texture>
+                <width>656</width>
+                <height>369</height>
+                <texture background="true" fallback="script.plex/thumb_fallbacks/show.png">$INFO[Container(400).ListItem.Thumb]</texture>
                 <aspectratio>scale</aspectratio>
             </control>
-            {% include "includes/watched_indicator.xml.tpl" with itemref="Container(400).ListItem" & xoff=657+60 & uw_size=35 & wbg_w=50 & wbg_h=40 %}
+            {% include "includes/watched_indicator.xml.tpl" with itemref="Container(400).ListItem" & xoff=656+60 & uw_size=35 & scale="large" %}
         </control>
 
         <control type="grouplist">
