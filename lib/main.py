@@ -50,7 +50,7 @@ def waitForThreads():
                         t.cancel()
 
                     try:
-                        t.join()
+                        t.join(2.0)
                     except:
                         util.ERROR()
 
@@ -72,8 +72,10 @@ def signout():
     plexapp.ACCOUNT.signOut()
 
 
-def main():
+def main(with_render=False):
     global BACKGROUND
+    if with_render:
+        render_templates(force=True)
 
     try:
         with util.Cron(0.1):
@@ -81,6 +83,10 @@ def main():
             if BACKGROUND.waitForOpen():
                 util.setGlobalProperty('running', '1')
                 BACKGROUND.modal()
+
+                # we've had an XMLError during modalizing, rebuild templates
+                if BACKGROUND._errored:
+                    return main(with_render=True)
                 del BACKGROUND
             else:
                 util.LOG("Couldn't start main loop, exiting.")

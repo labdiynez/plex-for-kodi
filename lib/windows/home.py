@@ -478,13 +478,16 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         self.updateProperties()
         self.checkPlexDirectHosts(plexapp.SERVERMANAGER.allConnections, source="stored")
 
+    def closeWithApplyTheme(self):
+        self._applyTheme = False
+        self._shuttingDown = True
+        self.closeOption = "apply_theme"
+        self.doClose()
+
     def onReInit(self):
         self._anyItemAction = False
         if self._applyTheme:
-            self._applyTheme = False
-            self._shuttingDown = True
-            self.closeOption = "apply_theme"
-            self.doClose()
+            self.closeWithApplyTheme()
             return
 
         if self._reloadOnReinit:

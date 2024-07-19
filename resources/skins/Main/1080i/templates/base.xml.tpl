@@ -11,5 +11,6 @@
     {% block backgroundcolor %}<backgroundcolor>$INFO[Window.Property(background_colour)]</backgroundcolor>{% endblock %}
     <controls>
         {% block controls %}{% endblock %}
+        <control type="label" id="666"><visible>false</visible></control><!-- sanity check dummy -->
     </controls>
 </window>

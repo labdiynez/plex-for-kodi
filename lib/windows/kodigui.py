@@ -7,7 +7,6 @@ import traceback
 
 from kodi_six import xbmc
 from kodi_six import xbmcgui
-from plexnet import util as pnUtil
 from six.moves import range
 from six.moves import zip
 
@@ -103,12 +102,48 @@ LAST_BG_URL = None
 BG_NA = "script.plex/home/background-fallback_black.png"
 
 
-class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
-    __slots__ = ("_closing", "_winID", "started", "finishedInit", "dialogProps", "isOpen")
+class XMLBase(object):
+    def onInit(self):
+        try:
+            self.getControl(666)
+        except RuntimeError as e:
+            if e.args and "Non-Existent Control" in e.args[0]:
+                util.ERROR("Possibly broken XML file: {}, triggering recompilation.".format(self.xmlFile))
+                util.showNotification("Recompiling templates", time_ms=1000,
+                                      header="Possibly broken XML file(s)")
+                xbmc.sleep(1000)
+
+                if self.__class__.__name__ == "HomeWindow":
+                    try:
+                        self._errored = True
+                        self.closeWithApplyTheme()
+                    finally:
+                        return
+                elif self.__class__.__name__ == "BackgroundWindow":
+                    try:
+                        self._errored = True
+                        self.doClose()
+                    finally:
+                        return
+
+                try:
+                    self._errored = True
+                    self.doClose()
+                finally:
+                    from . import windowutils
+                    windowutils.HOME.closeWithApplyTheme()
+                    return
+            raise
+        self._onInit()
+
+
+class BaseWindow(XMLBase, xbmcgui.WindowXML, BaseFunctions):
+    __slots__ = ("_closing", "_winID", "started", "finishedInit", "dialogProps", "isOpen", "_errored")
 
     def __init__(self, *args, **kwargs):
-        BaseFunctions.__init__(self)
+        super(BaseWindow, self).__init__()
         self._closing = False
+        self._errored = False
         self._winID = None
         self.started = False
         self.finishedInit = False
@@ -119,7 +154,7 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
             self.setProperties(list(carryProps.keys()), list(carryProps.values()))
         self.setBoolProperty('is_plextuary', util.SKIN_PLEXTUARY)
 
-    def onInit(self):
+    def _onInit(self):
         global LAST_BG_URL
         self._winID = xbmcgui.getCurrentWindowId()
         BaseFunctions.lastWinID = self._winID
@@ -149,6 +184,7 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
                     self.windowSetBackground(LAST_BG_URL)
                 self.onFirstInit()
                 self.finishedInit = True
+
         except util.NoDataException:
             self.exitCommand = "NODATA"
             self.doClose()
@@ -248,12 +284,13 @@ class BaseWindow(xbmcgui.WindowXML, BaseFunctions):
         pass
 
 
-class BaseDialog(xbmcgui.WindowXMLDialog, BaseFunctions):
-    __slots__ = ("_closing", "_winID", "started", "isOpen")
+class BaseDialog(XMLBase, xbmcgui.WindowXMLDialog, BaseFunctions):
+    __slots__ = ("_closing", "_winID", "started", "isOpen", "_errored")
 
     def __init__(self, *args, **kwargs):
-        BaseFunctions.__init__(self)
+        super(BaseDialog, self).__init__()
         self._closing = False
+        self._errored = False
         self._winID = ''
         self.started = False
 
@@ -262,7 +299,7 @@ class BaseDialog(xbmcgui.WindowXMLDialog, BaseFunctions):
             self.setProperties(list(carryProps.keys()), list(carryProps.values()))
         self.setBoolProperty('is_plextuary', util.SKIN_PLEXTUARY)
 
-    def onInit(self):
+    def _onInit(self):
         self._winID = xbmcgui.getCurrentWindowDialogId()
         BaseFunctions.lastDialogID = self._winID
         if self.started:
