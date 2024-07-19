@@ -471,7 +471,9 @@ class MediaDecisionEngine(object):
             # Inspect the audio stream attributes if the codec/container can direct
             # play. For now we only need to verify the sample rate.
 
-            if choice.audioStream is not None and choice.audioStream.samplingRate.asInt() > 384000:
+            maxSR = 384000 if item.settings.getPreference('audio_hires', True) else 191999
+
+            if choice.audioStream is not None and choice.audioStream.samplingRate.asInt() > maxSR:
                 util.LOG("MDE: sampling rate is not compatible")
                 choice.isDirectPlayable = False
         else:

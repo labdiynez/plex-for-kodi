@@ -512,6 +512,10 @@ class Settings(object):
                     T(32065, 'When force AC3 settings are enabled, treat DTS the same as AC3 '
                              '(useful for Optical passthrough)')
                 ),
+                BoolSetting('audio_hires', T(33079, ''),
+                            True).description(
+                    T(33080, '')
+                ),
                 OptionsSetting(
                     'burn_subtitles',
                     T(32031, 'Burn-in Subtitles'),

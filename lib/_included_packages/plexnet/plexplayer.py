@@ -738,16 +738,18 @@ class PlexAudioPlayer(BasePlayer):
         obj.transcodeEndpoint = "/music/:/transcode/universal/start.m3u8"
 
         builder = http.HttpRequest(transcodeServer.buildUrl(obj.transcodeEndpoint, True))
-        # builder.addParam("protocol", "http")
+        builder.addParam("protocol", "http")
         builder.addParam("path", item.getAbsolutePath("key"))
         builder.addParam("session", item.getGlobal("clientIdentifier"))
         builder.addParam("directPlay", "0")
         builder.addParam("directStream", "0")
 
-        #todo: This fixes audio transcoding, maybe we'll want to investigate further whether we can customize
-        #      the generic profile instead
-        builder.addParam("X-Plex-Platform", "Chrome")
-        builder.addParam("copyts", "1")
+        # this works, but currently shows "Direct Play" in Plex Web, even though it's clearly transcoding
+        builder.addParam("X-Plex-Platform", "Generic")
+        builder.extras = ["add-transcode-target(type=musicProfile&audioCodec=mp3&container=mp3&"
+                          "context=streaming&protocol=http)"]
+
+        builder.addParam("X-Plex-Client-Profile-Extra", '+'.join(builder.extras))
 
         obj.url = builder.getUrl()
 

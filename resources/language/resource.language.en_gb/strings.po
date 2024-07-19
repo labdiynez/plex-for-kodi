@@ -2117,3 +2117,11 @@ msgstr ""
 msgctxt "#33078"
 msgid "Scale the modern indicators based on the poster size used. Default: On (tiny: 0.75, small: 1.0, medium: 1.175, big: 1.3)"
 msgstr ""
+
+msgctxt "#33079"
+msgid "Hi-Res Music"
+msgstr ""
+
+msgctxt "#33080"
+msgid "Allow DirectPlay of high resolution music (e.g. FLAC, >= 192 kHz)"
+msgstr ""
