@@ -2,7 +2,7 @@
 import os
 import glob
 
-from kodi_six import xbmcvfs
+from kodi_six import xbmcvfs, xbmc
 
 from lib.logging import log as LOG, log_error as ERROR
 from .util import deep_update
@@ -77,15 +77,40 @@ class TemplateEngine(object):
         return template.render(data)
 
     def write(self, template, data):
-        try:
-            # write final file
-            f = xbmcvfs.File(os.path.join(self.target_dir, "script-plex-{}.xml".format(template)), "w")
-            f.write(data)
-            f.close()
-            return True
-        except:
-            ERROR("Couldn't write script-plex-{}.xml", template)
+        def ensure_file_exists(file_name, expected_size):
+            if xbmcvfs.exists(file_name):
+                s = xbmcvfs.Stat(file_name)
+                size = s.st_size()
+                return size == expected_size
             return False
+
+        leeway = 50
+        expected_len = len(data)
+        # write final file
+        count = 0
+        fn = os.path.join(self.target_dir, "script-plex-{}.xml".format(template))
+        f = xbmcvfs.File(fn, "w")
+
+        try:
+            success = f.write(data)
+
+            while not success and count < leeway:
+                success = f.write(data)
+                xbmc.sleep(100)
+                count += 1
+        finally:
+            f.close()
+
+        count = 0
+        exists = ensure_file_exists(fn, expected_len)
+        while not exists and count < leeway:
+            xbmc.sleep(100)
+            exists = ensure_file_exists(fn, expected_len)
+            count += 1
+
+        if not exists:
+            raise OSError("Timed out while waiting for template {} to be saved to disk".format(fn))
+        return True
 
     def apply(self, theme, update_callback, templates=None):
         templates = self.TEMPLATES if templates is None else templates
