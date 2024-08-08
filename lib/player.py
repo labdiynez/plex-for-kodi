@@ -618,7 +618,7 @@ class SeekPlayerHandler(BasePlayerHandler):
                                self.player.getTime())
 
                 tries = 0
-                while self.player.getTime() * 1000 < withinSOS and tries < 50:
+                while self.player.isPlayingVideo() and self.player.getTime() * 1000 < withinSOS and tries < 50:
                     util.DEBUG_LOG("OnPlayBackSeek: SeekOnStart: Not there, yet, "
                                    "seeking again ({}, {})", self.seekOnStart, self.player.getTime())
                     self.dialog.offset = self.seekOnStart
