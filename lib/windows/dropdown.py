@@ -57,18 +57,22 @@ class DropdownDialog(kodigui.BaseDialog):
     def onFirstInit(self):
         self.setProperty('dropdown', self.setDropdownProp and '1' or '')
         self.setProperty('header', self.header)
-        self.optionsList = kodigui.ManagedControlList(self, self.OPTIONS_LIST_ID, 8)
+        self.optionsList = kodigui.ManagedControlList(self, self.OPTIONS_LIST_ID, 14)
         self.showOptions()
-        height = min(self.optionHeight * 14, (len(self.options) * self.optionHeight)) + 80
+        height = min(self.optionHeight * 14, len(self.options) * self.optionHeight) + 80
         ol_height = height - 80
         y = self.y
-        self.getControl(100).setPosition(self.x, y)
 
         if y + height > self.height:
-            height = self.optionHeight * 10
-            ol_height = height
+            height = self.optionHeight * 14 + 80
+            if y + height > self.height:
+                y -= height - self.height
+
+            ol_height = height - 80
             if self.header:
                 ol_height -= 86
+
+        self.getControl(100).setPosition(self.x, y)
 
         shadowControl = self.getControl(110)
         if self.header:
