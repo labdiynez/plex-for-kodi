@@ -145,10 +145,12 @@ class CurrentPlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     def onAudioStarted(self, *args, **kwargs):
         util.setGlobalProperty('ignore_spinner', '')
         self.ignoreStopCommands = False
+        self.setDuration()
 
     def onAudioChanged(self, *args, **kwargs):
         util.setGlobalProperty('ignore_spinner', '')
         self.ignoreStopCommands = False
+        self.setDuration()
 
     def repeatButtonClicked(self):
         if player.PLAYER.handler.playQueue and player.PLAYER.handler.playQueue.isRemote:
@@ -307,9 +309,10 @@ class CurrentPlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
 
     def setDuration(self):
         try:
-            self.duration = player.PLAYER.getTotalTime() * 1000
+            duration = player.PLAYER.getTotalTime() * 1000
+            self.duration = duration if duration > 0 else self.duration
         except RuntimeError:  # Not playing
-            self.duration = 0
+            pass
 
     def seekForward(self, offset):
         self.selectedOffset += offset
@@ -338,6 +341,9 @@ class CurrentPlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         self.updateSelectedProgress()
 
     def updateSelectedProgress(self):
+        if not self.duration:
+            return
+
         ratio = self.selectedOffset / float(self.duration)
         w = int(ratio * self.SEEK_IMAGE_WIDTH)
         self.seekbarControl.setWidth(w or 1)
