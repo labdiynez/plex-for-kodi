@@ -807,7 +807,7 @@ class SeekDialog(kodigui.BaseDialog):
                                 if not self.playlistDialogVisible:
                                     self.hideOSD()
                             else:
-                                self.sendTimeline(state=self.player.STATE_STOPPED)
+                                self.sendTimeline(state=self.player.STATE_STOPPED, ensureFinalTimelineEvent=True)
                                 self.stop()
                             return
         except:

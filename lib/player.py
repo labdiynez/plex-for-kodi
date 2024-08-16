@@ -753,7 +753,9 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.showOSD()
 
     def tick(self):
-        if self.seeking != self.SEEK_IN_PROGRESS and not self.ended and self.player.started and not self.seekOnStart:
+        if (self.seeking != self.SEEK_IN_PROGRESS and not self.ended and self.player.started and not self.seekOnStart
+                and not self.queuingNext and not self.stoppedManually and self.player.isPlayingVideo() and
+                self.player.playState != self.player.STATE_STOPPED):
             self.updateNowPlaying(force=True)
 
         if self.dialog and getattr(self.dialog, "_ignoreTick", None) is not True:
@@ -1082,7 +1084,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         self.thread = None
         self.ignoreStopEvents = False
         self.isExternal = False
-        if xbmc.getCondVisibility('Player.HasMedia'):
+        if xbmc.getCondVisibility('Player.HasMedia') and self.isPlayingAudio() and not self.bgmPlaying:
             self.started = True
         self.resume = False
         self.open()
@@ -1540,7 +1542,6 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
             return
         util.DEBUG_LOG('Player - STARTED')
         self.trigger('playback.started')
-        self.started = True
 
         if not self.handler:
             return
@@ -1565,6 +1566,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
 
         self.isExternal = self.isExternalPlayer()
         self.trigger('av.started')
+        self.started = True
         if not self.handler:
             return
         self.handler.onAVStarted()
