@@ -15,7 +15,7 @@ class DropdownDialog(kodigui.BaseDialog):
     res = '1080i'
     width = 1920
     height = 1080
-    optionHeight = 66
+    optionHeight = util.vscalei(66)
     dropWidth = 360
     borderOff = -20
 
@@ -63,24 +63,27 @@ class DropdownDialog(kodigui.BaseDialog):
         ol_height = height - 80
         y = self.y
 
-        if y + height > self.height:
+        if isinstance(y, int) and y + height > self.height:
             height = self.optionHeight * 14 + 80
             if y + height > self.height:
                 y -= height - self.height
 
             ol_height = height - 80
             if self.header:
-                ol_height -= 86
-
-        self.getControl(100).setPosition(self.x, y)
+                ol_height -= util.vscalei(86)
 
         shadowControl = self.getControl(110)
         if self.header:
-            shadowControl.setHeight(height + 86)
+            shadowControl.setHeight(height + util.vscalei(86))
             self.getControl(111).setHeight(height + 6)
         else:
             shadowControl.setHeight(height)
         self.optionsList.setHeight(ol_height)
+
+        if y == "middle":
+            y = util.vperci(util.vscale(ol_height))
+
+        self.getControl(100).setPosition(self.x, y)
 
         self.setProperty('show', '1')
         self.setProperty('close.direction', self.closeDirection)
