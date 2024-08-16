@@ -1262,7 +1262,7 @@ class PropertyTimer():
 class WindowProperty():
     __slots__ = ("win", "prop", "val", "end", "old")
 
-    def __init__(self, win, prop, val='1', end=None):
+    def __init__(self, win, prop, val='1', end=''):
         self.win = win
         self.prop = prop
         self.val = val
@@ -1280,17 +1280,15 @@ class WindowProperty():
 class GlobalProperty():
     __slots__ = ("_addonID", "prop", "val", "end", "old")
 
-    def __init__(self, prop, val='1', end=None):
-        from kodi_six import xbmcaddon
-        self._addonID = xbmcaddon.Addon().getAddonInfo('id')
+    def __init__(self, prop, val='1', end=''):
         self.prop = prop
         self.val = val
         self.end = end
-        self.old = xbmc.getInfoLabel('Window(10000).Property({0}}.{1})'.format(self._addonID, prop))
+        self.old = xbmc.getInfoLabel('Window(10000).Property(script.plex.{})'.format(prop))
 
     def __enter__(self):
-        xbmcgui.Window(10000).setProperty('{0}.{1}'.format(self._addonID, self.prop), self.val)
+        xbmcgui.Window(10000).setProperty('script.plex.{}'.format(self.prop), self.val)
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        xbmcgui.Window(10000).setProperty('{0}.{1}'.format(self._addonID, self.prop), self.end or self.old)
+        xbmcgui.Window(10000).setProperty('script.plex.{}'.format(self.prop), self.end or self.old)

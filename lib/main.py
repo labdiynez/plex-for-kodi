@@ -2,7 +2,14 @@ from __future__ import absolute_import
 from kodi_six import xbmc
 
 if xbmc.getInfoLabel('Window(10000).Property(script.plex.running)') == "1":
-    xbmc.executebuiltin('NotifyAll({0},{1},{2})'.format('script.plexmod', 'RESTORE', '{}'))
+    try:
+        xbmc.executebuiltin('NotifyAll({0},{1},{2})'.format('script.plexmod', 'RESTORE', '{}'))
+    except:
+        xbmc.log('Main: script.plex: Already running, couldn\'t reactivate other instance, exiting.', xbmc.LOGINFO)
+    raise SystemExit
+
+if xbmc.getInfoLabel('Window(10000).Property(script.plex.started)') == "1":
+    xbmc.log('Main: script.plex: Already running, exiting.', xbmc.LOGINFO)
     raise SystemExit
 
 import gc
@@ -19,11 +26,14 @@ from . import plex
 
 from plexnet import plexapp
 from .templating import render_templates
-from .windows import background, userselect, home, windowutils
+from .windows import background, userselect, home, windowutils, kodigui
 from . import player
 from . import backgroundthread
 from . import util
 from .data_cache import dcm
+
+
+util.setGlobalProperty('started', '1')
 
 BACKGROUND = None
 quitKodi = False
@@ -34,9 +44,6 @@ if six.PY2:
     _Timer = threading._Timer
 else:
     _Timer = threading.Timer
-
-
-render_templates()
 
 
 def waitForThreads():
@@ -72,30 +79,31 @@ def signout():
     plexapp.ACCOUNT.signOut()
 
 
-def main(with_render=False):
+def main(force_render=False):
     global BACKGROUND
-    if with_render:
-        render_templates(force=True)
 
     try:
+        with kodigui.GlobalProperty('rendering'):
+            render_templates(force=force_render)
+
         with util.Cron(1 / util.addonSettings.tickrate):
             BACKGROUND = background.BackgroundWindow.create(function=_main)
             if BACKGROUND.waitForOpen():
-                util.setGlobalProperty('running', '1')
-                BACKGROUND.modal()
+                with kodigui.GlobalProperty('running'):
+                    BACKGROUND.modal()
 
-                # we've had an XMLError during modalizing, rebuild templates
-                if BACKGROUND._errored:
-                    return main(with_render=True)
-                del BACKGROUND
+                    # we've had an XMLError during modalizing, rebuild templates
+                    if BACKGROUND._errored:
+                        return main(force_render=True)
+                    del BACKGROUND
             else:
                 util.LOG("Couldn't start main loop, exiting.")
     finally:
         try:
-            util.setGlobalProperty('running', '')
             util.setGlobalProperty('stop_running', '')
             util.setGlobalProperty('ignore_spinner', '')
-            util.setGlobalProperty('is_active', '1')
+            util.setGlobalProperty('is_active', '')
+            util.setGlobalProperty('started', '')
         except:
             pass
 

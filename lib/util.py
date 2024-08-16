@@ -137,7 +137,7 @@ except:
 
 
 CURRENT_AR = DISPLAY_RESOLUTION[0] / DISPLAY_RESOLUTION[1]
-NEEDS_SCALING = CURRENT_AR != 1920 / 1080
+NEEDS_SCALING = round(CURRENT_AR, 2) != round(1920 / 1080, 2)
 
 
 def getSetting(key, default=None):

@@ -347,7 +347,7 @@
 
         <control type="grouplist" id="60">
             <posx>0</posx>
-            <posy>{{ vscale(585) }}</posy>
+            <posy>{{ vscale(540) }}</posy>
             <width>1920</width>
             <height>{{ vscale(1610) }}</height>
 
