@@ -176,7 +176,7 @@
             <posx>604</posx>
             <posy>0</posy>
             <width>776</width>
-            <height>{{ 715 + 715 - vscale(715) }}</height>
+            <height>715</height>
             <onleft>75</onleft>
             <onright>150</onright>
             <scrolltime>200</scrolltime>
@@ -405,7 +405,7 @@
             <posx>1383</posx>
             <posy>0</posy>
             <width>845</width>
-            <height>{{ 715 + 715 - vscale(715) }}</height>
+            <height>715</height>
             <onleft>100</onleft>
             <scrolltime>200</scrolltime>
             <orientation>vertical</orientation>
