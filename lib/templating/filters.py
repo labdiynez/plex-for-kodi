@@ -61,16 +61,26 @@ def vscale(value, up=1, negpos=False, context=None):
 
 @ibis.filters.register('vperc')
 @register_builtin
-def vperc(height, perc=50, ref=1080, rel=50):
+def vperc(height, perc=50, ref=1080, rel=50, r=2):
     """
     return vertical position based on percentage of ref, percentage of height
+    @param r:
     @param rel:
     @param perc:
     @param height:
     @param ref:
     @return: float
     """
-    return perc * ref / 100.0 - height * rel / 100
+    return round(perc * ref / 100.0 - height * rel / 100., r)
+
+
+@ibis.filters.register('valign')
+@register_builtin
+def valign(height, align="middle"):
+    if align == "middle":
+        return vperc(height)
+    elif align == "bottom":
+        return vperc(height, perc=100, rel=100)
 
 
 @ibis.filters.register('add')

@@ -38,7 +38,7 @@
         <control type="image">
             <visible>String.IsEmpty(Window.Property(no.osd.hide_info)) | !String.IsEmpty(Window.Property(show.OSD))</visible>
             <posx>0</posx>
-            <posy>940</posy>
+            <posy>{{ vscale(140) }}r</posy>
             <width>1920</width>
             <height>{{ vscale(140) }}</height>
             <texture>script.plex/white-square.png</texture>
@@ -106,7 +106,7 @@
 
     <control type="group">
         <posx>0</posx>
-        <posy>965</posy>
+        <posy>{{ vscale(115) }}r</posy>
         <control type="label">
             <visible>!String.IsEmpty(Window.Property(direct.play)) + [String.IsEmpty(Window.Property(no.osd.hide_info)) | !String.IsEmpty(Window.Property(show.OSD))]</visible>
             <posx>60</posx>
@@ -208,7 +208,7 @@
 
     <control type="group">
         <posx>0</posx>
-        <posy>940</posy>
+        <posy>{{ vscale(140) }}r</posy>
         <control type="image">
             <visible>String.IsEmpty(Window.Property(no.osd.hide_info)) | !String.IsEmpty(Window.Property(show.OSD))</visible>
             <posx>0</posx>
@@ -457,7 +457,7 @@
         <defaultcontrol>406</defaultcontrol>
         <hitrect x="460" y="998" w="1000" h="55" />
         <posx>360</posx>
-        <posy>964</posy>
+        <posy>{{ vscale(124) }}r</posy>
         <width>1200</width>
         <height>{{ vscale(124) }}</height>
         <align>center</align>

@@ -381,7 +381,7 @@
     <defaultcontrol>406</defaultcontrol>
     <hitrect x="460" y="998" w="1000" h="55" />
     <posx>0</posx>
-    <posy>964</posy>
+    <posy>{{ vscale(116) }}r</posy>
     <width>819</width>
 
     <height>{{ vscale(124) }}</height>
@@ -399,7 +399,7 @@
 
 <control type="group">
     <posx>0</posx>
-    <posy>940</posy>
+    <posy>{{ vscale(140) }}r</posy>
     <control type="button" id="500">
         <enable>Player.HasAudio</enable>
         <hitrect x="0" y="-19" w="819" h="48" />
@@ -479,7 +479,7 @@
 <control type="group" id="202">
     <visible>Control.HasFocus(500)</visible>
     <posx>0</posx>
-    <posy>896</posy>
+    <posy>{{ vscale(184) }}r</posy>
     <control type="group" id="203">
         <posx>-50</posx>
         <posy>0</posy>
