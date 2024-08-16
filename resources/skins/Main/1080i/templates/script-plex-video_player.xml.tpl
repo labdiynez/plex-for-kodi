@@ -16,6 +16,7 @@
             <width>1920</width>
             <height>1080</height>
             <texture background="true">$INFO[Window.Property(post.play.background)]</texture>
+            {% include "includes/scale_background.xml.tpl" %}
         </control>
     </control>
 
