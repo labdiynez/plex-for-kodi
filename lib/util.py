@@ -95,7 +95,7 @@ PROFILE = translatePath(ADDON.getAddonInfo('profile'))
 
 
 DEF_THEME = "modern-colored"
-THEME_VERSION = 21
+THEME_VERSION = 22
 
 
 def getChannelMapping():
@@ -137,7 +137,9 @@ except:
 
 
 CURRENT_AR = DISPLAY_RESOLUTION[0] / DISPLAY_RESOLUTION[1]
-NEEDS_SCALING = round(CURRENT_AR, 2) != round(1920 / 1080, 2)
+
+# we currently only support vertical scaling for smaller ARs; change to != once we know how to scale horizontally
+NEEDS_SCALING = round(CURRENT_AR, 2) < round(1920 / 1080, 2)
 
 
 def getSetting(key, default=None):
