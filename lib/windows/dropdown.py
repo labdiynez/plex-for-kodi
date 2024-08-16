@@ -64,9 +64,9 @@ class DropdownDialog(kodigui.BaseDialog):
         y = self.y
 
         if isinstance(y, int) and y + height > self.height:
-            height = self.optionHeight * 14 + 80
-            if y + height > self.height:
-                y -= height - self.height
+            while y + height > self.height and y > 0:
+                y -= self.optionHeight
+            y = max(0, y)
 
             ol_height = height - 80
             if self.header:
