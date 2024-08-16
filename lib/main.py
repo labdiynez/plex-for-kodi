@@ -117,7 +117,8 @@ def _main():
                        ']', (lv - 3) * '-')
 
     util.DEBUG_LOG('USER-AGENT: {0}', lambda: plex.defaultUserAgent())
-    util.DEBUG_LOG('Aspect ratio: {:.2f} (default: {:.2f})', util.CURRENT_AR, 1920 / 1080)
+    util.DEBUG_LOG('Aspect ratio: {:.2f} (default: {:.2f}), needs scaling: {}', util.CURRENT_AR, 1920 / 1080,
+                   util.NEEDS_SCALING)
     background.setSplash()
     util.setGlobalProperty('is_active', '1')
 
