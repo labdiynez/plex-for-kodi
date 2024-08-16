@@ -1,22 +1,14 @@
+# coding=utf-8
 from __future__ import absolute_import
-from kodi_six import xbmc
-
-if xbmc.getInfoLabel('Window(10000).Property(script.plex.running)') == "1":
-    try:
-        xbmc.executebuiltin('NotifyAll({0},{1},{2})'.format('script.plexmod', 'RESTORE', '{}'))
-    except:
-        xbmc.log('Main: script.plex: Already running, couldn\'t reactivate other instance, exiting.', xbmc.LOGINFO)
-    raise SystemExit
-
-if xbmc.getInfoLabel('Window(10000).Property(script.plex.started)') == "1":
-    xbmc.log('Main: script.plex: Already running, exiting.', xbmc.LOGINFO)
-    raise SystemExit
 
 import gc
 import atexit
 import threading
 import six
 import sys
+
+from kodi_six import xbmc
+
 #import cProfile, pstats, io
 #from pstats import SortKey
 

@@ -4,8 +4,8 @@ from kodi_six import xbmcplugin
 from kodi_six import xbmcgui
 import sys
 import base64
-from lib import _included_packages, plex, util
-from plexnet import audio, plexplayer, plexapp
+from lib import util
+from plexnet import plexplayer, plexapp
 from plexnet import util as plexnetUtil
 
 HANDLE = int(sys.argv[1])
