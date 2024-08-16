@@ -1,8 +1,13 @@
 # coding=utf-8
 from __future__ import absolute_import
 import logging
+import tempfile
+
 from lib import main
 from tendo_singleton import SingleInstance, SingleInstanceException
+
+# tempfile's standard temp dirs won't work on specific OS's (android)
+tempfile.tempdir = main.util.translatePath("special://temp/")
 
 
 class KodiLogProxyHandler(logging.Handler):
