@@ -177,9 +177,9 @@
                             <colordiffuse>80000000</colordiffuse>
                         </control>
                         <control type="label">
-                            <scroll>false</scroll>
+                            <scroll>true</scroll>
                             <posx>0</posx>
-                            <posy>{{ vscale(260) }}</posy>
+                            <posy>{{ vscale(244) }}</posy>
                             <width>244</width>
                             <height>{{ vscale(40) }}</height>
                             <font>font10</font>
@@ -251,7 +251,7 @@
                             <control type="label">
                                 <scroll>Control.HasFocus(101)</scroll>
                                 <posx>0</posx>
-                                <posy>{{ vscale(260) }}</posy>
+                                <posy>{{ vscale(244) }}</posy>
                                 <width>244</width>
                                 <height>{{ vscale(40) }}</height>
                                 <font>font10</font>
