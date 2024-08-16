@@ -159,7 +159,7 @@
     <defaultcontrol>406</defaultcontrol>
     <hitrect x="460" y="998" w="1000" h="55" />
     <posx>360</posx>
-    <posy>{{ vscale(124) }}r</posy>
+    <posy>{{ vscale(116) }}r</posy>
     <width>1200</width>
 
     <height>{{ vscale(124) }}</height>
