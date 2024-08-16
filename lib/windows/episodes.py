@@ -427,6 +427,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             if not mli.dataSource:
                 continue
 
+            is_last_mli = self.episodeListControl.isLastItem(mli)
+
             just_fully_watched = False
 
             if progress_data_left and mli.dataSource:
@@ -463,12 +465,12 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
             # first condition: we select self.episode if we've got no progress data or we haven't watched it just now.
             # second condition: we've just come from playback with progress upon reinit. select the next available
-            # episode that's either unwatched or in progress.
+            # episode that's either unwatched or in progress. if we're at the last item in the list, select it as well.
             # third condition: select the next unwatched episode if we don't have self.episode and didn't have any
             # player progress, which happens when being called without an episode (season view, show view).
             if (mli.dataSource == self.episode and not just_fully_watched and not progress_data_left) or \
-               (had_progress_data and not progress_data_left and not just_fully_watched
-                and not mli.dataSource.isFullyWatched) or \
+               (had_progress_data and not progress_data_left and ((not just_fully_watched
+                and not mli.dataSource.isFullyWatched) or (just_fully_watched and is_last_mli))) or \
                (not had_progress_data and not self.episode and not mli.dataSource.isFullyWatched):
                 if self.episodeListControl.getSelectedPosition() < mli.pos():
                     self.episodeListControl.selectItem(mli.pos())
