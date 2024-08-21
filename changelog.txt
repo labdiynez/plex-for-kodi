@@ -26,14 +26,14 @@
 - Episodes/Postplay: Fix behaviour when visiting episodes view from postplay
 - Home: Allow hiding specific hubs via hubitem context menu
 - Home: Avoid mis-selecting a hub item after watching something and returning to the hub, after updating the hub and a different selection has been made in the meantime
-- Home: Avoid section button “jumping” on reInit after visiting a library
+- Home: Avoid section button "jumping" on reInit after visiting a library
 - Home: Bifurcate library dropdowns
 - Home: Correctly re-enable home updates even if we're playing, after coming back from screensaver or sleep
 - Home: Disable updates when screensaver activated
 - Home: Don’t refresh stale sections while we’re not the active window; might improve UI performance after watching something
 - Home: Fix extremely long/indefinite reload when revisiting home after watching something from another library for longer than 5 minutes
 - Home: Fix setting correct background when round-robining hubs
-- Home: Implement library features “Scan Library Files”, “Empty Trash”, “Analyze” for admins
+- Home: Implement library features "Scan Library Files", "Empty Trash", "Analyze" for admins
 - Home: Properly support cancelling library reordering (reverting to the previous order)
 - Home: SectionHider: After hiding a section, go to the previous one
 - Home: SectionMover: Stay on current section after moving
@@ -59,7 +59,7 @@
 - Player/PlaybackState: Only store progress for episode view if updatePlaybackState has accepted and sent our new timestamp
 - Player/SeekDialog: Show chapters when pressing down with OSD
 - Player/SeekPlayerHandler: Possibly harden further against bad timeline events
-- Player/Settings/Player UI: Add option to show OSD instead of skipping chapters when pressing up/down without OSD (Default: On) (called “Behave like official Plex clients”)
+- Player/Settings/Player UI: Add option to show OSD instead of skipping chapters when pressing up/down without OSD (Default: On) (called "Behave like official Plex clients")
 - PlexPlayer: Music: Allow directplay of high resolution audio (e.g. FLAC >= 192 kHz)
 - PlexPlayer: Music: When transcoding is necessary, use http/mp3/mp3 for compatibility and seeking reasons
 - Postplay: Allow resuming in-progress episodes
@@ -76,7 +76,7 @@
 - Seekdialog: Only react to DOWN with OSD shown if we should behave like official Plex clients and we want/have (virtual) chapters
 - SeekDialog: Postplay: Fix replay error/issue
 - SeekDialog: Re-evaluate MediaDecisionEngine decision when changing selected streams during playback; this allows switching between DirectPlay/DirectStream/Transcode, on the fly, based on the selected streams
-- SeekDialog: Reduce skip-button “jumping” just before auto skipping a marker
+- SeekDialog: Reduce skip-button "jumping" just before auto skipping a marker
 - SeekDialog: Refocus playlist button after closing playlist dialog, after opening it more than once
 - SeekDialog/CurrentPlaylist: Honor no TV spoilers setting as well
 - SeekDialog/Player: Don’t restart the video when changing audio or subtitles (possibly even video, not tested), if not necessary
@@ -104,7 +104,7 @@
 - Core: Dump all user settings into the DEBUG log if requested (private information masked)
 - Core: Fix certain network related issues
 - Core: Fix hang after sleep/wake when network isn’t immediately available on CoreELEC
-- Core: Fix No data error upon startup when “Use new Continue Watching hub” is enabled
+- Core: Fix No data error upon startup when "Use new Continue Watching hub" is enabled
 - Core: Fix usage of collections.Iterable with Kodi python > 3.9
 - Core: Make DEBUG_LOG calls cheaper in case DEBUG isn't enabled
 - Core: Revert 2023 change to tick every 100ms; tick every 1 second
@@ -117,7 +117,7 @@
 - Core/AddonSettings: Set max_retries=3 (default) for HTTP/HTTPS adapters, possibly fixing section refresh failing after power states (hibernation) (thanks @stigger)
 - Core/AddonSettings: Split connect and read timeouts for Plex and Plex.tv connections; correctly set default max_retries to 3; New defaults: Plex (connect: 5s, read: 10s), Plex.tv (connect: 5s, read: 20s)
 - Core/Boot/Entrypoint: Make entrypoint leaner by only importing what’s necessary
-- Core/Boot/Entrypoint: Use both tenga.singleton and global “started” property on Window(10000) to determine whether we’re already running
+- Core/Boot/Entrypoint: Use both tenga.singleton and global "started" property on Window(10000) to determine whether we’re already running
 - Core/Boot/Kiosk: Allow delaying autostart/kiosk-mode; allow manual immediate start when requested
 - Core/Cache/Settings: Disallow writing (and showing) cache settings from within the plugin when installed from the official Kodi repository and we don’t have the modern API
 - Core/GUI/Templating: Smaller aspect ratio support (16:10, 4:3, …)
@@ -140,7 +140,7 @@
 - Core/Templating: Recompile templates if we’re missing XMLs; fixes addon not starting after upgrade without theme version change
 - Core/Theming: Allow overriding theme definition/defaults by supplying theme_overrides.json in userdata/addon_data/script.plexmod; see /lib/templating/context.py for the data structure
 - Core/Theming: When rendering templates, show kodi progress dialog
-- Core/Windows: Fix “Go to Home to {library}”; properly select and focus library in section list
+- Core/Windows: Fix "Go to Home to {library}"; properly select and focus library in section list
 - Dropdown/Libraries: Fix visual scrolling issues on dropdowns with many items (e.g.: Genres)
 - Dropdowns: Be smarter when we’re trying to display a dropdown that’s out of bounds
 - FireTV: Fix timeFormat (at least in InfoView)
@@ -153,7 +153,7 @@
 - Indicators: Improve indicators resolution; add missing image
 - Kodigui: Support dialog and window close signals
 - Libraries: Fix play all and shuffle all buttons
-- Library: Add “Episode Date Added” sort; rename “Name” sort to “Title”
+- Library: Add "Episode Date Added" sort; rename "Name" sort to "Title"
 - Library/Music: Support Tracks as type on Music libraries; partially fixes #133; should fix #132
 - Main/EventLoop: Allow setting a tickrate different than 1 Hz
 - Movies/Episodes: Auto-scroll long summaries
@@ -162,7 +162,7 @@
 - MyPlexAccount: Fix isAdmin based on homeUser (when caching home users)
 - Settings: Add CONTEXT_MENU to clear bound home button to description
 - Settings: Add MultiUAOptionsSetting (a user aware variant of MultiOptionsSetting)
-- Settings: Add setting “Action on Wake event” (none, restart pm4k, wait Xs)
+- Settings: Add setting "Action on Wake event" (none, restart pm4k, wait Xs)
 - Settings: Add setting for Hi-Res Music (default: on)
 - Settings: Add setting to allow a delay for the autostart/kiosk-mode
 - Settings: Add setting to enable or disable factor based scaling of modern watched indicators based on poster size (default: on)
@@ -175,15 +175,15 @@
 - Settings: Disable "Stop video playback on screensaver" by default
 - Settings: Focus setting categories when pressing back while inside a category instead of immediately backing out
 - Settings: Implement new watched/unwatched status setting (default: Modern (2024))
-- Settings: Move “Behave like official Plex clients” further up
-- Settings: Move “Player Theme” setting to Main section and rename it to “Theme”
-- Settings: Move “Stop video playback on idle after” and “Stop video playback on screensaver” settings to Video Player tab
+- Settings: Move "Behave like official Plex clients" further up
+- Settings: Move "Player Theme" setting to Main section and rename it to "Theme"
+- Settings: Move "Stop video playback on idle after" and "Stop video playback on screensaver" settings to Video Player tab
 - Settings: Move autostart/kiosk-mode to Main (was in: System)
 - Settings: Move Theme selection above Indicators
 - Settings: Post play Auto Play: Honor postplay timeout in setting description (addonSetting; default: 16s)
-- Settings: Re-arrange settings; add “User Interface” tab; move a lot of settings from Main to User Interface
-- Settings: Remove visually “annoying” last main section item bottom border
-- Settings: Rename “Hide black backdrop in inverted watched states” to “Hide background in modern indicators”
+- Settings: Re-arrange settings; add "User Interface" tab; move a lot of settings from Main to User Interface
+- Settings: Remove visually "annoying" last main section item bottom border
+- Settings: Rename "Hide black backdrop in inverted watched states" to "Hide background in modern indicators"
 - Settings: Rename Player UI to Video Player
 - Settings: TV Spoiler settings: Add setting to hide chapter preview images
 - Settings: Unify TV spoiler settings further
@@ -193,8 +193,8 @@
 - Settings/Home-Map-Key: Show proper dialog while remapping; make use of skin.plextuary-pm4k-1.1’s no-icon-dialog
 - Settings/MultiOptionsSetting: Keep original options order when displaying currently selected options
 - Settings/Player UI: Test new MultiOptionsSetting for a couple of Player UI button visibility settings (should auto-migrate over from old boolean settings)
-- Settings/Player: Add “Skip intro” and “Skip credits” to button options, allowing per-user control of whether marker action buttons should be shown or not (default: On)
-- Settings/Player: Make “Show buttons” setting user aware
+- Settings/Player: Add "Skip intro" and "Skip credits" to button options, allowing per-user control of whether marker action buttons should be shown or not (default: On)
+- Settings/Player: Make "Show buttons" setting user aware
 - Settings/TV/Spoilers: Make allowed TV spoilers for specific genres configurable
 - Settings/Video: Streamline playback features and video codecs to reduce the amount of settings available
 - AddonSettings: Add setting for tickrate (default: 1 Hz, min: 0.5 Hz, max: 10 Hz)
@@ -225,7 +225,7 @@
 
 [-0.7.8-]
 - Global: Use watched markers instead of unwatched markers (green checkmark vs. yellow triangle)
-- Home: Blur in-progress episode thumbnails if Addon Setting “Use episode thumbnails in continue hub” is enabled and titles if requested
+- Home: Blur in-progress episode thumbnails if Addon Setting "Use episode thumbnails in continue hub" is enabled and titles if requested
 - Home: Refresh hubs when no episode spoiler setting changed
 - Home/Settings: After changing home-relevant settings, reload Home on revisit, not immediately
 - Home: Dynamically reload home when relevant settings have changed
