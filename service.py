@@ -15,7 +15,7 @@ def main():
     if xbmcaddon.Addon().getSetting('kiosk.mode') == 'true':
         xbmc.log('script.plex: Starting from service (Kiosk Mode)', xbmc.LOGINFO)
         delay = xbmcaddon.Addon().getSetting('kiosk.delay') or "0"
-        xbmc.executebuiltin('RunScript(script.plexmod{})'.format(",{}".format(delay) if delay != "0" else ""))
+        xbmc.executebuiltin('RunScript(script.plexmod,1{})'.format(",{}".format(delay) if delay != "0" else ""))
 
 
 if __name__ == '__main__':
