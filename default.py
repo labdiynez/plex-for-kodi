@@ -29,9 +29,11 @@ logger.setLevel(logging.DEBUG)
 
 from_kiosk = False
 boot_delay = False
-if len(sys.argv) > 1:
+argvlen = len(sys.argv)
+if argvlen > 1:
     from_kiosk = bool(int(sys.argv[1]))
-    boot_delay = int(sys.argv[2])
+    if argvlen > 2:
+        boot_delay = int(sys.argv[2])
 
 started = False
 set_waiting_for_start = False
