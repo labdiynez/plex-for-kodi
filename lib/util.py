@@ -221,6 +221,7 @@ class AddonSettings(object):
         ("honor_plextv_dnsrebind", True),
         ("honor_plextv_pam", True),
         ("coreelec_resume_seek_wait", 350),
+        ("background_resolution_scale_perc", 100),
     )
 
     def __init__(self):
