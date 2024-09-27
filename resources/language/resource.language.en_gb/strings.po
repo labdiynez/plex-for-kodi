@@ -2269,3 +2269,11 @@ msgstr ""
 msgctxt "#33652"
 msgid "Never show Post Play"
 msgstr ""
+
+msgctxt "#33653"
+msgid "Background image resolution scaling %"
+msgstr ""
+
+msgctxt "#33654"
+msgid "In percent, based on 1080p. Scales the resolution of all backgrounds for better image quality. May impact PMS/PM4K performance, will increase the cache usage accordingly. Can lead to crashes if your hardware is low on RAM. Needs addon restart. Use 400% for 4K. ATTENTION: In order for this to work you need to add <fanartres>2160</fanartres> and <imageres>2160</imageres> to your advancedsettings.xml."
+msgstr ""
