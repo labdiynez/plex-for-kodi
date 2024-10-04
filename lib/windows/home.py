@@ -1254,7 +1254,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                            {'key': 'analyze', 'display': T(33084, "Analyze")},
                            dropdown.SEPARATOR]
 
-            if section.locations:
+            if section.locations and util.getSetting('path_mapping', True):
                 for loc in section.locations:
                     source, target = section.getMappedPath(loc)
                     loc_is_mapped = source and target
