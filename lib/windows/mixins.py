@@ -13,7 +13,7 @@ from . import kodigui
 from . import optionsdialog
 
 
-class SeasonsMixin:
+class SeasonsMixin(object):
     SEASONS_CONTROL_ATTR = "subItemListControl"
 
     THUMB_DIMS = {
@@ -89,7 +89,7 @@ class SeasonsMixin:
         return True
 
 
-class DeleteMediaMixin:
+class DeleteMediaMixin(object):
     def delete(self, item=None):
         item = item or self.mediaItem
         button = optionsdialog.show(
@@ -116,7 +116,7 @@ class DeleteMediaMixin:
         return success
 
 
-class RatingsMixin:
+class RatingsMixin(object):
     def populateRatings(self, video, ref):
         def sanitize(src):
             return src.replace("themoviedb", "tmdb").replace('://', '/')
