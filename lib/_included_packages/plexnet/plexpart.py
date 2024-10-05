@@ -21,7 +21,7 @@ class PlexPart(plexobjects.PlexObject):
 
         # If we weren't given any data, this is a synthetic part
         if data is not None:
-            self.streams = [plexstream.PlexStream(e, initpath=self.initpath, server=self.server) for e in data if e.tag == 'Stream']
+            self.streams = [plexstream.PlexStream(e, initpath=self.initpath, server=self.server, part=self) for e in data if e.tag == 'Stream']
             if self.indexes:
                 indexKeys = self.indexes('').split(",")
                 self.indexes = util.AttributeDict()
