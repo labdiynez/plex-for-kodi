@@ -1907,6 +1907,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         mli.setProperty('thumb.fallback', 'script.plex/thumb_fallbacks/show.png')
         if not obj.isWatched:
             mli.setProperty('unwatched.count', str(obj.unViewedLeafCount))
+            mli.setBoolProperty('unwatched.count.large', obj.unViewedLeafCount > 999)
         mli.setBoolProperty('watched', obj.isFullyWatched)
         return mli
 
@@ -1923,6 +1924,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         mli.setProperty('thumb.fallback', 'script.plex/thumb_fallbacks/show.png')
         if not obj.isWatched:
             mli.setProperty('unwatched.count', str(obj.unViewedLeafCount))
+            mli.setBoolProperty('unwatched.count.large', obj.unViewedLeafCount > 999)
         mli.setBoolProperty('watched', obj.isFullyWatched)
         return mli
 
@@ -2164,6 +2166,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 mli.setProperty('unwatched.count', '')
             else:
                 mli.setProperty('unwatched.count', str(obj.unViewedLeafCount))
+                mli.setBoolProperty('unwatched.count.large', obj.unViewedLeafCount > 999)
 
     def sectionClicked(self):
         item = self.sectionList.getSelectedItem()

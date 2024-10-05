@@ -271,6 +271,7 @@ class BaseRelatedPaginator(MCLPaginator):
         if data.type in ('season', 'show'):
             if not mli.dataSource.isWatched:
                 mli.setProperty('unwatched.count', str(mli.dataSource.unViewedLeafCount) or '')
+                mli.setBoolProperty('unwatched.count.large', mli.dataSource.unViewedLeafCount > 999)
             else:
                 mli.setBoolProperty('watched', mli.dataSource.isWatched)
         else:
