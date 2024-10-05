@@ -1015,6 +1015,7 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
         else:
             if self.section.TYPE == 'show' or mli.dataSource.TYPE == 'show' or mli.dataSource.TYPE == 'season':
                 mli.setProperty('unwatched.count', str(mli.dataSource.unViewedLeafCount))
+                mli.setBoolProperty('unwatched.count.large', mli.dataSource.unViewedLeafCount.asInt() > 999)
             else:
                 mli.setProperty('unwatched', '1')
         mli.setProperty('progress', util.getProgressImage(mli.dataSource))
@@ -1419,6 +1420,7 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
                             if not obj.isWatched and obj.TYPE != "Directory":
                                 if self.section.TYPE == 'show' or obj.TYPE == 'show' or obj.TYPE == 'season':
                                     mli.setProperty('unwatched.count', str(obj.unViewedLeafCount))
+                                    mli.setBoolProperty('unwatched.count.large', obj.unViewedLeafCount > 999)
                                 else:
                                     mli.setProperty('unwatched', '1')
                             elif obj.isFullyWatched and obj.TYPE != "Directory":

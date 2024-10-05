@@ -73,6 +73,7 @@ class EpisodesPaginator(pagination.MCLPaginator):
         mli.setBoolProperty('watched', mli.dataSource.isFullyWatched)
         if not mli.dataSource.isWatched:
             mli.setProperty('unwatched.count', str(mli.dataSource.unViewedLeafCount))
+            mli.setBoolProperty('unwatched.count.large', mli.dataSource.unViewedLeafCount.asInt() > 999)
             mli.setProperty('unwatched', '1')
         mli.setProperty('progress', util.getProgressImage(mli.dataSource))
 
@@ -464,6 +465,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
                     mli.setProperty('watched', '1')
                     mli.setProperty('progress', '')
                     mli.setProperty('unwatched.count', '')
+                    mli.setProperty('unwatched.count.large', '')
                     mli.dataSource.set('viewCount', mli.dataSource.get('viewCount', 0).asInt() + 1)
                     mli.dataSource.set('viewOffset', 0)
                     self.setUserItemInfo(mli, fully_watched=True)

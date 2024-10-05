@@ -132,6 +132,7 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
         self.setProperty('date', self.mediaItem.year)
         if not self.mediaItem.isWatched:
             self.setProperty('unwatched.count', str(self.mediaItem.unViewedLeafCount) or '')
+            self.setBoolProperty('unwatched.count.large', self.mediaItem.unViewedLeafCount > 999)
         else:
             self.setBoolProperty('watched', self.mediaItem.isWatched)
 

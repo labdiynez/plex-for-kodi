@@ -39,6 +39,10 @@ class PlexStream(plexobjects.PlexObject, AudioCodecMixin):
         'yid': "Yiddish"
     }
 
+    def __init__(self, data, initpath=None, server=None, container=None, part=None):
+        super(PlexStream, self).__init__(data, initpath, server, container)
+        self.part = part
+
     def reload(self):
         pass
 
