@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import gc
+import threading
 
 from kodi_six import xbmc
 from kodi_six import xbmcgui
@@ -103,8 +104,10 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
             self.cameFrom = self.mediaItem.ratingKey
             volume = self.mediaItem.settings.getThemeMusicValue()
             if volume > 0:
-                player.PLAYER.playBackgroundMusic(self.mediaItem.theme.asURL(True), volume,
-                                                  self.mediaItem.ratingKey)
+                t = threading.Thread(target=player.PLAYER.playBackgroundMusic,
+                                     args=(self.mediaItem.theme.asURL(True), volume, self.mediaItem.ratingKey),
+                                     name="bgm")
+                t.start()
 
     def onReInit(self):
         PlaybackBtnMixin.onReInit(self)

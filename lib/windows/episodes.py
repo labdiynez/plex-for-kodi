@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 import requests.exceptions
 import copy
+import threading
 from kodi_six import xbmc
 from kodi_six import xbmcgui
 from collections import OrderedDict
@@ -188,7 +189,6 @@ class RedirectToEpisode(Exception):
 
 VIDEO_PROGRESS = OrderedDict()
 
-
 class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, RatingsMixin, SpoilersMixin,
                      PlaybackBtnMixin, playbacksettings.PlaybackSettingsMixin):
     xmlFile = 'script-plex-episodes.xml'
@@ -259,6 +259,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         self.seasons = None
         self.manuallySelected = False
         self.manuallySelectedSeason = False
+        self.hadUserInteraction = False
         self.currentItemLoaded = False
         self.lastItem = None
         self.lastFocusID = None
@@ -316,8 +317,10 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
                 not self.openedWithAutoPlay:
             volume = self.show_.settings.getThemeMusicValue()
             if volume > 0:
-                player.PLAYER.playBackgroundMusic(self.show_.theme.asURL(True), volume,
-                                                  self.show_.ratingKey)
+                t = threading.Thread(target=player.PLAYER.playBackgroundMusic,
+                                     args=(self.show_.theme.asURL(True), volume, self.show_.ratingKey),
+                                     name="bgm")
+                t.start()
                 self.useBGM = True
 
         self.openedWithAutoPlay = False
@@ -393,7 +396,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
     def postSetup(self):
         self.checkForHeaderFocus(xbmcgui.ACTION_MOVE_DOWN, initial=True)
-        self.selectPlayButton()
+        if not self.hadUserInteraction:
+            self.selectPlayButton()
         self.initialized = True
 
     def selectPlayButton(self):
@@ -584,6 +588,9 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
                 self.prev()
             elif action == xbmcgui.ACTION_PREV_ITEM:
                 self.prev()
+
+            if action in (xbmcgui.ACTION_MOVE_DOWN, xbmcgui.ACTION_MOVE_LEFT, xbmcgui.ACTION_MOVE_RIGHT):
+                self.hadUserInteraction = True
 
             if action == xbmcgui.ACTION_MOVE_UP and controlID in (self.EPISODE_LIST_ID, self.SEASONS_LIST_ID):
                 self.updateBackgroundFrom((self.show_ or self.season.show()))
