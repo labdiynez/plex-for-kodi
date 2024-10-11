@@ -295,7 +295,7 @@
                 <control type="textbox">
                     <scroll>false</scroll>
                     <posx>1177</posx>
-                    <posy>{{ vscale(300) }}</posy>
+                    <posy>{{ vscale(240) }}</posy>
                     <width>683</width>
                     <height>{{ vscale(215) }}</height>
                     <font>font12</font>
@@ -334,7 +334,7 @@
                 <control type="textbox">
                     <scroll>false</scroll>
                     <posx>580</posx>
-                    <posy>{{ vscale(300) }}</posy>
+                    <posy>{{ vscale(240) }}</posy>
                     <width>1280</width>
                     <height>{{ vscale(225) }}</height>
                     <font>font12</font>
