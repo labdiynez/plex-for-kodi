@@ -34,6 +34,8 @@ class RelatedPaginator(pagination.BaseRelatedPaginator):
 
 
 class OnDeckPaginator(pagination.MCLPaginator):
+    initialPageSize = 8
+
     def readyForPaging(self):
         return self.parentWindow.postPlayInitialized
 
@@ -66,8 +68,13 @@ class OnDeckPaginator(pagination.MCLPaginator):
 
     def getData(self, offset, amount):
         data = (self.parentWindow.prev or self.parentWindow.next).sectionOnDeck(offset=offset, limit=amount)
+        skipRKs = []
         if self.parentWindow.next:
-            return list(filter(lambda x: x.ratingKey != self.parentWindow.next.ratingKey, data))
+            skipRKs.append(self.parentWindow.next.ratingKey)
+        if self.parentWindow.prev:
+            skipRKs.append(self.parentWindow.prev.ratingKey)
+        if skipRKs:
+            return list(filter(lambda x: x.ratingKey not in skipRKs, data))
         return data
 
 
@@ -124,12 +131,14 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
         self.lastNonOptionsFocusID = None
         self.playBackStarted = False
         self.handleBGM = kwargs.get('bgm')
+        self.lastItem = None
 
     def doClose(self):
         util.DEBUG_LOG('VideoPlayerWindow: Closing')
         self.timeout = None
         self.relatedPaginator = None
         self.onDeckPaginator = None
+        self.lastItem = None
         kodigui.ControlledWindow.doClose(self)
         player.PLAYER.handler.sessionEnded()
 
@@ -202,6 +211,22 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
                     if self.onDeckPaginator.boundaryHit:
                         self.onDeckPaginator.paginate()
                         return
+
+                    mli = self.onDeckListControl.getSelectedItem()
+                    if not mli or mli.getProperty("is.boundary"):
+                        return
+
+                    lastItem = self.lastItem
+
+                    if action in (xbmcgui.ACTION_MOVE_RIGHT, xbmcgui.ACTION_MOVE_LEFT) and lastItem:
+                        items = self.onDeckPaginator.wrap(mli, lastItem, action)
+                        xbmc.sleep(100)
+                        if items:
+                            # wrapped with new data
+                            return True
+
+                    if mli != self.lastItem and not mli.getProperty("is.boundary"):
+                        self.lastItem = mli
         except:
             util.ERROR()
 

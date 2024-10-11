@@ -384,8 +384,8 @@
                     <height>{{ vscale(430) }}</height>
                     <onup>100</onup>
                     <ondown>401</ondown>
-                    <onleft>false</onleft>
-                    <onright>false</onright>
+                    <onleft>noop</onleft>
+                    <onright>noop</onright>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
                     <preloaditems>4</preloaditems>
@@ -658,8 +658,8 @@
                     <height>{{ vscale(520) }}</height>
                     <onup>400</onup>
                     <ondown>403</ondown>
-                    <onleft>false</onleft>
-                    <onright>false</onright>
+                    <onleft>noop</onleft>
+                    <onright>noop</onright>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
                     <preloaditems>4</preloaditems>

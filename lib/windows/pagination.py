@@ -227,7 +227,7 @@ class MCLPaginator(object):
         onlyTwo = self._currentAmount == 2
 
         items = None
-        if action == xbmcgui.ACTION_MOVE_LEFT and index == 0:
+        if action == xbmcgui.ACTION_MOVE_LEFT and index == 0 and last_mli_index == 0:
             if onlyTwo and last_mli_index == self._currentAmount - 1:
                 return
 
