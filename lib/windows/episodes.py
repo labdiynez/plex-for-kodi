@@ -6,7 +6,7 @@ from kodi_six import xbmc
 from kodi_six import xbmcgui
 from collections import OrderedDict
 
-from plexnet import plexapp, playlist, plexplayer
+from plexnet import plexapp, playlist, plexplayer, util as pnUtil
 
 from lib import backgroundthread
 from lib import metadata
@@ -1109,6 +1109,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
         ds.setMediaChoice(choice['key'])
         choice['key'].set('selected', 1)
+        pnUtil.INTERFACE.playbackManager(mli.dataSource, key="media_version", value=choice['key'].id)
         self.setPostReloadItemInfo(ds, mli)
 
     def delete(self, item):

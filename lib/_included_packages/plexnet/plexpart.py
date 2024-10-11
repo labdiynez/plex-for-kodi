@@ -198,7 +198,8 @@ class PlexPart(plexobjects.PlexObject):
         return ""
 
     def __str__(self):
-        return "PlexPart {0} {1}".format(self.id("NaN"), self.key)
+        return "PlexPart {0}:{1}:{2} {3}".format(self.container.container.ratingKey,
+                                                 self.container.id, self.id("NaN"), self.key)
 
     def __eq__(self, other):
         if other is None:
