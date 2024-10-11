@@ -2886,3 +2886,7 @@ msgstr "Auto-Sync aktiv."
 msgctxt "#33658"
 msgid "Disable Auto-Sync"
 msgstr "Auto-Sync deakt."
+
+msgctxt "#33659"
+msgid "Hide hub: {}"
+msgstr "Hub verstecken: {}"

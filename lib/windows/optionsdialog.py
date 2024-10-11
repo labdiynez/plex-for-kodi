@@ -59,9 +59,9 @@ class OptionsDialog(kodigui.BaseDialog):
             self.doClose()
 
 
-def show(header, info, button0=None, button1=None, button2=None, action_callback=None):
+def show(header, info, button0=None, button1=None, button2=None, action_callback=None, dialog_props=None):
     w = OptionsDialog.open(header=header, info=info, button0=button0, button1=button1, button2=button2,
-                           action_callback=action_callback)
+                           action_callback=action_callback, dialog_props=dialog_props)
     choice = w.buttonChoice
     del w
     util.garbageCollect()

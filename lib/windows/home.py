@@ -639,8 +639,6 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         if len(self.hubControls) > hub_focus and self.hubControls[hub_focus]:
             hub_control = self.hubControls[hub_focus]
             hub = hub_control.dataSource
-            if not hub or hub.hubIdentifier == "home.continue":
-                return
             return hub
 
     @property
@@ -858,7 +856,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                     self.hubItemClicked(controlID, auto_play=True)
                     return
                 elif action == xbmcgui.ACTION_CONTEXT_MENU:
-                    show_section = self.hubMenu()
+                    show_section = self.hubMenu(controlID)
                     if not show_section:
                         return
                     else:
@@ -1375,9 +1373,17 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 section.analyze()
             return
 
-    def hubMenu(self):
+    def hubMenu(self, hubControlID):
         hub = self.currentHub
         if not hub:
+            return
+
+        control = self.hubControls[hubControlID - 400]
+        mli = control.getSelectedItem()
+        if not mli:
+            return
+
+        if mli.dataSource is None:
             return
 
         section_hub_key = "{}:{}".format(self.lastSection.key, hub.hubIdentifier)
@@ -1387,7 +1393,20 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             hub_title = plexapp.SERVERMANAGER.selectedServer.currentHubs.get(section_hub_key,
                                                                              section_hub_key)
 
-        options = [{'key': 'hide', 'display': "Hide Hub: {}".format(hub_title)}]
+        options = []
+        has_prev = False
+        if hub.hubIdentifier != "home.continue":
+            options.append({'key': 'hide', 'display': T(33659, "Hide Hub: {}").format(hub_title)})
+            has_prev = True
+
+        if mli.dataSource.TYPE in ('episode', 'season', 'movie', 'show'):
+            if has_prev:
+                options.append(dropdown.SEPARATOR)
+
+            if not mli.getProperty('watched'):
+                options.append({'key': 'mark_watched', 'display': T(32319, "Mark Played")})
+            else:
+                options.append({'key': 'mark_unwatched', 'display': T(32318, "Mark Unplayed")})
 
         choice = dropdown.showDropdown(
             options,
@@ -1395,7 +1414,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             close_direction='none',
             set_dropdown_prop=False,
             header=T(33030, 'Choose action for: {}').format(hub.title),
-            select_index=0,
+            select_index=1 if len(options) > 1 else 0,
             align_items="left",
             dialog_props=self.carriedProps
         )
@@ -1409,6 +1428,26 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             self.hubSettings[section_hub_key]['show'] = False
             self.saveHubSettings()
             return self.lastSection
+
+        elif choice["key"] in ("mark_watched", "mark_unwatched"):
+            button = optionsdialog.show(
+                T(32319, "Mark Played") if choice["key"] == "mark_watched" else T(32318, "Mark Unplayed"),
+                u"{} {}".format(mli.label, mli.label2),
+                T(32328, 'Yes'),
+                T(32329, 'No'),
+                dialog_props=self.carriedProps
+            )
+
+            if button != 0:
+                return
+
+            if choice["key"] == "mark_watched":
+                mli.dataSource.markWatched()
+                self._updateOnDeckHubs()
+
+            elif choice["key"] == "mark_unwatched":
+                mli.dataSource.markUnwatched()
+                self._updateOnDeckHubs()
 
     def sectionMover(self, item, action):
         def stop_moving(reset=False):
