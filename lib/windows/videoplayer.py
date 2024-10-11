@@ -429,7 +429,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
         vid = self.prev or self.next
         if vid.sectionOnDeckCount:
             self.onDeckPaginator = OnDeckPaginator(self.onDeckListControl,
-                                                   leaf_count=int(vid.sectionOnDeckCount),
+                                                   leaf_count=int(vid.sectionOnDeckCount) - 1 if self.next else 0,
                                                    parent_window=self)
 
         self.setInfo()

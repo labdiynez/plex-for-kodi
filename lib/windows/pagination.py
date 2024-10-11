@@ -29,7 +29,7 @@ class MCLPaginator(object):
     def __init__(self, control, parent_window, page_size=None, orphans=None, leaf_count=None):
         self.control = control
         self.pageSize = page_size if page_size is not None else self.pageSize
-        self.orphans = orphans if orphans is not None else self.orphans
+        self.orphans = orphans if orphans is not None else self.pageSize
         self.leafCount = leaf_count
         self.parentWindow = parent_window
 
