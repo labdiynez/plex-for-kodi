@@ -452,7 +452,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         selected_new = False
 
         last_mli_seen = None
-        was_last_mli = False
+        progress_for_last_mli = False
 
         mli = self.episodeListControl[0]
 
@@ -467,12 +467,14 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
                 if not mli.dataSource:
                     continue
 
-                is_last_mli = was_last_mli = self.episodeListControl.isLastItem(mli)
+                is_last_mli = self.episodeListControl.isLastItem(mli)
 
                 just_fully_watched = False
 
                 if progress_data_left and mli.dataSource:
                     progress = progress_data_left.pop(mli.dataSource.ratingKey, False)
+                    progress_for_last_mli = progress and is_last_mli
+
                     # progress can be False (no entry), a number (progress), or True (fully watched just now)
                     # select it if it's not watched or in progress
                     if progress is True:
@@ -545,8 +547,10 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
                 key = '/library/metadata/{0}'.format(list(ns.keys())[-1])
                 ep = plexapp.SERVERMANAGER.selectedServer.getObject(key)
                 if ep.parentIndex != self.season.index and ep.grandparentRatingKey == self.show_.ratingKey:
+                    util.LOG("Progress data left for TV show, going to season of "
+                             "remaining episode with progress data: {}", ep)
                     raise RedirectToEpisode(ep)
-            elif was_last_mli and last_mli_seen.dataSource.isFullyWatched and self.getSeasons():
+            elif progress_for_last_mli and last_mli_seen.dataSource.isFullyWatched and self.getSeasons():
                 # check if we need to go to the next season
                 remaining_seasons = self.seasons[self.seasons.index(self.season)+1:]
                 if remaining_seasons:
