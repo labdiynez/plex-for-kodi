@@ -1230,6 +1230,8 @@ class SeekDialog(kodigui.BaseDialog):
     def subtitleButtonClicked(self):
         options = []
 
+        sss = self.player.video.selectedSubtitleStream()
+
         if self.isDirectPlay:
             options.append({'key': 'download', 'display': T(32405, 'Download Subtitles')})
 
@@ -1239,6 +1241,7 @@ class SeekDialog(kodigui.BaseDialog):
             selectIndex = 0
 
         if self.player.video.hasSubtitles:
+            subsEnabled = xbmc.getCondVisibility('VideoPlayer.SubtitlesEnabled') and self.player.video.hasSubtitle
             if self.player.video.hasSubtitle:
                 options.append({'key': 'delay', 'display': T(32406, 'Subtitle Delay')})
 
@@ -1264,12 +1267,22 @@ class SeekDialog(kodigui.BaseDialog):
                     elif self.lastSubtitleNavAction == "download":
                         selectIndex = 0
 
+            if subsEnabled:
+                if sss and sss.canAutoSync.asBool():
+                    options.append(
+                        {
+                            'key': 'auto_sync',
+                            'display':
+                                sss.should_auto_sync and
+                                T(33658, 'Disable Auto-Sync') or T(33657, 'Enable Auto-Sync')
+                        }
+                    )
+
             options.append(
                 {
                     'key': 'enable',
-                    'display':
-                        xbmc.getCondVisibility('VideoPlayer.SubtitlesEnabled') and self.player.video.hasSubtitle and
-                        T(32408, 'Disable Subtitles') or T(32409, 'Enable Subtitles')
+                    'display': subsEnabled and
+                               T(32408, 'Disable Subtitles') or T(32409, 'Enable Subtitles')
                 }
             )
 
@@ -1334,6 +1347,15 @@ class SeekDialog(kodigui.BaseDialog):
         elif choice['key'] == 'enable':
             enabled = self.toggleSubtitles()
             self.lastSubtitleNavAction = "forward"
+        elif choice['key'] == 'auto_sync':
+            sss.should_auto_sync = not sss.should_auto_sync
+            # self.player.video isn't the same as the mediachoice representation
+            self.player.playerObject.choice.subtitleStream.should_auto_sync = sss.should_auto_sync
+            if self.isDirectPlay:
+                self.setSubtitles(honor_forced_subtitles_override=False)
+            else:
+                self.doSeek(self.trueOffset(), settings_changed=True)
+            self.lastSubtitleNavAction = "auto_sync"
 
     def toggleSubtitles(self):
         """

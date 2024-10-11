@@ -513,6 +513,11 @@ class Settings(object):
                              'transcoding the video stream). If disabled it will not touch the video stream, but '
                              'will convert the subtitle to unstyled text.')
                 ),
+                BoolSetting('auto_sync', T(33655, 'Auto-Sync Subtitles'),
+                            True).description(
+                    T(33656, 'Only for External SRT subtitles. The PMS setting for voice activity detection '
+                             'has to be enabled for this to work.')
+                ),
                 BoolSetting('forced_subtitles_override', T(32941, 'Forced subtitles fix'),
                             False).description(
                     T(32493, 'When a media file has a forced/foreign subtitle for a subtitle-enabled language, the Plex'

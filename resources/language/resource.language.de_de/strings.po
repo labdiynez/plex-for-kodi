@@ -2870,3 +2870,19 @@ msgstr "Hintergrundbilder Auflösungsskalierung %"
 msgctxt "#33654"
 msgid "In percent, based on 1080p. Scales the resolution of all backgrounds for better image quality. May impact PMS/PM4K performance, will increase the cache usage accordingly. Can lead to crashes if your hardware is low on RAM. Needs addon restart. Use 400% for 4K. ATTENTION: In order for this to work you need to add <fanartres>2160</fanartres> and <imageres>2160</imageres> to your advancedsettings.xml."
 msgstr "In Prozent, basierend auf 1080p. Skaliert die Auflösung aller Hintergründe für bessere Bildqualität. Kann die PMS/PM4K Performance beeinflussen; wird die Cache-Nutzung dementsprechend erhöhen. Kann zu Abstürzen führen, wenn die Hardware zu wenig Arbeitsspeicher besitzt. Benötigt Addon-Neustart. 400% für 4K benutzen. ACHTUNG: Damit dies funktioniert, müssen folgende Werte in die advancedsettings.xml eingetragen werden: <fanartres>2160</fanartres> <imageres>2160</imageres>"
+
+msgctxt "#33655"
+msgid "Auto-Sync Subtitles"
+msgstr "Untertitel autom. Sync."
+
+msgctxt "#33656"
+msgid "Only for External SRT subtitles. The PMS setting for voice activity detection has to be enabled for this to work."
+msgstr "Nur für externe SRT-Untertitel. Die PMS-Einstellung für Sprachaktivitätserkennung muss aktiviert sein, damit dies funktioniert."
+
+msgctxt "#33657"
+msgid "Enable Auto-Sync"
+msgstr "Auto-Sync aktiv."
+
+msgctxt "#33658"
+msgid "Disable Auto-Sync"
+msgstr "Auto-Sync deakt."

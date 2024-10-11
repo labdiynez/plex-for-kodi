@@ -623,6 +623,10 @@ class PlexPlayer(BasePlayer):
 
         builder.addParam("path", path)
 
+        if self.choice.subtitleStream and self.choice.subtitleStream.should_auto_sync:
+            builder.addParam("autoAdjustSubtitle",
+                             util.INTERFACE.getPreference('auto_sync', True) and '1' or '0')
+
         part = self.media.parts[partIndex]
         seekOffset = int(self.seekValue / 1000)
         startOffset = obj.get("startOffset", 0)

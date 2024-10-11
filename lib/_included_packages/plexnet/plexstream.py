@@ -14,6 +14,8 @@ class PlexStream(plexobjects.PlexObject, AudioCodecMixin):
     TYPE_SUBTITLE = 3
     TYPE_LYRICS = 4
 
+    should_auto_sync = False
+
     streamTypeNames = (
         "Unknown", "VideoStream", "AudioStream", "SubtitleStream", "LyricsStream"
     )
@@ -121,6 +123,9 @@ class PlexStream(plexobjects.PlexObject, AudioCodecMixin):
 
         if self.codec == "smi":
             query += "&format=srt"
+
+        if self.should_auto_sync and util.INTERFACE.getPreference('auto_sync', True):
+            query += "&autoAdjustSubtitle=1"
 
         return self.key + query
 
