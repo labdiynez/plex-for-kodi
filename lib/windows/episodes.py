@@ -502,6 +502,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
                         mli.setProperty('progress', '')
                         mli.dataSource.set('viewOffset', '')
                         self.setUserItemInfo(mli)
+                        set_main_progress_to = 0
 
                     # after immediately updating the watched state, if we still have data left, continue
                     if progress is True and progress_data_left:

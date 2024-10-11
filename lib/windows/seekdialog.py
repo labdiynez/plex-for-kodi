@@ -900,12 +900,12 @@ class SeekDialog(kodigui.BaseDialog):
         elif controlID == self.SHUFFLE_BUTTON_ID:
             self.shuffleButtonClicked()
         elif controlID == self.PREV_BUTTON_ID:
-            self.sendTimeline(state=self.player.STATE_STOPPED)
+            self.sendTimeline(state=self.player.STATE_STOPPED, ensureFinalTimelineEvent=True)
             self._ignoreTick = True
             self.handler.prev()
         elif controlID == self.NEXT_BUTTON_ID:
             if not self.handler.queuingNext:
-                self.sendTimeline(state=self.player.STATE_STOPPED)
+                self.sendTimeline(state=self.player.STATE_STOPPED, ensureFinalTimelineEvent=True)
                 self.handler.queuingNext = True
                 self._ignoreTick = True
                 self._ignoreInput = True

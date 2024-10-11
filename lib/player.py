@@ -246,7 +246,6 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.chapters = chapters or []
         self.playedThreshold = plexapp.util.INTERFACE.getPlayedThresholdValue()
         self.ignoreTimelines = False
-        self.queuingNext = False
         self.stoppedManually = False
         self.inBingeMode = False
         self.skipPostPlay = False
@@ -481,6 +480,7 @@ class SeekPlayerHandler(BasePlayerHandler):
 
     def onPlayBackStarted(self):
         util.DEBUG_LOG('SeekHandler: onPlayBackStarted, DP: {}', self.isDirectPlay)
+
         self.updateNowPlaying(refreshQueue=True)
 
         if self.dialog:
@@ -1397,6 +1397,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         })
 
         self.trigger('starting.video')
+        self.handler.queuingNext = False
         self.play(url, li)
 
     def playVideoPlaylist(self, playlist, resume=False, handler=None, session_id=None):
@@ -1404,8 +1405,16 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
             self.stopAndWait()
 
         if handler and isinstance(handler, SeekPlayerHandler):
+            util.DEBUG_LOG("PlayVideoPlaylist: Reusing old handler: {}", handler)
             self.handler = handler
-            self.handler.seekOnStart = 0
+            #self.handler.queuingNext = True
+            #self.handler.seekOnStart = 0
+            #self.handler.baseOffset = 0
+            if self.handler.dialog:
+                self.handler.dialog.doClose()
+            self.handler.dialog = None
+            self.playerObject = None
+            self.currentTime = 0
         else:
             self.handler = SeekPlayerHandler(self, session_id or self.sessionID)
 
@@ -1755,7 +1764,18 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         hasFullScreened = False
 
         ct = 0
+        util.DEBUG_LOG("VideoMonitor: Initializing...")
         while self.isPlayingVideo() and not util.MONITOR.abortRequested() and not self._closed:
+            if self.handler and self.handler.queuingNext:
+                # when waiting for the next item to be fully initialized, don't set self.currentTime, otherwise
+                # onPlaybackStarted could push an invalid trueTime
+                util.DEBUG_LOG("VideoMonitor: Waiting for next item to queue...")
+                while (self.handler and self.handler.queuingNext and not util.MONITOR.abortRequested()
+                       and not self._closed):
+                    util.MONITOR.waitForAbort(0.1)
+
+                util.DEBUG_LOG("VideoMonitor: Started")
+
             try:
                 self.currentTime = self.getTime()
             except RuntimeError:
