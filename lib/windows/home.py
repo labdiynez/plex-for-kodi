@@ -1070,7 +1070,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         self.enableUpdates()
         if not xbmc.Player().isPlayingVideo():
             util.LOG("Refreshing last section after wake events")
-            self.showHubs(self.lastSection, force=True)
+            self.showHubs(self.lastSection, force=True, update=True)
 
     def onWake(self, *args, **kwargs):
         wakeAction = util.getSetting('action_on_wake', util.isCoreELEC and 'wait_5' or 'wait_1')
