@@ -1169,7 +1169,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
 
             else:
                 # don't re-queue the currently playing theme
-                if self.handler.currentlyPlaying == rating_key:
+                if isinstance(self.handler, BGMPlayerHandler) and self.handler.currentlyPlaying == rating_key:
                     return
 
                 # cancel any currently playing theme before starting the new one
