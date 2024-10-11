@@ -1395,7 +1395,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
         options = []
         has_prev = False
-        if hub.hubIdentifier != "home.continue":
+        if hub.hubIdentifier not in ("home.continue", "continueWatching"):
             options.append({'key': 'hide', 'display': T(33659, "Hide Hub: {}").format(hub_title)})
             has_prev = True
 
@@ -1930,7 +1930,9 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             title = u'{0} - {1}'.format(obj.parentTitle, obj.title)
         else:
             title = obj.parentTitle or obj.title or ''
+
         mli = kodigui.ManagedListItem(title, thumbnailImage=obj.defaultThumb.asTranscodedImageURL(thumb_w, thumb_h), data_source=obj)
+
         return mli
 
     def createSimpleListItem(self, obj, thumb_w, thumb_h):
@@ -1959,6 +1961,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         mli = self.createParentedListItem(obj, *self.THUMB_POSTER_DIM)
         # mli.setLabel2('Season {0}'.format(obj.index))
         mli.setProperty('thumb.fallback', 'script.plex/thumb_fallbacks/show.png')
+        mli.setLabel2(obj.title)
+
         if not obj.isWatched:
             mli.setProperty('unwatched.count', str(obj.unViewedLeafCount))
             mli.setBoolProperty('unwatched.count.large', obj.unViewedLeafCount > 999)
