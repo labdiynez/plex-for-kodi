@@ -4,6 +4,7 @@ from . import plexobjects
 from . import plexstream
 from . import plexrequest
 from . import util
+from .media import MediaPartStream
 
 from lib.util import addonSettings
 from lib.path_mapping import pmm, norm_sep
@@ -21,7 +22,7 @@ class PlexPart(plexobjects.PlexObject):
 
         # If we weren't given any data, this is a synthetic part
         if data is not None:
-            self.streams = [plexstream.PlexStream(e, initpath=self.initpath, server=self.server, part=self) for e in data if e.tag == 'Stream']
+            self.streams = [MediaPartStream.parse(e, initpath=self.initpath, server=self.server, part=self) for e in data if e.tag == 'Stream']
             if self.indexes:
                 indexKeys = self.indexes('').split(",")
                 self.indexes = util.AttributeDict()
