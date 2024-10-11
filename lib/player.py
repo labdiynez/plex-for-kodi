@@ -96,6 +96,9 @@ class BasePlayerHandler(object):
     def setup(self, duration, meta, offset, bif_url, **kwargs):
         pass
 
+    def reset(self):
+        pass
+
     @property
     def trueTime(self):
         return self.baseOffset + self.player.currentTime
@@ -1261,6 +1264,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
 
         # fixme: this handler might be accessing a new playerObject, not the one it's expecting to access,
         #        especially when .next() is used
+        self.handler.reset()
         self.handler.setup(self.video.duration.asInt(), meta, offset, bifURL, title=self.video.grandparentTitle,
                            title2=self.video.title, seeking=seeking, chapters=self.video.chapters)
 
@@ -1401,6 +1405,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
 
         if handler and isinstance(handler, SeekPlayerHandler):
             self.handler = handler
+            self.handler.seekOnStart = 0
         else:
             self.handler = SeekPlayerHandler(self, session_id or self.sessionID)
 
