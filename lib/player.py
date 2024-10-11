@@ -512,7 +512,13 @@ class SeekPlayerHandler(BasePlayerHandler):
             # progress already consumed
             return
 
-        self.player.trigger('video.progress', data=(rk, self._progressHld[rk] if not self.videoWatched else True))
+        gprk = None
+        prk = None
+        if self.player.video.type == "episode":
+            prk = self.player.video.parentRatingKey
+            gprk = self.player.video.grandparentRatingKey
+
+        self.player.trigger('video.progress', data=(gprk, prk, rk, self._progressHld[rk] if not self.videoWatched else True))
         self._progressHld = {}
 
     def onPlayBackStopped(self):
