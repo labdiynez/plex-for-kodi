@@ -659,7 +659,7 @@ class SeekPlayerHandler(BasePlayerHandler):
             if self.isDirectPlay:
                 self.player.showSubtitles(False)
                 if path:
-                    util.DEBUG_LOG('Setting subtitle path: {0} ({1})', path, subs)
+                    util.DEBUG_LOG('Setting subtitle path: {0} ({1})', plexnetUtil.cleanToken(path), subs)
                     self.player.setSubtitles(path)
                     self.player.showSubtitles(True)
 
