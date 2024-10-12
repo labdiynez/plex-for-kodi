@@ -987,7 +987,7 @@ class SeekDialog(kodigui.BaseDialog):
                 elapsed += 0.5
 
             # fill attributes
-            info = VideoSessionInfo(videoSession, currentVideo)
+            info = VideoSessionInfo(videoSession, currentVideo, plexapp.SERVERMANAGER.selectedServer.anyLANConnection)
 
         except ServerNotOwned:
             # timeline response data fallback
@@ -1000,7 +1000,9 @@ class SeekDialog(kodigui.BaseDialog):
                     util.MONITOR.waitForAbort(0.1)
                     elapsed += 0.1
 
-                info = VideoSessionInfo(None, currentVideo, incompleteSessionData=self.lastTimelineResponse)
+                info = VideoSessionInfo(None, currentVideo,
+                                        plexapp.SERVERMANAGER.selectedServer.anyLANConnection,
+                                        incompleteSessionData=self.lastTimelineResponse)
             except NotFound:
                 self.setProperty('ppi.Status', 'Info not available (data not found)')
 
